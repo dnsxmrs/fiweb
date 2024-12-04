@@ -15,45 +15,170 @@ class ProductSeeder extends Seeder
     {
         //
         DB::table('products')->insert([
+            // Iced Coffee
             [
-                'product_name' => 'Cappuccino',
-                'product_description' => 'A rich coffee with steamed milk and foam.',
-                'product_price' => 4.50,
-                'category_id' => 1,
+                'name' => 'Americano',
+                'description' => 'A strong black coffee with a bold flavor.',
+                'price' => 3.50,
                 'isAvailable' => true,
-                'image' => 'path/to/cappuccino.jpg',
+                'has_customization' => true,
+                'image' => 'assets/americano.jpg',
+                'category_number' => 1, // Iced Coffee
+                'created_at' => now(),
             ],
             [
-                'product_name' => 'Chocolate Chip Cookie',
-                'product_description' => 'A classic cookie with gooey chocolate chips.',
-                'product_price' => 1.50,
-                'category_id' => 2,
+                'name' => 'Sweetened Americano',
+                'description' => 'A rich Americano with added sweetness.',
+                'price' => 3.75,
                 'isAvailable' => true,
-                'image' => 'path/to/cookie.jpg',
+                'has_customization' => true,
+                'image' => 'assets/sweetened_americano.jpg',
+                'category_number' => 1, // Iced Coffee
+                'created_at' => now(),
+            ],
+
+            // Hot Coffee
+            [
+                'name' => 'Americano',
+                'description' => 'A smooth and strong espresso with hot water.',
+                'price' => 3.00,
+                'isAvailable' => true,
+                'has_customization' => false,
+                'image' => 'assets/hot_americano.jpg',
+                'category_number' => 2, // Hot Coffee
+                'created_at' => now(),
             ],
             [
-                'product_name' => 'Cheesecake',
-                'product_description' => 'Creamy cheesecake topped with strawberries.',
-                'product_price' => 5.00,
-                'category_id' => 3,
+                'name' => 'Cafe Latte',
+                'description' => 'A creamy espresso with steamed milk and a touch of foam.',
+                'price' => 3.50,
                 'isAvailable' => true,
-                'image' => 'path/to/cheesecake.jpg',
+                'has_customization' => false,
+                'image' => 'assets/cafe_latte.jpg',
+                'category_number' => 2, // Hot Coffee
+                'created_at' => now(),
+            ],
+
+            // Iced Non-Coffee
+            [
+                'name' => 'Choco',
+                'description' => 'A refreshing iced chocolate drink.',
+                'price' => 3.00,
+                'isAvailable' => true,
+                'has_customization' => true,
+                'image' => 'assets/choco.jpg',
+                'category_number' => 3, // Iced Non-Coffee
+                'created_at' => now(),
             ],
             [
-                'product_name' => 'Grilled Chicken Sandwich',
-                'product_description' => 'A grilled chicken breast sandwich with lettuce and mayo.',
-                'product_price' => 7.50,
-                'category_id' => 4,
+                'name' => 'Strawberry Milk',
+                'description' => 'A sweet and creamy strawberry milkshake.',
+                'price' => 3.25,
                 'isAvailable' => true,
-                'image' => 'path/to/chicken_sandwich.jpg',
+                'has_customization' => true,
+                'image' => 'assets/strawberry_milk.jpg',
+                'category_number' => 3, // Iced Non-Coffee
+                'created_at' => now(),
+            ],
+
+            // Hot Non-Coffee
+            [
+                'name' => 'Choco',
+                'description' => 'A warm and comforting hot chocolate.',
+                'price' => 2.50,
+                'isAvailable' => true,
+                'has_customization' => false,
+                'image' => 'assets/hot_choco.jpg',
+                'category_number' => 4, // Hot Non-Coffee
+                'created_at' => now(),
+            ],
+
+            // Frappuccino Espresso
+            [
+                'name' => 'Java Chip',
+                'description' => 'A rich frappuccino blended with chocolate chips and espresso.',
+                'price' => 4.50,
+                'isAvailable' => true,
+                'has_customization' => true,
+                'image' => 'assets/java_chip.jpg',
+                'category_number' => 5, // Frappuccino Espresso
+                'created_at' => now(),
             ],
             [
-                'product_name' => 'Spring Rolls',
-                'product_description' => 'Crispy rolls filled with fresh vegetables.',
-                'product_price' => 3.00,
-                'category_id' => 5,
+                'name' => 'Caramel',
+                'description' => 'A smooth frappuccino with caramel and a hint of coffee.',
+                'price' => 4.00,
                 'isAvailable' => true,
-                'image' => 'path/to/spring_rolls.jpg',
+                'has_customization' => true,
+                'image' => 'assets/caramel_frappuccino.jpg',
+                'category_number' => 5, // Frappuccino Espresso
+                'created_at' => now(),
+            ],
+
+            // Frappuccino Non-Espresso
+            [
+                'name' => 'Choco Hazelnut',
+                'description' => 'A delicious blend of chocolate and hazelnut in a frappuccino.',
+                'price' => 4.25,
+                'isAvailable' => true,
+                'has_customization' => true,
+                'image' => 'assets/choco_hazelnut.jpg',
+                'category_number' => 6, // Frappuccino Non-Espresso
+                'created_at' => now(),
+            ],
+            [
+                'name' => 'Strawberry Delight',
+                'description' => 'A refreshing strawberry frappuccino with creamy texture.',
+                'price' => 4.00,
+                'isAvailable' => true,
+                'has_customization' => true,
+                'image' => 'assets/strawberry_delight.jpg',
+                'category_number' => 6, // Frappuccino Non-Espresso
+                'created_at' => now(),
+            ],
+
+            // Snack
+            [
+                'name' => 'Fries',
+                'description' => 'Crispy golden fries served with a dipping sauce.',
+                'price' => 2.00,
+                'isAvailable' => true,
+                'has_customization' => false,
+                'image' => 'assets/fries.jpg',
+                'category_number' => 7, // Snack
+                'created_at' => now(),
+            ],
+            [
+                'name' => 'Big Siomai',
+                'description' => 'Delicious steamed dumplings filled with pork and spices.',
+                'price' => 2.50,
+                'isAvailable' => true,
+                'has_customization' => false,
+                'image' => 'assets/big_siomai.jpg',
+                'category_number' => 7, // Snack
+                'created_at' => now(),
+            ],
+
+            // Dessert
+            [
+                'name' => 'Chocolate Chip Cookie',
+                'description' => 'A soft and chewy chocolate chip cookie.',
+                'price' => 1.50,
+                'isAvailable' => true,
+                'has_customization' => false,
+                'image' => 'assets/chocolate_chip_cookie.jpg',
+                'category_number' => 8, // Dessert
+                'created_at' => now(),
+            ],
+            [
+                'name' => 'Compfire S\'mores Cookie',
+                'description' => 'A delicious cookie filled with marshmallows, chocolate, and graham cracker crumbs.',
+                'price' => 2.00,
+                'isAvailable' => true,
+                'has_customization' => false,
+                'image' => 'assets/compfire_smores_cookie.jpg',
+                'category_number' => 8, // Dessert
+                'created_at' => now(),
             ],
         ]);
     }

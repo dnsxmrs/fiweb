@@ -16,7 +16,6 @@ class MenuController extends Controller
         return view('components.menu', compact('categories'));
     }
 
-
     // get menu using menu table (non existing)
     public function showMenu()
     {
@@ -30,24 +29,5 @@ class MenuController extends Controller
     //     $item->update($request->all());
     //     broadcast(new MenuUpdated($item));
     // }
-
-    // exposing api to retrieve product details
-    public function getProduct()
-    {
-        $products = Product::all();
-
-            // Transform the product data to include the category name
-        $products = $products->map(function ($product) {
-            return [
-                'id' => $product->id,
-                'name' => $product->product_name,
-                'price' => $product->product_price,
-                'category_id' => $product->category_id,
-                'category_name' => $product->category ? $product->category->category_name : null,
-            ];
-        });
-
-        return response()->json($products);
-    }
 }
 

@@ -31,25 +31,25 @@
 </div>
 
 <script>
-// JavaScript to open/close modal
-const modal = document.getElementById("modal");
-const addToBagBtn = document.getElementById("addToBagBtn"); // Trigger button (replace/add multiple IDs if needed)
-const closeModalBtn = document.getElementById("closeModalBtn");
+    // JavaScript to open/close modal
+    const modal = document.getElementById("modal");
+    const addToBagBtn = document.getElementById("addToBagBtn"); // Trigger button (replace/add multiple IDs if needed)
+    const closeModalBtn = document.getElementById("closeModalBtn");
 
-// Open Modal
-addToBagBtn?.addEventListener("click", () => {
-    modal.classList.remove("hidden");
-});
+    // Open Modal
+    addToBagBtn?.addEventListener("click", () => {
+        modal.classList.remove("hidden");
+    });
 
-// Close Modal
-closeModalBtn?.addEventListener("click", () => {
-    modal.classList.add("hidden");
-});
-
-// Close modal on clicking outside the content
-modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
+    // Close Modal
+    closeModalBtn?.addEventListener("click", () => {
         modal.classList.add("hidden");
-    }
-});
+    });
+
+    // Close modal on clicking outside the content
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.classList.add("hidden");
+        }
+    });
 </script>

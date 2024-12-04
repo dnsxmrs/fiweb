@@ -12,17 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id(); // Primary key column with unique, auto-incremented ID
-            $table->string('product_name'); // Unique name for each product
-            $table->text('product_description')->nullable(); // Nullable description
-            $table->decimal('product_price', 8, 2); // Price with 2 decimal places
-            $table->unsignedBigInteger('category_id')->nullable(); // Nullable foreign key to category
-            $table->boolean('isAvailable')->default(true); // Availability defaulting to true
-            $table->string('image')->nullable(); // Nullable path to image
-            $table->timestamps();
+            $table->id(); // Primary key for product
+            $table->string('name'); // Product name (e.g., Iced Coffee)
+            $table->text('description')->nullable(); // Nullable product description
+            $table->decimal('price', 10, 2); // Product price with decimal precision
+            $table->boolean('isAvailable')->default(true); // Availability flag (default: true)
+            $table->boolean('has_customization')->default(false); // Customization flag (default: false)
+            $table->string('image')->nullable(); // Nullable image for the product
+            $table->integer('category_number')->nullable(); // Foreign key to category
+            $table->timestamps(); // Timestamps for created_at and updated_at
+            $table->softDeletes(); // Soft delete column
 
-            // Foreign key constraint for category_id
-            $table->foreign('category_id')->references('category_id')->on('categories')->onDelete('set null');
+            // Foreign key constraint linking product to category
+            $table->foreign('category_number')->references('category_number')->on('categories')->onDelete('set null');
         });
     }
 
