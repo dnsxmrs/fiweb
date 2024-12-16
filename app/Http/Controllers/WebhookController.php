@@ -133,7 +133,7 @@ class WebhookController extends Controller
                 'status' => 'error',
                 'message' => 'Failed to process category operation.',
                 'error_details' => $e->getMessage(),
-            ], 500);
+            ], 500);    
         }
     }
 

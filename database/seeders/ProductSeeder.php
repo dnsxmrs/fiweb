@@ -13,7 +13,6 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        //
         DB::table('products')->insert([
             // Iced Coffee
             [
@@ -25,6 +24,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/americano.jpg',
                 'category_number' => 1, // Iced Coffee
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Sweetened Americano',
@@ -35,6 +35,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/sweetened_americano.jpg',
                 'category_number' => 1, // Iced Coffee
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
 
             // Hot Coffee
@@ -47,6 +48,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/hot_americano.jpg',
                 'category_number' => 2, // Hot Coffee
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Cafe Latte',
@@ -57,6 +59,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/cafe_latte.jpg',
                 'category_number' => 2, // Hot Coffee
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
 
             // Iced Non-Coffee
@@ -69,6 +72,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/choco.jpg',
                 'category_number' => 3, // Iced Non-Coffee
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Strawberry Milk',
@@ -79,6 +83,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/strawberry_milk.jpg',
                 'category_number' => 3, // Iced Non-Coffee
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
 
             // Hot Non-Coffee
@@ -91,6 +96,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/hot_choco.jpg',
                 'category_number' => 4, // Hot Non-Coffee
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
 
             // Frappuccino Espresso
@@ -103,6 +109,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/java_chip.jpg',
                 'category_number' => 5, // Frappuccino Espresso
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Caramel',
@@ -113,6 +120,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/caramel_frappuccino.jpg',
                 'category_number' => 5, // Frappuccino Espresso
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
 
             // Frappuccino Non-Espresso
@@ -125,6 +133,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/choco_hazelnut.jpg',
                 'category_number' => 6, // Frappuccino Non-Espresso
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Strawberry Delight',
@@ -135,6 +144,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/strawberry_delight.jpg',
                 'category_number' => 6, // Frappuccino Non-Espresso
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
 
             // Snack
@@ -147,6 +157,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/fries.jpg',
                 'category_number' => 7, // Snack
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Big Siomai',
@@ -157,6 +168,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/big_siomai.jpg',
                 'category_number' => 7, // Snack
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
 
             // Dessert
@@ -169,6 +181,7 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/chocolate_chip_cookie.jpg',
                 'category_number' => 8, // Dessert
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Compfire S\'mores Cookie',
@@ -179,7 +192,9 @@ class ProductSeeder extends Seeder
                 'image' => 'assets/compfire_smores_cookie.jpg',
                 'category_number' => 8, // Dessert
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }
+
 }

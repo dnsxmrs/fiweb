@@ -16,17 +16,17 @@ class CategorySeeder extends Seeder
         DB::table('categories')->insert([
             [
                 'category_number' => 1,
-                'beverage_type' => 'iced',
+                'beverage_type' => 'iced', // Beverage type for iced drink
                 'created_at' => now(),
                 'deleted_at' => null,  // Add null value for deleted_at
                 'image' => 'assets/iced-coffee-icon.png',
                 'name' => 'Iced Coffee',
-                'type' => 'beverage',
+                'type' => 'beverage', // Type is beverage
                 'updated_at' => now(),  // Add current timestamp for updated_at
             ],
             [
                 'category_number' => 2,
-                'beverage_type' => 'hot',
+                'beverage_type' => 'hot', // Beverage type for hot drink
                 'created_at' => now(),
                 'deleted_at' => null,
                 'image' => 'assets/hot-coffee-icon.png',
@@ -36,7 +36,7 @@ class CategorySeeder extends Seeder
             ],
             [
                 'category_number' => 3,
-                'beverage_type' => 'iced',
+                'beverage_type' => 'iced', // Beverage type for iced drink
                 'created_at' => now(),
                 'deleted_at' => null,
                 'image' => 'assets/iced-non-coffee-icon.png',
@@ -46,7 +46,7 @@ class CategorySeeder extends Seeder
             ],
             [
                 'category_number' => 4,
-                'beverage_type' => 'hot',
+                'beverage_type' => 'hot', // Beverage type for hot drink
                 'created_at' => now(),
                 'deleted_at' => null,
                 'image' => 'assets/hot-non-coffee-icon.png',
@@ -56,7 +56,7 @@ class CategorySeeder extends Seeder
             ],
             [
                 'category_number' => 5,
-                'beverage_type' => 'iced',
+                'beverage_type' => 'iced', // Beverage type for iced drink
                 'created_at' => now(),
                 'deleted_at' => null,
                 'image' => 'assets/frappuccino-espresso-icon.png',
@@ -66,7 +66,7 @@ class CategorySeeder extends Seeder
             ],
             [
                 'category_number' => 6,
-                'beverage_type' => 'iced',
+                'beverage_type' => 'iced', // Beverage type for iced drink
                 'created_at' => now(),
                 'deleted_at' => null,
                 'image' => 'assets/frappuccino-non-espresso-icon.png',
@@ -76,25 +76,24 @@ class CategorySeeder extends Seeder
             ],
             [
                 'category_number' => 7,
-                'beverage_type' => null,
+                'beverage_type' => null, // No beverage type for food item
                 'created_at' => now(),
                 'deleted_at' => null,
                 'image' => 'assets/snack-icon.png',
                 'name' => 'Snack',
-                'type' => 'food',
+                'type' => 'food', // Type is food
                 'updated_at' => now(),
             ],
             [
                 'category_number' => 8,
-                'beverage_type' => null,
+                'beverage_type' => null, // No beverage type for food item
                 'created_at' => now(),
                 'deleted_at' => null,
                 'image' => 'assets/dessert-icon.png',
                 'name' => 'Dessert',
-                'type' => 'food',
+                'type' => 'food', // Type is food
                 'updated_at' => now(),
             ],
         ]);
-
     }
 }

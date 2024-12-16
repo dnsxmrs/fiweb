@@ -51,11 +51,7 @@
                     </button>
                 </div>
 
-                <script>
-                    document.getElementById('searchButton').addEventListener('click', function() {
-                        document.getElementById('searchInput').focus();
-                    });
-                </script>
+
 
                 <!-- Basket Icon -->
                 <button class="relative flex items-center">
@@ -656,6 +652,10 @@
             if (e.target === modal) {
                 modal.classList.add("hidden");
             }
+        });
+
+        document.getElementById('searchButton').addEventListener('click', function() {
+            document.getElementById('searchInput').focus();
         });
     </script>
 
