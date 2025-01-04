@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use Symfony\Component\HttpFoundation\Response;
+
 
 class WebhookController extends Controller
 {
@@ -45,12 +47,12 @@ class WebhookController extends Controller
     }
 
     // used in POS - creating and updating categories
-    public function upCategory(Request $request)
+    public function category(Request $request)
     {
         // log incoming request
-        \Log::info('Received upCategory request', [
+        \Log::info('Received category request', [
             'request_method' => $request->method(),
-            'request_data' => $request->all()
+            'request_data' => $request->all(),
         ]);
 
         // Determine the request method
@@ -95,7 +97,7 @@ class WebhookController extends Controller
                     'status' => 'success',
                     'message' => 'Category updated successfully!',
                     'category' => $category,
-                ], 200);
+                ], Response::HTTP_OK);
             } else {
                 // Create a new category if it doesn't exist
                 $category = Category::create([
@@ -119,7 +121,7 @@ class WebhookController extends Controller
                     'status' => 'success',
                     'message' => 'Category created successfully!',
                     'category' => $category,
-                ], 201);
+                ], Response::HTTP_CREATED);
             }
         } catch (\Exception $e) {
             // Log the error with relevant context
@@ -131,9 +133,8 @@ class WebhookController extends Controller
             // Return failure response
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to process category operation.',
-                'error_details' => $e->getMessage(),
-            ], 500);    
+                'message' => 'Failed to process category operation. An unexpected error occurred. Please try again later.',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -147,13 +148,19 @@ class WebhookController extends Controller
         try {
             $category = Category::where('category_number', $validatedData['category_number'])->first();
 
+            // if category is not found
             if (!$category) {
+                \Log::error('Category not found', [
+                    'category_number' => $validatedData['category_number'],
+                ]);
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Category not found.',
-                ], 404);
+                    'errors' => [ $validatedData['category_number'] => 'Invalid or non-existent category number.']
+                ], Response::HTTP_NOT_FOUND);
             }
 
+            // delete the category if it exists
             $category->delete();
 
             \Log::info('Category deleted successfully', [
@@ -164,8 +171,9 @@ class WebhookController extends Controller
                 'status' => 'success',
                 'message' => 'Category deleted successfully!',
                 'category_number' => $validatedData['category_number'],
-            ], 200);
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
+            // Log the error with relevant context
             \Log::error('Failed to delete category', [
                 'error' => $e->getMessage(),
                 'category_number' => $validatedData['category_number'],
@@ -173,17 +181,18 @@ class WebhookController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to delete category.',
-                'error_details' => $e->getMessage(),
-            ], 500);
+                'message' => 'An unexpected error occurred. Please try again later.',
+                // 'error_details' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     // used in POS - creating and updating products
-    public function upProduct(Request $request)
+    public function product(Request $request)
     {
         // Log the incoming request data for debugging
-        \Log::info('Received upProduct request', [
+        \Log::info('Received product request', [
+            'request_method' => $request->method(),
             'request_data' => $request->all()
         ]);
 
@@ -236,9 +245,10 @@ class WebhookController extends Controller
 
                 // Return a response indicating success
                 return response()->json([
+                    'status' => 'success',
                     'message' => 'Product updated successfully!',
                     'product' => $product
-                ]);
+                ], 200);
             } else {
                 // Category does not exist, create a new record
                 $product = Product::create([
@@ -265,9 +275,10 @@ class WebhookController extends Controller
 
                 // Return a response indicating success
                 return response()->json([
+                    'status' => 'success',
                     'message' => 'Product created successfully!',
                     'product' => $product
-                ]);
+                ], 201);
             }
         } catch (\Exception $e) {
             // Log the error with relevant context
@@ -325,54 +336,5 @@ class WebhookController extends Controller
                 'error_details' => $e->getMessage(),
             ], 500);
         }
-    }
-
-
-    public function upsertProduct(Request $request)
-    {
-        // Validate incoming request data
-        $validatedData = $request->validate([
-            'product_id' => 'required|integer',
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'category_id' => 'nullable|integer|exists:categories,category_id', // Ensure category exists
-            'image' => 'nullable|url',
-        ]);
-
-        // Update or create product based on product_id
-        $product = Product::updateOrCreate(
-            ['id' => $validatedData['product_id']], // Match on product_id
-            [
-                'name' => $validatedData['name'],
-                'price' => $validatedData['price'],
-                'category_id' => $validatedData['category_id'] ?? null,
-                'image' => $validatedData['image'] ?? null,
-            ]
-        );
-
-        return response()->json([
-            'success' => true,
-            'message' => $product->wasRecentlyCreated ? 'Product created successfully' : 'Product updated successfully',
-            'product' => $product,
-        ]);
-
-
-
-        // 'name'
-        // , 'description'
-        // , 'price'
-        // , 'isAvailable'
-        // , 'has_customization'
-        // , 'image'
-        // , 'category_number'
-
-        // 'name' => 'Big Siomai',
-        // 'description' => 'Delicious steamed dumplings filled with pork and spices.',
-        // 'price' => 2.50,
-        // 'isAvailable' => true,
-        // 'has_customization' => false,
-        // 'image' => 'assets/big_siomai.jpg',
-        // 'category_number' => 7, // Snack
-        // 'created_at' => now(),
     }
 }

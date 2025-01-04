@@ -6,6 +6,8 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class APIController extends Controller
 {
@@ -80,5 +82,19 @@ class APIController extends Controller
         $uploadedFileUrl = Cloudinary::upload($request->file('file')->getRealPath())->getSecurePath();
 
         return response()->json(['url' => $uploadedFileUrl]);
+    }
+
+    public function check()
+    {
+        $dbConnection = DB::connection()->getPdo() ? 'UP' : 'DOWN';
+        // $cacheStatus = Cache::store('redis')->get('health-check') !== null ? 'UP' : 'DOWN';
+
+        return response()->json([
+            'status' => 'UP',
+            'checks' => [
+                'database' => $dbConnection,
+                // 'cache' => $cacheStatus,
+            ],
+        ]);
     }
 }
