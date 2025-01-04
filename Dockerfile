@@ -45,5 +45,8 @@ RUN chmod +x /usr/local/bin/docker-entrypoint
 # Set the entrypoint
 ENTRYPOINT ["docker-entrypoint"]
 
-# Start PHP-FPM
-CMD ["php-fpm"]
+# # Start PHP-FPM
+# CMD ["php-fpm"]
+
+# Start PHP's built-in server (replace php-fpm)
+CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]
