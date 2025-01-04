@@ -36,12 +36,12 @@ RUN chown -R www-data:www-data /var/www \
 # Expose the PHP-FPM port
 EXPOSE 10000
 
-# Copy the custom entrypoint script
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint
-RUN chmod +x /usr/local/bin/docker-entrypoint
+# # Copy the custom entrypoint script
+# COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+# RUN chmod +x /usr/local/bin/docker-entrypoint
 
-# Set the entrypoint
-ENTRYPOINT ["docker-entrypoint"]
+# # Set the entrypoint
+# ENTRYPOINT ["docker-entrypoint"]
 
 # Start PHP-FPM
 CMD ["php-fpm"]
