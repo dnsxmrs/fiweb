@@ -2,7 +2,7 @@
 
 # Wait for the database to be ready
 echo "Waiting for database connection..."
-while ! nc -z db 3306; do
+until mysqladmin ping -h"$DB_HOST" --silent; do
     sleep 1
 done
 
