@@ -17,9 +17,11 @@ RUN apt-get update && apt-get install -y \
     unzip \
     curl \
     git \
-    netcat \  
+    netcat-openbsd \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring exif bcmath gd zip
+    && docker-php-ext-install pdo_mysql mbstring exif bcmath gd zip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Composer globally
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -32,7 +34,7 @@ RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # Expose the PHP-FPM port
-EXPOSE 9000
+EXPOSE 10000
 
 # Copy the custom entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint
