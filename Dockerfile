@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     netcat-openbsd \
+    mysql-client \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql mbstring exif bcmath gd zip \
     && apt-get clean \
