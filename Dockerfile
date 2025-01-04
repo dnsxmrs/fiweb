@@ -5,7 +5,8 @@ FROM php:8.3-fpm
 WORKDIR /var/www
 
 # Install system dependencies and PHP extensions
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y \
     build-essential \
     libpng-dev \
     libjpeg-dev \
@@ -18,7 +19,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     netcat-openbsd \
-    mysql-client \
+    default-mysql-client \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql mbstring exif bcmath gd zip \
     && apt-get clean \
