@@ -61,45 +61,15 @@
 
                         @foreach ($categories as $category)
                             <button class="flex flex-col items-center w-40 space-y-2 text-center">
-                                <img class="p-4 bg-gray-100 rounded-full w-28 h-28" src="{{ $category->image}}">
+                                <img class="p-4 bg-gray-100 rounded-full w-28 h-28" src="{{ $category->image }}">
                                 <p class="text-xl">{{ $category->name }}</p>
                             </button>
                         @endforeach
-
-{{--
-                        <button class="flex flex-col items-center w-40 space-y-2 text-center">
-                            <img class="p-4 bg-gray-100 rounded-full w-28 h-28"
-                                src="{{ asset('assets/Coffee-icon.png') }}" alt="Coffee">
-                            <p class="text-xl">Coffee</p>
-                        </button>
-                        <button class="flex flex-col items-center w-40 space-y-2 text-center">
-                            <img class="p-4 bg-gray-100 rounded-full w-28 h-28"
-                                src="{{ asset('assets/Non-Coffee-icon.png') }}" alt="Non-Coffee">
-                            <p class="text-xl">Non-Coffee</p>
-                        </button>
-                        <button class="flex flex-col items-center w-40 space-y-2 text-center">
-                            <img class="p-4 bg-gray-100 rounded-full w-28 h-28"
-                                src="{{ asset('assets/Frappuccino-icon.png') }}" alt="Frappuccino">
-                            <p class="text-xl">Frappuccino</p>
-                        </button>
-                        <button class="flex flex-col items-center w-40 space-y-2 text-center">
-                            <img class="p-4 bg-gray-100 rounded-full h-28 w-28"
-                                src="{{ asset('assets/Snack-icon.png') }}" alt="Snack">
-                            <p class="text-xl">Snack</p>
-                        </button>
-                        <button class="flex flex-col items-center w-40 space-y-2 text-center">
-                            <img class="p-4 bg-gray-100 rounded-full w-28 h-28"
-                            src="{{ asset('assets/Dessert-icon.png') }}"
-                                alt="Dessert">
-                            <p class="text-xl">Dessert</p>
-                        </button> --}}
-
                     </div>
                 </div>
 
                 <!-- Order Now Button -->
-                <button
-                    onclick="window.location.href='{{ route('order-now') }}'"
+                <button onclick="window.location.href='{{ route('order-now') }}'"
                     class="absolute px-12 py-4 text-xl font-semibold text-center text-white bg-black rounded-lg w-60 bottom-20 left-20">
                     Order Now
                 </button>
@@ -124,8 +94,6 @@
             </div>
         </div>
     </div>
-    </div>
-
 </body>
 
 </html>
