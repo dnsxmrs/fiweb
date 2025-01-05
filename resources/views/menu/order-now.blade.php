@@ -34,8 +34,8 @@
 
                     <!-- Navigation Links -->
                     <nav class="hidden ml-8 space-x-8 md:flex">
-                        <a href="#" class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Home</a>
-                        <a href="#" class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Menu</a>
+                        <a href=" {{ route('landing') }} " class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Home</a>
+                        <a href="{{ route('order-now') }}" class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Menu</a>
                         <a href="#" class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Orders</a>
                     </nav>
                 </div>
@@ -56,7 +56,7 @@
                 <button class="relative flex items-center">
                     <img src="assets/order-bag.png" alt="Order Bag" class="w-12 h-12">
                     <span
-                        class="absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full">3</span>
+                        class="absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full">0</span>
                 </button>
 
                 <!-- Guest Button -->
@@ -65,10 +65,10 @@
                     <img src="{{ asset('assets/Male User.png') }}" alt="User" class="w-5 h-5 mr-2">Guest
                 </button>
 
-                <!-- My Account Button -->
+                {{-- <!-- My Account Button -->
                 <button class="px-4 py-2 text-sm text-gray-700 rounded-md bg-brown-500 hover:bg-brown-600">
                     My account
-                </button>
+                </button> --}}
             </div>
         </div>
     </header>
@@ -101,8 +101,8 @@
 
     <main class="container px-4 py-8 mx-auto">
         {{-- header for searching --}}
-        <section class="mb-12 search-header">
-            <h3 class="mb-4 text-2xl font-semibold text-brown-700">Search results for "" () </h3>
+        <section class="search-header mb-12 hidden">
+            <h3 class="mb-4 text-2xl font-semibold text-brown-700"></h3>
         </section>
         <!-- Grouped Products by Categories -->
         @foreach ($categories as $category)
@@ -182,19 +182,37 @@
         const addToBagBtn = document.getElementById("addToBagBtn"); // Trigger button (replace/add multiple IDs if needed)
         const closeModalBtn = document.getElementById("closeModalBtn");
 
+        function filterProducts(categoryId) {
+            const allSections = document.querySelectorAll('.category-section');
+
+            allSections.forEach(section => {
+                if (categoryId === 'all' || section.getAttribute('data-category') === categoryId) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
+
         function searchProducts() {
             const searchInput = document.getElementById('searchInput');
             const searchValue = searchInput.value.toLowerCase().trim(); // Get the search value and trim extra spaces
             const allSections = document.querySelectorAll('.category-section');
+            const searchHeader = document.querySelector('.search-header'); // Updated to target the h3 inside .search-header
+
+            console.log('search input: ' + searchInput);
+            console.log('search value: ' + searchValue);
+            console.log('all sections: ' + allSections);
+            console.log('search header: ' + searchHeader);
 
             let totalResults = 0; // Variable to store the total number of results found
+            let sectionHasVisibleProduct = false; // Track if at least one product in the section matches
+            let sectionProductCount = 0; // Track how many products match in this section
 
             // Loop through all category sections
             allSections.forEach(section => {
                 const products = section.querySelectorAll('.product-card');
-                let sectionHasVisibleProduct = false; // Track if at least one product in the section matches
-                let sectionProductCount = 0; // Track how many products match in this section
-
+                console.log('products: ' + products);
                 products.forEach(product => {
                     const productName = product.getAttribute('data-name')
                         .toLowerCase(); // Accessing the data-name attribute
@@ -209,17 +227,6 @@
                     }
                 });
 
-                // Update the section heading dynamically based on search results
-                const searchHeader = section.querySelector('.search-header h3'); // Updated to target the h3 inside .search-header
-                if (searchHeader) {
-                    if (sectionProductCount > 0) {
-                        searchHeader.textContent = `Search results for "${searchValue}" (${sectionProductCount} found)`;
-                        totalResults += sectionProductCount; // Update total results count
-                    } else {
-                        searchHeader.textContent = `Search results for "${searchValue}" (No results)`;
-                    }
-                }
-
                 // If no products match, hide the entire section; otherwise, show the section
                 if (sectionHasVisibleProduct) {
                     section.style.display = 'block'; // Show the section if at least one product matches
@@ -227,19 +234,26 @@
                     section.style.display = 'none'; // Hide the section if no products match
                 }
             });
-        }
 
-        function filterProducts(categoryId) {
-            const allSections = document.querySelectorAll('.category-section');
+            // Update the section heading dynamically based on search results
+            console.log(searchHeader, sectionProductCount);
+            if (searchHeader) {
+                searchHeader.classList.remove('hidden'); // Show the search header
 
-            allSections.forEach(section => {
-                if (categoryId === 'all' || section.getAttribute('data-category') === categoryId) {
-                    section.style.display = 'block';
+                if (sectionProductCount > 0) {
+                    searchHeader.textContent = `Search results for "${searchValue}" (${sectionProductCount} found)`;
+                    totalResults += sectionProductCount; // Update total results count
                 } else {
-                    section.style.display = 'none';
+                    searchHeader.textContent = `No results found for "${searchValue}"`;
                 }
-            });
+            }
         }
+
+        // Store the initial visibility state of the sections and products
+        const initialState = {
+            sections: Array.from(document.querySelectorAll('.category-section')),
+            products: Array.from(document.querySelectorAll('.product-card'))
+        };
 
         // Restore the initial visibility state when search bar loses focus
         document.getElementById('searchInput').addEventListener('blur', function() {
@@ -253,17 +267,14 @@
                     product.style.display = initialState.products[i].style.display;
                 });
             });
+            // Reset the search results header
+            document.querySelector('.search-header').classList.add('hidden');
         });
 
         document.getElementById('searchButton').addEventListener('click', function() {
             document.getElementById('searchInput').focus();
         });
 
-        // Store the initial visibility state of the sections and products
-        const initialState = {
-            sections: Array.from(document.querySelectorAll('.category-section')),
-            products: Array.from(document.querySelectorAll('.product-card'))
-        };
 
         // Open Modal
         function openModal(product) {

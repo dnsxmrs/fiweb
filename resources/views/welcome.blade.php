@@ -53,14 +53,16 @@
                         <hr class="flex-grow w-32 ml-4 border-t-2 border-black">
                     </div>
                     <div class="flex space-x-8">
-                        <button class="flex flex-col items-center w-40 space-y-2 text-center">
+                        <button onclick="window.location.href='{{ route('order-now') }}'"
+                            class="flex flex-col items-center w-40 space-y-2 text-center">
                             <img class="p-4 bg-gray-100 rounded-full w-28 h-28" src="{{ asset('assets/All-icon.png') }}"
                                 alt="All">
                             <p class="text-xl">All</p>
                         </button>
 
                         @foreach ($categories as $category)
-                            <button class="flex flex-col items-center w-40 space-y-2 text-center">
+                            <button onclick="selectedCategory(this)" data-id="{{$category->category_id}}"
+                                class="flex flex-col items-center w-40 space-y-2 text-center">
                                 <img class="p-4 bg-gray-100 rounded-full w-28 h-28" src="{{ $category->image }}">
                                 <p class="text-xl">{{ $category->name }}</p>
                             </button>
@@ -94,6 +96,17 @@
             </div>
         </div>
     </div>
+    <script>
+        function selectedCategory(button) {
+            // Retrieve the data-id attribute from the clicked button
+            const categoryId = button.dataset.id;
+
+            // Log the category ID to the console
+            console.log(`Selected Category ID: ${categoryId}`);
+
+            
+        }
+    </script>
 </body>
 
 </html>

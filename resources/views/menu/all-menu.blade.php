@@ -99,503 +99,129 @@
     <!-- Menu Section -->
     <main class="container px-4 py-8 mx-auto">
 
-        <!-- Iced Espresso Section -->
-        <section class="mb-12">
-            <h3 class="mb-4 text-2xl font-semibold text-brown-700">Iced Espresso</h3>
-            <div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                <!-- Product Cards -->
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <!-- Product Image -->
-                    <div class="p-4">
-                        <img src="assets/Iced_Americano.png" alt="Americano"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <!-- Product Name -->
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Americano</h4>
-                    </div>
-                    <!-- Add to Bag Button -->
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Sweetened Americano.png" alt="Sweetened Americano"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Sweetened Americano</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Cafe Latte.png" alt="Cafe Latte" class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Cafe Latte</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Caramel Macchiato.png" alt="Caramel Macchiato"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Caramel Macchiato</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/White Americano.png" alt="White Americano"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">White Americano</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Spanish Latte.png" alt="Spanish Latte"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Spanish Latte</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Mocha.png" alt="Mocha" class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Mocha</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Cafe Hazelnut.png" alt="Cafe Hazelnut"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Cafe Hazelnut</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Ube Espresso Fusion.png" alt="Ube Espresso Fusion"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Ube Espresso Fusion</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-            </div>
-        </section>
+        <!-- Cold Drinks Modal -->
+        <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
+            <div class="bg-[#E9B303] w-[450px] h-[810px] rounded-lg shadow-lg p-6">
+                <div class="text-center">
+                    <!-- Header -->
+                    <h2 class="mb-4 text-2xl font-bold text-white">Customize your order</h2>
 
-        <!-- Hot Espresso Section -->
-        <section class="mb-12">
-            <h3 class="mb-4 text-2xl font-semibold text-brown-700">Hot Espresso</h3>
-            <div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                <!-- Product Cards -->
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
                     <!-- Product Image -->
-                    <div class="p-4">
-                        <img src="assets/Hot-Americano.png" alt="Americano"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <!-- Product Name -->
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Americano</h4>
-                    </div>
-                    <!-- Add to Bag Button -->
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Hot-Cafe Latte.png" alt="Cafe Latte"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Cafe Latte</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Hot-Spanish Latte.png" alt="Spanish Latte"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Spanish Latte</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Hot-Mocha.png" alt="Mocha" class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Mocha</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Hot-Caramel Macchiato.png" alt="Caramel Macchiato"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Caramel Macchiato</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-            </div>
-        </section>
+                    <img src="assets/Iced_Americano.png" alt="Americano" class="mx-auto w-[378px] h-[243px] rounded-lg mb-4">
 
-        <!-- Iced Non-Espresso Section -->
-        <section class="mb-12">
-            <h3 class="mb-4 text-2xl font-semibold text-brown-700">Iced Non-Espresso</h3>
-            <div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                <!-- Product Cards -->
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <!-- Product Image -->
-                    <div class="p-4">
-                        <img src="assets/Iced-Choco.png" alt="Choco" class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <!-- Product Name -->
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Choco</h4>
-                    </div>
-                    <!-- Add to Bag Button -->
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Iced-Strawberry Milk.png" alt="Strawberry Milk"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Strawberry Milk</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Iced-Matcha Latte.png" alt="Matcha Latte"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Matcha Latte</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-            </div>
-        </section>
+                    <!-- Product Title -->
+                    <h3 class="mb-2 text-3xl font-semibold text-white">Americano</h3>
+                    <p class="mb-6 text-lg text-white">Iced Coffee</p>
 
-        <!-- Hot Non-Espresso Section -->
-        <section class="mb-12">
-            <h3 class="mb-4 text-2xl font-semibold text-brown-700">Hot Non-Espresso</h3>
-            <div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                <!-- Product Cards -->
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <!-- Product Image -->
-                    <div class="p-4">
-                        <img src="assets/Hot-Choco.png" alt="Choco" class="object-cover w-full rounded-lg h-44">
+                    <!-- Quantity Selector -->
+                    <div class="flex items-center justify-center mb-6">
+                        <button class="px-4 py-2 text-2xl font-bold text-white bg-black rounded-full">-</button>
+                        <span class="mx-6 text-2xl text-white">2</span>
+                        <button class="px-4 py-2 text-2xl font-bold text-white bg-black rounded-full">+</button>
                     </div>
-                    <!-- Product Name -->
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Choco</h4>
-                    </div>
-                    <!-- Add to Bag Button -->
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-            </div>
-        </section>
 
-        <!-- Frappuccino Espresso Section -->
-        <section class="mb-12">
-            <h3 class="mb-4 text-2xl font-semibold text-brown-700">Frappuccino Espresso</h3>
-            <div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                <!-- Product Cards -->
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <!-- Product Image -->
-                    <div class="p-4">
-                        <img src="assets/Frappuccino-Java Chip.png" alt="Java Chip"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <!-- Product Name -->
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Java Chip</h4>
-                    </div>
-                    <!-- Add to Bag Button -->
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Frappuccino-Caramel.png" alt="Caramel"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Caramel</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Frappuccino-Mocha Hazelnut.png" alt="Mocha Hazelnut"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Mocha Hazelnut</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-            </div>
-        </section>
+                    <!-- Size Options -->
+                    <h4 class="mb-4 text-lg font-semibold text-white">Choose your drink size</h4>
+                    <div class="flex justify-center gap-4 mb-6">
+                        <!-- Size Option 1 -->
+                        <button
+                            class="flex flex-col items-center justify-center w-24 h-32 bg-gray-200 rounded-lg shadow-md hover:bg-white hover:shadow-lg">
+                            <img src="assets/coffee size.png" alt="16oz cup" class="w-12 h-12 mb-2">
+                            <span class="text-sm font-semibold text-gray-500 hover:text-[#E9B303]">16oz</span>
+                            <span class="text-sm text-gray-400 hover:text-gray-500">(Php 110.00)</span>
+                        </button>
 
-        <!-- Frappuccino Non-Espresso Section -->
-        <section class="mb-12">
-            <h3 class="mb-4 text-2xl font-semibold text-brown-700">Frappuccino Non-Espresso</h3>
-            <div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                <!-- Product Cards -->
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <!-- Product Image -->
-                    <div class="p-4">
-                        <img src="assets/Frappuccino-Choco Hazelnut.png" alt="Choco Hazelnut"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <!-- Product Name -->
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Choco Hazelnut</h4>
+                        <!-- Size Option 2 -->
+                        <button
+                            class="flex flex-col items-center justify-center w-24 h-32 bg-gray-200 rounded-lg shadow-md hover:bg-white hover:shadow-lg">
+                            <img src="assets/coffee size.png" alt="16oz cup" class="w-12 h-12 mb-2">
+                            <span class="text-sm font-semibold text-gray-500 hover:text-[#E9B303]">22oz</span>
+                            <span class="text-sm text-gray-400 hover:text-gray-500">(Php 120.00)</span>
+                        </button>
                     </div>
                     <!-- Add to Bag Button -->
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Frappuccino-Strawberry Delight.png" alt="Strawberry Delight"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Strawberry Delight</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Frappuccino-Choc Chip.png" alt="Choc Chip"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Choc Chip</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Frappuccino-Matcha.png" alt="Matcha"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Matcha</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
+                    <button id="closeModalBtn" class="py-3 text-lg font-semibold text-white bg-black w-[378px] rounded-3xl">
+                        Add to my bag
                     </button>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Snack Section -->
-        <section class="mb-12">
-            <h3 class="mb-4 text-2xl font-semibold text-brown-700">Snack</h3>
-            <div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                <!-- Product Cards -->
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <!-- Product Image -->
-                    <div class="p-4">
-                        <img src="assets/Fries.png" alt="Fries" class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <!-- Product Name -->
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Fries</h4>
-                    </div>
-                    <!-- Add to Bag Button -->
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Big Siomai.png" alt="Big Siomai"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Big Siomai</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Siomai Rice.png" alt="Siomai Rice"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Siomai Rice</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-            </div>
-        </section>
+        <!-- Hot Drinks Modal -->
+        <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
+            <div class="bg-[#E9B303] w-[450px] h-[810px] rounded-lg shadow-lg p-6">
+                <div class="text-center">
+                    <!-- Header -->
+                    <h2 class="mb-4 text-2xl font-bold text-white">Customize your order</h2>
 
-        <!-- Dessert Section -->
-        <section class="mb-12">
-            <h3 class="mb-4 text-2xl font-semibold text-brown-700">Dessert</h3>
-            <div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                <!-- Product Cards -->
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
                     <!-- Product Image -->
-                    <div class="p-4">
-                        <img src="assets/Chocolate Chip Cookie.png" alt="Chocolate Chip Cookie"
-                            class="object-cover w-full rounded-lg h-44">
+                    <img src="assets/Iced_Americano.png" alt="Americano" class="mx-auto w-[350px] h-[200px] rounded-lg mb-4">
+
+                    <!-- Product Title -->
+                    <h3 class="mb-2 text-xl font-semibold text-white">Americano</h3>
+                    <p class="mb-4 text-sm text-white">Hot Coffee</p>
+
+                    <!-- Drink Size Section -->
+                    <h4 class="mb-4 text-lg font-semibold text-white">Choose your drink size</h4>
+                    <div class="flex flex-col items-center mb-4">
+                        <div class="flex flex-col items-center bg-gray-200 rounded-lg shadow-md w-[100px] h-[140px]">
+                            <img src="assets/coffee size.png" alt="8oz cup" class="w-12 h-12 mt-4">
+                            <span class="mt-2 text-sm font-semibold text-gray-700">8oz</span>
+                            <span class="text-sm text-gray-500">(Php 95.00)</span>
+                        </div>
                     </div>
-                    <!-- Product Name -->
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Chocolate Chip Cookie</h4>
+
+                    <!-- Total Price -->
+                    <p class="pb-5 mb-4 text-lg font-semibold text-white">Php 95.00</p>
+
+                    <!-- Quantity Selector -->
+                    <div class="flex items-center justify-center pb-5 mb-6">
+                        <button class="px-4 py-2 text-xl font-bold text-white bg-black rounded-full">-</button>
+                        <span class="mx-6 text-xl text-white">1</span>
+                        <button class="px-4 py-2 text-xl font-bold text-white bg-black rounded-full">+</button>
                     </div>
+
                     <!-- Add to Bag Button -->
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Compfire S’mores Cookie.png" alt="Compfire S’mores Cookie"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Compfire S’mores Cookie</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Fudgy Brownie.png" alt="Fudgy Brownie"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Fudgy Brownie</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
-                    </button>
-                </div>
-                <div class="mx-auto bg-white rounded-lg shadow-md w-70">
-                    <div class="p-4">
-                        <img src="assets/Red Velvet Slice.png" alt="Red Velvet Slice"
-                            class="object-cover w-full rounded-lg h-44">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="mb-2 text-lg font-bold text-gray-800">Red Velvet Slice</h4>
-                    </div>
-                    <button id="addToBagBtn"
-                        class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition">
-                        Add to bag
+                    <button id="closeModalBtn" class="w-full py-3 text-sm font-semibold text-white bg-black rounded-full">
+                        Add to my bag
                     </button>
                 </div>
             </div>
-        </section>
+        </div>
+
+        <!-- Snacks/Dessert Modal -->
+        <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
+            <div class="bg-[#E9B303] w-[455px] h-[590px] rounded-lg shadow-lg p-6">
+                <div class="text-center">
+                    <!-- Header -->
+                    <h2 class="mb-4 text-2xl font-bold text-white">Customize your order</h2>
+
+                    <!-- Product Image -->
+                    <img src="assets/Iced_Americano.png" alt="Americano" class="mx-auto w-[350px] h-[200px] rounded-lg mb-4">
+
+                    <!-- Product Title -->
+                    <h3 class="mb-2 text-2xl font-semibold text-white">Fries</h3>
+                    <p class="mb-4 text-lg text-white">Snack</p>
+
+                    <!-- Total Price -->
+                    <p class="mb-4 text-xl font-semibold text-white p">Php 75.00</p>
+
+                    <!-- Quantity Selector -->
+                    <div class="flex items-center justify-center pb-5 mb-6">
+                        <button class="px-4 py-2 text-xl font-bold text-white bg-black rounded-full">-</button>
+                        <span class="mx-6 text-xl text-white">1</span>
+                        <button class="px-4 py-2 text-xl font-bold text-white bg-black rounded-full">+</button>
+                    </div>
+
+                    <!-- Add to Bag Button -->
+                    <button id="closeModalBtn" class="w-full py-3 text-sm font-semibold text-white bg-black rounded-full">
+                        Add to my bag
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
     </main>
 
     <!-- Snacks/Dessert Modal -->
