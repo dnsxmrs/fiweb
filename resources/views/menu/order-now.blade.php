@@ -12,9 +12,15 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('js/order-now.js') }}" defer></script>
     <style>
         body {
             font-family: 'Barlow', sans-serif;
+            margin: 0;
+            height: 100%;
+        }
+        html {
+            height: 100%;
         }
     </style>
 </head>
@@ -34,9 +40,12 @@
 
                     <!-- Navigation Links -->
                     <nav class="hidden ml-8 space-x-8 md:flex">
-                        <a href=" {{ route('landing') }} " class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Home</a>
-                        <a href="{{ route('order-now') }}" class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Menu</a>
-                        <a href="#" class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Orders</a>
+                        <a href=" {{ route('landing') }} "
+                            class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Home</a>
+                        <a href="{{ route('order-now') }}"
+                            class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Menu</a>
+                        <a href="#                       "
+                            class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Orders</a>
                     </nav>
                 </div>
             </div>
@@ -53,10 +62,11 @@
                 </div>
 
                 <!-- Basket Icon -->
-                <button class="relative flex items-center">
+                <button class="basketBtn relative flex items-center">
                     <img src="assets/order-bag.png" alt="Order Bag" class="w-12 h-12">
                     <span
-                        class="absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full">0</span>
+                        class="basketCounter absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full">
+                        0</span>
                 </button>
 
                 <!-- Guest Button -->
@@ -73,75 +83,128 @@
         </div>
     </header>
 
-    <!-- Menu header -->
-    <div class="relative sticky z-10 h-40 bg-center bg-cover top-20"
-        style="background-image: url('assets/coffee-shop-bg.png'); margin-bottom: 0;">
-        <div class="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-30">
-            <h1 class="text-5xl font-bold text-white">MENU</h1>
-            <p class="mt-2 text-2xl font-light text-white">What are you craving today?</p>
-        </div>
-    </div>
+    <div class="container flex table w-full h-full">
+        <div class="right-panel table-cell w-[95%] align-top flex-1 bg-[#f4f4f4] overflow-y-auto p-5">
+            <!-- Menu header -->
+            <div class="relative sticky z-10 h-40 bg-center bg-cover top-20"
+                style="background-image: url('assets/coffee-shop-bg.png'); margin-bottom: 0;">
+                <div class="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-30">
+                    <h1 class="text-5xl font-bold text-white">MENU</h1>
+                    <p class="mt-2 text-2xl font-light text-white">What are you craving today?</p>
+                </div>
+            </div>
 
-    <!-- Tabs Section for Filtering -->
-    <div class="sticky z-10 bg-white shadow-md top-60">
-        <div class="flex justify-center py-4 space-x-4">
-            <button onclick="filterProducts('all')"
-                class="px-4 py-2 text-lg font-medium text-black border-b-2 border-black hover:text-black-800">
-                All Menu
-            </button>
+            <!-- Tabs Section for Filtering -->
+            <div class="sticky z-10 bg-white shadow-md top-60">
+                <div class="flex justify-center py-4 space-x-4">
+                    <button onclick="filterProducts('all')"
+                        class="px-4 py-2 text-lg font-medium text-black border-b-2 border-black hover:text-black-800">
+                        All Menu
+                    </button>
 
-            @foreach ($categories as $category)
-                <button onclick="filterProducts('{{ $category->category_number }}')"
-                    class="px-4 py-2 font-medium text-black text-lg hover:text-black-800">
-                    {{ $category->name }}
-                </button>
-            @endforeach
-        </div>
-    </div>
-
-    <main class="container px-4 py-8 mx-auto">
-        {{-- header for searching --}}
-        <section class="search-header mb-12 hidden">
-            <h3 class="mb-4 text-2xl font-semibold text-brown-700"></h3>
-        </section>
-        <!-- Grouped Products by Categories -->
-        @foreach ($categories as $category)
-            <section class="mb-12 category-section" data-category="{{ $category->category_number }}">
-                <h3 class="mb-4 text-2xl font-semibold text-brown-700">{{ $category->name }}</h3>
-                <div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                    @foreach ($products as $product)
-                        @if ($product->category_number === $category->category_number)
-                            <!-- Product Cards -->
-                            <div class="product-card mx-auto bg-white rounded-lg shadow-md w-70"
-                                data-name="{{ $product->name }}">
-                                <!-- Product Image -->
-                                <div class="p-4">
-                                    <img src="{{ $product->image }}" alt="{{ $product->name }}"
-                                        class="object-cover w-full rounded-lg h-44">
-                                </div>
-                                <!-- Product Name -->
-                                <div class="text-center">
-                                    <h4 class="mb-2 text-lg font-bold text-gray-800">{{ $product->name }}</h4>
-                                </div>
-                                {{-- Product Price --}}
-                                <div class="text-center">
-                                    <span class="text-lg font-bold text-gray-800">₱{{ $product->price }}</span>
-                                </div>
-                                <!-- Add to Bag Button -->
-                                <button id="addToBagBtn"
-                                    class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition"
-                                    onclick='openModal(@json($product))'>
-                                    Add to bag
-                                </button>
-                            </div>
-                        @endif
+                    @foreach ($categories as $category)
+                        <button onclick="filterProducts('{{ $category->category_number }}')"
+                            class="px-4 py-2 font-medium text-black text-lg hover:text-black-800">
+                            {{ $category->name }}
+                        </button>
                     @endforeach
                 </div>
-            </section>
-        @endforeach
-    </main>
+            </div>
 
-    <!-- Snacks/Dessert Modal -->
+            <main class="container px-4 py-8 mx-auto">
+                {{-- header for searching --}}
+                <section class="search-header mb-12 hidden">
+                    <h3 class="mb-4 text-2xl font-semibold text-brown-700">Text for search results</h3>
+                </section>
+                <!-- Grouped Products by Categories -->
+                @foreach ($categories as $category)
+                    <section class="mb-12 category-section" data-category="{{ $category->category_number }}">
+                        <h3 class="mb-4 text-2xl font-semibold text-brown-700">{{ $category->name }}</h3>
+                        <div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                            @foreach ($products as $product)
+                                @if ($product->category_number === $category->category_number)
+                                    <!-- Product Cards -->
+                                    <div class="product-card mx-auto bg-white rounded-lg shadow-md w-70"
+                                        data-name="{{ $product->name }}">
+                                        <!-- Product Image -->
+                                        <div class="p-4">
+                                            <img src="{{ $product->image }}" alt="{{ $product->name }}"
+                                                class="object-cover w-full rounded-lg h-44">
+                                        </div>
+                                        <!-- Product Name -->
+                                        <div class="text-center">
+                                            <h4 class="mb-2 text-lg font-bold text-gray-800">{{ $product->name }}</h4>
+                                        </div>
+                                        {{-- Product Price --}}
+                                        <div class="text-center">
+                                            <span class="text-lg font-bold text-gray-800">₱{{ $product->price }}</span>
+                                        </div>
+                                        <!-- Add to Bag Button -->
+                                        <button id="addToBagBtn" data-category="{{ $category->name }}"
+                                            class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition"
+                                            onclick='openModal(@json(['product' => $product, 'category' => $category]))'>
+                                            Add to bag
+                                        </button>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </section>
+                @endforeach
+            </main>
+        </div>
+
+        <!-- Order Summary Sidebar -->
+        <div class="sidebar fixed top-20 right-0 h-[calc(100vh-80px)] bg-white shadow-md w-96 z-10 flex flex-col">
+            <!-- Order Summary Header -->
+            <div class="p-6">
+                <h2 class="mb-4 text-xl font-semibold text-gray-800">Order Summary</h2>
+                <!-- Column Headings -->
+                <div class="flex justify-between pb-2 mb-2 border-b">
+                    <span class="font-medium text-gray-600">Item</span>
+                    <span class="font-medium text-gray-600">Qty</span>
+                    <span class="font-medium text-gray-600">Price</span>
+                </div>
+
+                <!-- Order Items -->
+                <div class="order-cart flex flex-col">
+                    {{-- items added to cart goes here --}}
+                </div>
+
+                <!-- Order Note -->
+                <div class="flex items-center mt-4">
+                    <textarea id="orderNote" rows="1" placeholder="Order Note..."
+                        class="orderNote flex-grow p-2 text-xs text-gray-700 bg-gray-100 border rounded focus:outline-none focus:ring-2 focus:ring-[#E9B303]"></textarea>
+                    <!-- Trash Can Icon -->
+                    <button class="ml-2 text-gray-500 hover:text-red-600">
+                        <img src="assets/trashcan.png" alt="Trash Can" class="h-10 w-7">
+                    </button>
+                </div>
+            </div>
+
+            <!-- Subtotal, Delivery Fee, and Total Section -->
+            <div class="p-6 pb-10 mt-auto border-t bg-gray-50">
+                <div class="flex justify-between text-gray-800">
+                    <span>Subtotal</span>
+                    <span class="order-subtotal"></span>
+                </div>
+                <div class="flex justify-between mt-2 text-gray-800">
+                    <span>Delivery Fee</span>
+                    <span>Php 50.00</span>
+                </div>
+                <div class="flex justify-between mt-4 text-lg font-bold text-gray-800">
+                    <span>Total</span>
+                    <span class="order-total"></span>
+                </div>
+                <!-- Checkout Button -->
+                <button class="w-full py-3 mt-6 text-white bg-green-500 rounded-3xl hover:bg-green-600">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- General Modal -->
     <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50">
         <div class="bg-[#E9B303] w-[455px] h-[590px] rounded-lg shadow-lg p-6">
             <div class="text-center">
@@ -161,11 +224,12 @@
 
                 <!-- Quantity Selector -->
                 <div class="flex items-center justify-center pb-5 mb-6">
-                    <button id="decreaseBtn"
-                        class="px-4 py-2 text-xl font-bold text-white bg-black rounded-full">-</button>
-                    <span id='quantity' class="mx-6 text-xl text-white">1</span>
-                    <button id="increaseBtn"
-                        class="px-4 py-2 text-xl font-bold text-white bg-black rounded-full">+</button>
+                    <button id="decreaseBtn" class="px-4 py-2 text-xl font-bold text-white bg-black rounded-full">
+                        -</button>
+                    <span id='quantity' class="mx-6 text-xl text-white">
+                        1</span>
+                    <button id="increaseBtn" class="px-4 py-2 text-xl font-bold text-white bg-black rounded-full">
+                        +</button>
                 </div>
 
                 <!-- Add to Bag Button -->
@@ -175,157 +239,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        // JavaScript to open/close modal
-        const modal = document.getElementById("modal");
-        const addToBagBtn = document.getElementById("addToBagBtn"); // Trigger button (replace/add multiple IDs if needed)
-        const closeModalBtn = document.getElementById("closeModalBtn");
-
-        function filterProducts(categoryId) {
-            const allSections = document.querySelectorAll('.category-section');
-
-            allSections.forEach(section => {
-                if (categoryId === 'all' || section.getAttribute('data-category') === categoryId) {
-                    section.style.display = 'block';
-                } else {
-                    section.style.display = 'none';
-                }
-            });
-        }
-
-        function searchProducts() {
-            const searchInput = document.getElementById('searchInput');
-            const searchValue = searchInput.value.toLowerCase().trim(); // Get the search value and trim extra spaces
-            const allSections = document.querySelectorAll('.category-section');
-            const searchHeader = document.querySelector('.search-header'); // Updated to target the h3 inside .search-header
-
-            console.log('search input: ' + searchInput);
-            console.log('search value: ' + searchValue);
-            console.log('all sections: ' + allSections);
-            console.log('search header: ' + searchHeader);
-
-            let totalResults = 0; // Variable to store the total number of results found
-            let sectionHasVisibleProduct = false; // Track if at least one product in the section matches
-            let sectionProductCount = 0; // Track how many products match in this section
-
-            // Loop through all category sections
-            allSections.forEach(section => {
-                const products = section.querySelectorAll('.product-card');
-                console.log('products: ' + products);
-                products.forEach(product => {
-                    const productName = product.getAttribute('data-name')
-                        .toLowerCase(); // Accessing the data-name attribute
-
-                    // If the product name includes the search term, show it
-                    if (productName.includes(searchValue)) {
-                        product.style.display = 'block';
-                        sectionProductCount++; // Increment count for matching products in this section
-                        sectionHasVisibleProduct = true; // Set this to true if this product is visible
-                    } else {
-                        product.style.display = 'none'; // Hide the product if it doesn't match
-                    }
-                });
-
-                // If no products match, hide the entire section; otherwise, show the section
-                if (sectionHasVisibleProduct) {
-                    section.style.display = 'block'; // Show the section if at least one product matches
-                } else {
-                    section.style.display = 'none'; // Hide the section if no products match
-                }
-            });
-
-            // Update the section heading dynamically based on search results
-            console.log(searchHeader, sectionProductCount);
-            if (searchHeader) {
-                searchHeader.classList.remove('hidden'); // Show the search header
-
-                if (sectionProductCount > 0) {
-                    searchHeader.textContent = `Search results for "${searchValue}" (${sectionProductCount} found)`;
-                    totalResults += sectionProductCount; // Update total results count
-                } else {
-                    searchHeader.textContent = `No results found for "${searchValue}"`;
-                }
-            }
-        }
-
-        // Store the initial visibility state of the sections and products
-        const initialState = {
-            sections: Array.from(document.querySelectorAll('.category-section')),
-            products: Array.from(document.querySelectorAll('.product-card'))
-        };
-
-        // Restore the initial visibility state when search bar loses focus
-        document.getElementById('searchInput').addEventListener('blur', function() {
-            // Reset the search input value
-            this.value = '';
-            // Reset the display state to the initial state
-            initialState.sections.forEach((section, index) => {
-                section.style.display = initialState.sections[index].style.display;
-                const products = section.querySelectorAll('.product-card');
-                products.forEach((product, i) => {
-                    product.style.display = initialState.products[i].style.display;
-                });
-            });
-            // Reset the search results header
-            document.querySelector('.search-header').classList.add('hidden');
-        });
-
-        document.getElementById('searchButton').addEventListener('click', function() {
-            document.getElementById('searchInput').focus();
-        });
-
-
-        // Open Modal
-        function openModal(product) {
-            // Populate the modal with the product details
-            document.getElementById("modalProductImage").src = product.image;
-            document.getElementById("modalProductTitle").textContent = product.name;
-            document.getElementById("modalProductCategory").textContent = product.category_name; // Use category_name
-            document.getElementById("modalProductPrice").textContent = "Php " + product.price;
-
-            // Set initial price
-            let quantity = 1;
-            let totalPrice = product.price;
-
-            // Update total price when quantity changes
-            const priceDisplay = document.getElementById("modalProductPrice");
-            const quantityDisplay = document.getElementById("quantity");
-
-            // Decrease Quantity
-            document.getElementById("decreaseBtn").addEventListener("click", () => {
-                if (quantity > 1) {
-                    quantity--;
-                    quantityDisplay.textContent = quantity;
-                    priceDisplay.textContent = "Php " + (product.price * quantity).toFixed(2); // Update total price
-                }
-            });
-
-            // Increase Quantity
-            document.getElementById("increaseBtn").addEventListener("click", () => {
-                quantity++;
-                quantityDisplay.textContent = quantity;
-                priceDisplay.textContent = "Php " + (product.price * quantity).toFixed(2); // Update total price
-            });
-
-            // Show the modal
-            const modal = document.getElementById("modal");
-            modal.classList.remove("hidden");
-        }
-
-        // Close Modal
-        closeModalBtn?.addEventListener("click", () => {
-            modal.classList.add("hidden");
-        });
-
-        // Close modal on clicking outside the content
-        modal.addEventListener("click", (e) => {
-            if (e.target === modal) {
-                modal.classList.add("hidden");
-            }
-        });
-    </script>
-
 </body>
 
 </html>

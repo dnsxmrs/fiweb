@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
 
 
 class WebhookController extends Controller
@@ -50,7 +51,7 @@ class WebhookController extends Controller
     public function category(Request $request)
     {
         // log incoming request
-        \Log::info('Received category request', [
+        Log::info('Received category request', [
             'request_method' => $request->method(),
             'request_data' => $request->all(),
         ]);
@@ -84,7 +85,7 @@ class WebhookController extends Controller
                     'image' => $validatedData['image_url'] ?: null, // Treat empty string as null
                 ]);
 
-                \Log::info('Category updated successfully', [
+                Log::info('Category updated successfully', [
                     'category_number' => $category->category_number,
                     'name' => $category->name,
                     'type' => $category->type,
@@ -108,7 +109,7 @@ class WebhookController extends Controller
                     'image' => $validatedData['image_url'] ?: null,
                 ]);
 
-                \Log::info('Category created successfully', [
+                Log::info('Category created successfully', [
                     'category_number' => $category->category_number,
                     'name' => $category->name,
                     'type' => $category->type,
@@ -125,7 +126,7 @@ class WebhookController extends Controller
             }
         } catch (\Exception $e) {
             // Log the error with relevant context
-            \Log::error('Failed to process category operation', [
+            Log::error('Failed to process category operation', [
                 'error' => $e->getMessage(),
                 'data' => $validatedData,
             ]);
@@ -150,7 +151,7 @@ class WebhookController extends Controller
 
             // if category is not found
             if (!$category) {
-                \Log::error('Category not found', [
+                Log::error('Category not found', [
                     'category_number' => $validatedData['category_number'],
                 ]);
                 return response()->json([
@@ -163,7 +164,7 @@ class WebhookController extends Controller
             // delete the category if it exists
             $category->delete();
 
-            \Log::info('Category deleted successfully', [
+            Log::info('Category deleted successfully', [
                 'category_number' => $validatedData['category_number'],
             ]);
 
@@ -174,7 +175,7 @@ class WebhookController extends Controller
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             // Log the error with relevant context
-            \Log::error('Failed to delete category', [
+            Log::error('Failed to delete category', [
                 'error' => $e->getMessage(),
                 'category_number' => $validatedData['category_number'],
             ]);
@@ -191,7 +192,7 @@ class WebhookController extends Controller
     public function product(Request $request)
     {
         // Log the incoming request data for debugging
-        \Log::info('Received product request', [
+        Log::info('Received product request', [
             'request_method' => $request->method(),
             'request_data' => $request->all()
         ]);
@@ -232,7 +233,7 @@ class WebhookController extends Controller
                 ]);
 
                 // Log the successful category update
-                \Log::info('Product updated successfully', [
+                Log::info('Product updated successfully', [
                     'product_id' => $product->id,
                     'name' => $product->name,
                     'description' => $product->description,
@@ -262,7 +263,7 @@ class WebhookController extends Controller
                 ]);
 
                 // Log the successful category create
-                \Log::info('Product created successfully', [
+                Log::info('Product created successfully', [
                     'product_id' => $product->id,
                     'name' => $product->name,
                     'description' => $product->description,
@@ -282,7 +283,7 @@ class WebhookController extends Controller
             }
         } catch (\Exception $e) {
             // Log the error with relevant context
-            \Log::error('Failed to process product operation', [
+            Log::error('Failed to process product operation', [
                 'error' => $e->getMessage(),
                 'data' => $validatedData,
             ]);
