@@ -11,8 +11,10 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="{{ asset('js/order-now.js') }}" defer></script>
+    {{-- <script src="{{ asset('js/order-now.js') }}" defer></script> --}}
+
+    @vite(['resources/js/app.js', 'resources/css/app.css'])
+
     <style>
         body {
             font-family: 'Barlow', sans-serif;
