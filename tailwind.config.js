@@ -7,6 +7,7 @@ export default {
         './storage/framework/views/*.php',
         './resources/**/*.blade.php',
         './resources/**/*.js',
+        './resources/**/*.css',
         './resources/**/*.vue',
     ],
     theme: {
@@ -14,47 +15,21 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                brown: {
+                    DEFAULT: '#A27451',
+                    hover: '#7E593F',
+                },
+                gold: {
+                    DEFAULT: '#E9B303',
+                    hover: '#C69702',
+                },
+                green: {
+                    DEFAULT: '#0FAF00',
+                    hover: '#0C9000',
+                },
+            },
         },
     },
     plugins: [],
-
 };
-
-module.exports = {
-    theme: {
-      extend: {
-        colors: {
-          brown: {
-            DEFAULT: '#A27451',
-            hover: '#7E593F',
-          },
-        },
-      },
-    },
-  };
-
-  module.exports = {
-    theme: {
-      extend: {
-        colors: {
-          gold: {
-            DEFAULT: '#E9B303',
-            hover: '#C69702',
-          },
-        },
-      },
-    },
-  };
-
-  module.exports = {
-    theme: {
-      extend: {
-        colors: {
-          gold: {
-            DEFAULT: '#0FAF00',
-            hover: '#0C9000',
-          },
-        },
-      },
-    },
-  };
