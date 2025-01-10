@@ -11,8 +11,10 @@ const delivery_fee = 50;
 let discountAmount = 0.0;
 let modeOfPayment = null;
 
-window.filterProducts = function(categoryId) {
+window.filterProducts = function (categoryId) {
     const allSections = document.querySelectorAll(".category-section");
+
+    console.log("filter tab is clicked " + categoryId);
 
     allSections.forEach((section) => {
         if (
@@ -24,7 +26,7 @@ window.filterProducts = function(categoryId) {
             section.style.display = "none";
         }
     });
-}
+};
 
 window.searchProducts = function () {
     const searchInput = document.getElementById("searchInput");
@@ -78,7 +80,7 @@ window.searchProducts = function () {
             searchHeader.textContent = `No results found for "${searchValue}"`;
         }
     }
-}
+};
 
 // Store the initial visibility state of the sections and products
 const initialState = {
@@ -87,27 +89,50 @@ const initialState = {
 };
 
 // Restore the initial visibility state when search bar loses focus
-document.getElementById("searchInput").addEventListener("blur", function () {
-    // Reset the search input value
-    this.value = "";
-    // Reset the display state to the initial state
-    initialState.sections.forEach((section, index) => {
-        section.style.display = initialState.sections[index].style.display;
-        const products = section.querySelectorAll(".product-card");
-        products.forEach((product, i) => {
-            product.style.display = initialState.products[i].style.display;
+// document.getElementById("searchInput").addEventListener("blur", function () {
+
+// });
+
+window.addEventListener("load", function () {
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+        searchInput.addEventListener("blur", function () {
+            // Your logic here
+            // Reset the search input value
+            this.value = "";
+            // Reset the display state to the initial state
+            initialState.sections.forEach((section, index) => {
+                section.style.display =
+                    initialState.sections[index].style.display;
+                const products = section.querySelectorAll(".product-card");
+                products.forEach((product, i) => {
+                    product.style.display =
+                        initialState.products[i].style.display;
+                });
+            });
+            // Reset the search results header
+            document.querySelector(".search-header").classList.add("hidden");
         });
-    });
-    // Reset the search results header
-    document.querySelector(".search-header").classList.add("hidden");
+    }
 });
 
-document.getElementById("searchButton").addEventListener("click", function () {
-    document.getElementById("searchInput").focus();
+window.addEventListener("load", function () {
+    const searchButton = document.getElementById("searchButton");
+    const searchInput = document.getElementById("searchInput");
+
+    if (searchButton && searchInput) {
+        searchButton.addEventListener("click", function () {
+            searchInput.focus();
+        });
+    }
 });
+
+// document.getElementById("searchButton").addEventListener("click", function () {
+//     document.getElementById("searchInput").focus();
+// });
 
 // Open Modal
-function openModal(data) {
+window.openModal = function (data) {
     console.table(data);
 
     // Set initial price
@@ -121,9 +146,12 @@ function openModal(data) {
 
     // Populate the modal with the product details
     document.getElementById("modalProductImage").src = data.product.image;
-    document.getElementById("modalProductTitle").textContent = data.product.name;
-    document.getElementById("modalProductCategory").textContent = data.category.name;
-    document.getElementById("modalProductPrice").textContent = "Php " + data.product.price;
+    document.getElementById("modalProductTitle").textContent =
+        data.product.name;
+    document.getElementById("modalProductCategory").textContent =
+        data.category.name;
+    document.getElementById("modalProductPrice").textContent =
+        "Php " + data.product.price;
     document.getElementById("quantity").textContent = quantity;
 
     // Decrease Quantity
@@ -148,7 +176,7 @@ function openModal(data) {
 
     // Show the modal
     modal.classList.remove("hidden");
-}
+};
 
 // // for computations
 // let order_subtotal = 0.0;
@@ -158,39 +186,50 @@ function openModal(data) {
 // let discountAmount = 0.0;
 // let modeOfPayment = null;
 
-// Close Modal
-closeModalBtn?.addEventListener("click", () => {
-    // get the category, product name, prodct price, quantity, quantity-price from modal
-    let category = document.getElementById("modalProductCategory").textContent;
-    let productName = document.getElementById("modalProductTitle").textContent;
-    let productPrice = parseFloat(
-        document.getElementById("modalProductPrice").textContent.split("Php ")[1]
-    );
-    let quantity = parseInt(document.getElementById("quantity").textContent);
-    let totalPrice = parseFloat(
-        document.getElementById("modalProductPrice").textContent.split("Php ")[1]
-    );
+window.addEventListener("load", () => {
+    const closeModalBtn = document.querySelector(".close-modal-btn");
+    closeModalBtn?.addEventListener("click", () => {
+        // Logic to close the modal
+        // get the category, product name, prodct price, quantity, quantity-price from modal
+        let category = document.getElementById(
+            "modalProductCategory"
+        ).textContent;
+        let productName =
+            document.getElementById("modalProductTitle").textContent;
+        let productPrice = parseFloat(
+            document
+                .getElementById("modalProductPrice")
+                .textContent.split("Php ")[1]
+        );
+        let quantity = parseInt(
+            document.getElementById("quantity").textContent
+        );
+        let totalPrice = parseFloat(
+            document
+                .getElementById("modalProductPrice")
+                .textContent.split("Php ")[1]
+        );
 
-    if (orderItems[productName]) {
-        orderItems[name].quantity++;
-        orderItems[name].price += price;
+        if (orderItems[productName]) {
+            orderItems[name].quantity++;
+            orderItems[name].price += price;
 
-        // Update the quantity and price in the DOM
-        const itemRow = document.getElementById("item-" + name);
-        itemRow.querySelector(".item-qty").textContent =
-            orderItems[name].quantity;
-        itemRow.querySelector(".item-price").textContent = `₱ ${orderItems[
-            name
-        ].price.toFixed(2)}`;
-    } else {
-        // If item does not exist, add it to the order
-        orderItems[name] = {
-            quantity: 1,
-            price: price,
-        };
+            // Update the quantity and price in the DOM
+            const itemRow = document.getElementById("item-" + name);
+            itemRow.querySelector(".item-qty").textContent =
+                orderItems[name].quantity;
+            itemRow.querySelector(".item-price").textContent = `₱ ${orderItems[
+                name
+            ].price.toFixed(2)}`;
+        } else {
+            // If item does not exist, add it to the order
+            orderItems[name] = {
+                quantity: 1,
+                price: price,
+            };
 
-        // Add the item to the right panel
-        const orderItem = `
+            // Add the item to the right panel
+            const orderItem = `
                     <div class="flex items-center justify-between py-3 border-b">
                         <!-- Item Details -->
                         <div class="flex items-center">
@@ -212,52 +251,133 @@ closeModalBtn?.addEventListener("click", () => {
                     </div>
                 `;
 
-        // Append the new item to the order list
-        document
-            .getElementById("order-items-container")
-            .insertAdjacentHTML("beforeend", orderItem);
-    }
+            // Append the new item to the order list
+            document
+                .getElementById("order-items-container")
+                .insertAdjacentHTML("beforeend", orderItem);
+        }
 
+        console.table({
+            category,
+            productName,
+            productPrice,
+            quantity,
+            totalPrice,
+        });
 
+        const orderCartContainer = document.getElementById("order-cart");
+        const subtotal = document.getElementById("order-subtotal");
+        const orderTotal = document.getElementById("order-total");
 
+        orderCartContainer.innerHTML = "";
 
-    console.table({
-        category,
-        productName,
-        productPrice,
-        quantity,
-        totalPrice,
-    });
-
-    const orderCartContainer = document.getElementById("order-cart");
-    const subtotal = document.getElementById("order-subtotal");
-    const orderTotal = document.getElementById("order-total");
-
-    orderCartContainer.innerHTML = "";
-
-    Object.keys(orderItems).forEach((name) => {
-        const item = orderItems[name];
-        const itemRow = `
+        Object.keys(orderItems).forEach((name) => {
+            const item = orderItems[name];
+            const itemRow = `
         <div class="flex justify-between text-sm text-gray-600 mb-2">
             <span>${item.quantity}   ${name}</span>
             <span>₱ ${item.price.toFixed(2)}</span>
         </div>`;
-        orderCartContainer.insertAdjacentHTML("beforeend", itemRow);
+            orderCartContainer.insertAdjacentHTML("beforeend", itemRow);
+        });
     });
-
-
-
-    // // Add product to cart
-    // addToCart({
-    //     category,
-    //     productName,
-    //     productPrice,
-    //     quantity,
-    //     totalPrice,
-    // });
-
-    modal.classList.add("hidden");
 });
+
+// // Close Modal
+// closeModalBtn?.addEventListener("click", () => {
+//     // get the category, product name, prodct price, quantity, quantity-price from modal
+//     let category = document.getElementById("modalProductCategory").textContent;
+//     let productName = document.getElementById("modalProductTitle").textContent;
+//     let productPrice = parseFloat(
+//         document.getElementById("modalProductPrice").textContent.split("Php ")[1]
+//     );
+//     let quantity = parseInt(document.getElementById("quantity").textContent);
+//     let totalPrice = parseFloat(
+//         document.getElementById("modalProductPrice").textContent.split("Php ")[1]
+//     );
+
+//     if (orderItems[productName]) {
+//         orderItems[name].quantity++;
+//         orderItems[name].price += price;
+
+//         // Update the quantity and price in the DOM
+//         const itemRow = document.getElementById("item-" + name);
+//         itemRow.querySelector(".item-qty").textContent =
+//             orderItems[name].quantity;
+//         itemRow.querySelector(".item-price").textContent = `₱ ${orderItems[
+//             name
+//         ].price.toFixed(2)}`;
+//     } else {
+//         // If item does not exist, add it to the order
+//         orderItems[name] = {
+//             quantity: 1,
+//             price: price,
+//         };
+
+//         // Add the item to the right panel
+//         const orderItem = `
+//                     <div class="flex items-center justify-between py-3 border-b">
+//                         <!-- Item Details -->
+//                         <div class="flex items-center">
+//                             <div>
+//                                 <p class="cart-product-name font-medium text-gray-800"></p>
+//                                 <p class="cart-product-price text-sm text-gray-500"></p>
+//                             </div>
+//                         </div>
+
+//                         <div class="flex items-center">
+//                             <button class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
+//                             <span class="cart-product-quantity px-4 text-gray-800"></span>
+//                             <button class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
+//                         </div>
+
+//                         <div class="flex items-center">
+//                             <p class="cart-quantity-price mr-4 font-medium text-gray-800"></p>
+//                         </div>
+//                     </div>
+//                 `;
+
+//         // Append the new item to the order list
+//         document
+//             .getElementById("order-items-container")
+//             .insertAdjacentHTML("beforeend", orderItem);
+//     }
+
+//     console.table({
+//         category,
+//         productName,
+//         productPrice,
+//         quantity,
+//         totalPrice,
+//     });
+
+//     const orderCartContainer = document.getElementById("order-cart");
+//     const subtotal = document.getElementById("order-subtotal");
+//     const orderTotal = document.getElementById("order-total");
+
+//     orderCartContainer.innerHTML = "";
+
+//     Object.keys(orderItems).forEach((name) => {
+//         const item = orderItems[name];
+//         const itemRow = `
+//         <div class="flex justify-between text-sm text-gray-600 mb-2">
+//             <span>${item.quantity}   ${name}</span>
+//             <span>₱ ${item.price.toFixed(2)}</span>
+//         </div>`;
+//         orderCartContainer.insertAdjacentHTML("beforeend", itemRow);
+//     });
+
+//     // // Add product to cart
+//     // addToCart({
+//     //     category,
+//     //     productName,
+//     //     productPrice,
+//     //     quantity,
+//     //     totalPrice,
+//     // });
+
+//     modal.classList.add("hidden");
+// });
 
 // Close modal on clicking outside the content
 modal.addEventListener("click", (e) => {
