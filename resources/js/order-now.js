@@ -187,7 +187,8 @@ window.openModal = function (data) {
 // let modeOfPayment = null;
 
 window.addEventListener("load", () => {
-    const closeModalBtn = document.querySelector(".close-modal-btn");
+    console.log("Order Now Page Loaded");
+    const closeModalBtn = document.querySelector(".closeModalBtn");
     closeModalBtn?.addEventListener("click", () => {
         // Logic to close the modal
         // get the category, product name, prodct price, quantity, quantity-price from modal
@@ -209,6 +210,9 @@ window.addEventListener("load", () => {
                 .getElementById("modalProductPrice")
                 .textContent.split("Php ")[1]
         );
+
+        // log the fetched details
+        console.table({ category, productName, productPrice, quantity, totalPrice });
 
         if (orderItems[productName]) {
             orderItems[name].quantity++;
