@@ -11,9 +11,11 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    {{-- <script src="{{ asset('js/order-now.js') }}" defer></script> --}}
+    <script src="{{ asset('js/order-now.js') }}" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    @vite(['resources/js/app.js', 'resources/css/app.css'])
+
+    {{-- @vite(['resources/js/app.js', 'resources/css/app.css']) --}}
 
     <style>
         body {
@@ -21,6 +23,7 @@
             margin: 0;
             height: 100%;
         }
+
         html {
             height: 100%;
         }
@@ -29,7 +32,7 @@
 
 <body class="bg-gray-100">
     <!-- Navbar -->
-    <header class="sticky top-0 z-10 bg-white" style="height: 80px; box-shadow: 0 4px 6px rgba(139, 69, 19, 0.3);">
+    <header class="sticky top-0 z-20 bg-white" style="height: 80px; box-shadow: 0 4px 6px rgba(139, 69, 19, 0.3);">
         <div class="container flex items-center justify-between h-full px-4 mx-auto">
             <!-- Logo and Text -->
             <div class="flex items-center space-x-3">
@@ -67,6 +70,7 @@
                 <button class="basketBtn relative flex items-center">
                     <img src="assets/order-bag.png" alt="Order Bag" class="w-12 h-12">
                     <span
+                        id="basketCounter"
                         class="basketCounter absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full">
                         0</span>
                 </button>
@@ -85,35 +89,40 @@
         </div>
     </header>
 
-    <div class="container flex table w-full h-full">
-        <div class="right-panel table-cell w-[95%] align-top flex-1 bg-[#f4f4f4] overflow-y-auto p-5">
-            <!-- Menu header -->
-            <div class="relative sticky z-10 h-40 bg-center bg-cover top-20"
-                style="background-image: url('assets/coffee-shop-bg.png'); margin-bottom: 0;">
-                <div class="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-30">
-                    <h1 class="text-5xl font-bold text-white">MENU</h1>
-                    <p class="mt-2 text-2xl font-light text-white">What are you craving today?</p>
+    {{-- main content --}}
+    <div class="container flex w-full">
+        {{-- menu and header --}}
+        <div class="content w-full">
+            <div>
+                <!-- Menu header -->
+                <div class="relative sticky z-10 h-40 bg-center bg-cover"
+                    style="background-image: url('assets/coffee-shop-bg.png'); margin-bottom: 0;">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-30">
+                        <h1 class="text-5xl font-bold text-white">MENU</h1>
+                        <p class="mt-2 text-2xl font-light text-white">What are you craving today?</p>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Tabs Section for Filtering -->
-            <div class="sticky z-10 bg-white shadow-md top-60">
-                <div class="flex justify-center py-4 space-x-4">
-                    <button onclick="filterProducts('all')"
-                        class="px-4 py-2 text-lg font-medium text-black border-b-2 border-black hover:text-black-800">
-                        All Menu
-                    </button>
-
-                    @foreach ($categories as $category)
-                        <button onclick="filterProducts('{{ $category->category_number }}')"
-                            class="px-4 py-2 font-medium text-black text-lg hover:text-black-800">
-                            {{ $category->name }}
+                <!-- Tabs Section for Filtering -->
+                <div class="sticky z-10 bg-white shadow-md">
+                    <div class="flex justify-center py-4 space-x-4">
+                        <button onclick="filterProducts('all')"
+                            class="px-4 py-2 text-lg font-medium text-black border-b-2 border-black hover:text-black-800">
+                            All Menu
                         </button>
-                    @endforeach
+
+                        @foreach ($categories as $category)
+                            <button onclick="filterProducts('{{ $category->category_number }}')"
+                                class="px-4 py-2 font-medium text-black text-lg hover:text-black-800">
+                                {{ $category->name }}
+                            </button>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 
-            <main class="container px-4 py-8 mx-auto">
+
+            <main class="container px-12 py-8 mx-auto">
                 {{-- header for searching --}}
                 <section class="search-header mb-12 hidden">
                     <h3 class="mb-4 text-2xl font-semibold text-brown-700">Text for search results</h3>
@@ -157,7 +166,7 @@
         </div>
 
         <!-- Order Summary Sidebar -->
-        <div class="sidebar fixed top-20 right-0 h-[calc(100vh-80px)] bg-white shadow-md w-96 z-10 flex flex-col">
+        <div class="sidebar fixed top-20 right-0 h-[calc(100vh-80px)] bg-white shadow-md w-96 z-20 flex flex-col">
             <!-- Order Summary Header -->
             <div class="p-6">
                 <h2 class="mb-4 text-xl font-semibold text-gray-800">Order Summary</h2>
@@ -169,7 +178,7 @@
                 </div>
 
                 <!-- Order Items -->
-                <div class="order-cart flex flex-col">
+                <div id="order-cart" class="order-cart flex flex-col">
                     {{-- items added to cart goes here --}}
                 </div>
 
@@ -179,7 +188,7 @@
                         class="orderNote flex-grow p-2 text-xs text-gray-700 bg-gray-100 border rounded focus:outline-none focus:ring-2 focus:ring-[#E9B303]"></textarea>
                     <!-- Trash Can Icon -->
                     <button class="ml-2 text-gray-500 hover:text-red-600">
-                        <img src="assets/trashcan.png" alt="Trash Can" class="h-10 w-7">
+                        <img src="assets/trashcan.png" alt="Trash Can" class="h-10 w-7" />
                     </button>
                 </div>
             </div>

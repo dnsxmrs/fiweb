@@ -188,28 +188,15 @@ window.openModal = function (data) {
 
 window.addEventListener("load", () => {
     console.log("Order Now Page Loaded");
-    const closeModalBtn = document.querySelector(".closeModalBtn");
     closeModalBtn?.addEventListener("click", () => {
+        console.log("Close Modal Button Clicked");
         // Logic to close the modal
         // get the category, product name, prodct price, quantity, quantity-price from modal
-        let category = document.getElementById(
-            "modalProductCategory"
-        ).textContent;
-        let productName =
-            document.getElementById("modalProductTitle").textContent;
-        let productPrice = parseFloat(
-            document
-                .getElementById("modalProductPrice")
-                .textContent.split("Php ")[1]
-        );
-        let quantity = parseInt(
-            document.getElementById("quantity").textContent
-        );
-        let totalPrice = parseFloat(
-            document
-                .getElementById("modalProductPrice")
-                .textContent.split("Php ")[1]
-        );
+        let category = document.getElementById("modalProductCategory").textContent;
+        let productName =document.getElementById("modalProductTitle").textContent;
+        let productPrice = parseFloat(document.getElementById("modalProductPrice").textContent.split("Php ")[1]);
+        let quantity = parseInt(document.getElementById("quantity").textContent);
+        let totalPrice = parseFloat(document.getElementById("modalProductPrice").textContent.split("Php ")[1]);
 
         // log the fetched details
         console.table({ category, productName, productPrice, quantity, totalPrice });
@@ -229,7 +216,7 @@ window.addEventListener("load", () => {
             // If item does not exist, add it to the order
             orderItems[name] = {
                 quantity: 1,
-                price: price,
+                price: totalPrice,
             };
 
             // Add the item to the right panel
