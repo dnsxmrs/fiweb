@@ -1,25 +1,114 @@
 // JavaScript to open/close modal
 const modal = document.getElementById("modal");
+const checkoutButton = document.getElementById("checkoutBtn");
+const basketCounterHTML = document.getElementById("basketCounter");
 
-const orderItems = {};
+const orderItems = {}; // loaded
 const tax = 0.12;
 const delivery_fee = 50;
 
 let modeOfPayment = null;
 let constProductPrice = 0.0;
 let constProductId = 1;
-let order_subtotal = 0.0;
+let order_subtotal = 0.0; // loaded
 let discountAmount = 0.0;
-let totalAmount = 0.0;
+let totalAmount = 0.0; // loaded
 
 
 // Initialize button state on page load
 window.addEventListener("load", () => {
     console.log("DOM fully loaded and parsed")
 
-    updateCheckoutButton();
-    // loadOrdersFromLocalStorage();
+    loadOrdersFromLocalStorage();
 });
+
+function loadOrdersFromLocalStorage() {
+    // change to local storage if want to load data even when tab is closed
+    const savedOrders = sessionStorage.getItem("orderItems");
+    let totalPrice = 0;
+    if (savedOrders) {
+        // Parse and restore the `orderItems` object
+        const parsedOrders = JSON.parse(savedOrders);
+        for (const name in parsedOrders) {
+            if (parsedOrders.hasOwnProperty(name)) {
+                // Restore each item to the `orderItems` object
+                orderItems[name] = parsedOrders[name];
+
+                // Add the item back to the DOM
+                addItemToOrderPanel(name, parsedOrders[name]);
+                totalPrice += parsedOrders[name].totalPrice;
+            }
+        }
+    }
+
+    updateTotal(totalPrice);
+    cartCounter();
+    updateCheckoutButton();
+}
+
+function addItemToOrderPanel(name, itemDetails) {
+    const orderPanel = document.querySelector(".order-cart");
+    const itemHTML = `
+        <div id="item-${name}" class="flex items-center justify-between py-3 border-b">
+            <div class="flex items-center">
+                <div>
+                    <p class="cart-product-name font-medium text-gray-800">${name}</p>
+                    <p class="cart-product-price text-sm text-gray-500">₱ ${(itemDetails.totalPrice / itemDetails.quantity).toFixed(2)}</p>
+                </div>
+            </div>
+
+            <div class="flex items-center">
+                <button onclick="changeQuantity('${name}', -1)" id="cart-decrease" class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
+                <span class="cart-product-quantity px-2 text-gray-800">${itemDetails.quantity}</span>
+                <button onclick="changeQuantity('${name}', 1)" id="cart-increase" class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
+            </div>
+
+            <div class="flex items-center">
+                <p class="cart-quantity-price font-medium text-gray-800">₱ ${itemDetails.totalPrice.toFixed(2)}</p>
+            </div>
+        </div>
+    `;
+    orderPanel.insertAdjacentHTML("beforeend", itemHTML);
+
+    const orderNote = sessionStorage.getItem("orderNote");
+    if (orderNote) {
+        document.getElementById("orderNote").value = orderNote;
+    }
+}
+
+function updateTotal(price) {
+    order_subtotal += price;
+    totalAmount = order_subtotal + delivery_fee;
+
+    document.getElementById("orderSubtotal").textContent = `₱ ${order_subtotal.toFixed(2)}`;
+    document.getElementById("deliveryFee").textContent = `₱ ${delivery_fee.toFixed(2)}`;
+
+    if (Object.keys(orderItems).length === 0) {
+        document.getElementById("orderTotal").textContent = `₱ 0.00`;
+    } else {
+        document.getElementById("orderTotal").textContent = `₱ ${totalAmount.toFixed(2)}`;
+    }
+}
+
+function cartCounter() {
+    // Get the number of items in orderItems
+    const numberOfItems = Object.keys(orderItems).length;
+
+    basketCounterHTML.textContent = numberOfItems;
+}
+
+function updateCheckoutButton() {
+    // Check if orderItems is empty
+    const hasItems = Object.keys(orderItems).length > 0;
+
+    if (hasItems) {
+        checkoutButton.disabled = false; // Enable the button
+        checkoutButton.classList.remove("opacity-50", "cursor-not-allowed"); // Remove disabled styles
+    } else {
+        checkoutButton.disabled = true; // Disable the button
+        checkoutButton.classList.add("opacity-50", "cursor-not-allowed"); // Add disabled styles
+    }
+}
 
 // when a category tabs is cicked, the coresponding category is displayed
 window.filterProducts = function (categoryId) {
@@ -37,6 +126,12 @@ window.filterProducts = function (categoryId) {
             section.style.display = "none";
         }
     });
+};
+
+// Store the initial visibility state of the sections and products
+const initialState = {
+    sections: Array.from(document.querySelectorAll(".category-section")),
+    products: Array.from(document.querySelectorAll(".product-card")),
 };
 
 // Search for products, categories, search headers
@@ -83,6 +178,40 @@ window.searchProducts = function () {
         }
     }
 };
+
+// all about visibility of cards when searching, also taken care of behavior of search input/bar
+window.addEventListener("load", function () {
+    const searchInput = document.getElementById("searchInput");
+    const searchButton = document.getElementById("searchButton");
+
+    if (searchButton && searchInput) {
+        searchButton.addEventListener("click", function () {
+            searchInput.focus();
+        });
+    }
+
+    // Search input event listener
+    searchInput.addEventListener("input", function () {
+        // Your logic here
+        if (searchInput.value.length === 0) {
+            document.querySelector(".search-header").classList.add("hidden");
+        }
+    });
+
+    // // if the search input is lost focus
+    // searchInput.addEventListener("blur", function () {
+    //     // Reset the search input value
+    //     this.value = "";
+    //     // Reset the display state to the initial state
+    //     initialState.sections.forEach((section, index) => {
+    //         section.style.display = "block";
+    //         const products = section.querySelectorAll(".product-card");
+    //         products.forEach((product, i) => {product.style.display = "block";});
+    //     });
+    //     // Reset the search results header
+    //     document.querySelector(".search-header").classList.add("hidden");
+    // });
+});
 
 // Open Modal, when pressed add to bag
 window.openModal = function (data) {
@@ -139,6 +268,7 @@ modal.addEventListener("click", (e) => {
     }
 });
 
+//
 window.addToMyBag = function () {
     const name =document.getElementById("modalProductTitle").textContent;
     const quantity = parseInt(document.getElementById("quantity").textContent);
@@ -192,12 +322,15 @@ window.addToMyBag = function () {
     }
 
     updateTotal(totalPrice);
-
     cartCounter();
     updateCheckoutButton();
+    saveOrders();
 
     modal.classList.add("hidden");
 };
+
+
+
 
 window.deleteNote = function () {
     const orderNoteElement = document.getElementById("orderNote"); // Use the correct ID as a string
@@ -206,70 +339,10 @@ window.deleteNote = function () {
     } else {
         console.error("Element with ID 'orderNote' not found.");
     }
+
+    saveOrders();
 };
 
-// Store the initial visibility state of the sections and products
-const initialState = {
-    sections: Array.from(document.querySelectorAll(".category-section")),
-    products: Array.from(document.querySelectorAll(".product-card")),
-};
-
-// all about visibility of cards when searching, also taken care of behavior of search input/bar
-window.addEventListener("load", function () {
-    const searchInput = document.getElementById("searchInput");
-    const searchButton = document.getElementById("searchButton");
-
-    if (searchButton && searchInput) {
-        searchButton.addEventListener("click", function () {
-            searchInput.focus();
-        });
-    }
-
-    // Search input event listener
-    searchInput.addEventListener("input", function () {
-        // Your logic here
-        if (searchInput.value.length === 0) {
-            document.querySelector(".search-header").classList.add("hidden");
-        }
-    });
-
-    // // if the search input is lost focus
-    // searchInput.addEventListener("blur", function () {
-    //     // Reset the search input value
-    //     this.value = "";
-    //     // Reset the display state to the initial state
-    //     initialState.sections.forEach((section, index) => {
-    //         section.style.display = "block";
-    //         const products = section.querySelectorAll(".product-card");
-    //         products.forEach((product, i) => {product.style.display = "block";});
-    //     });
-    //     // Reset the search results header
-    //     document.querySelector(".search-header").classList.add("hidden");
-    // });
-});
-
-
-
-window.addEventListener("load", () => {
-
-});
-
-
-
-
-window.updateTotal = function (price) {
-    order_subtotal += price;
-    totalAmount = order_subtotal + delivery_fee;
-
-    document.getElementById("orderSubtotal").textContent = `₱ ${order_subtotal.toFixed(2)}`;
-    document.getElementById("deliveryFee").textContent = `₱ ${delivery_fee.toFixed(2)}`;
-
-    if (Object.keys(orderItems).length === 0) {
-        document.getElementById("orderTotal").textContent = `₱ 0.00`;
-    } else {
-        document.getElementById("orderTotal").textContent = `₱ ${totalAmount.toFixed(2)}`;
-    }
-}
 
 window.changeQuantity = function (name, change) {
     if (orderItems[name]) {
@@ -296,177 +369,41 @@ window.changeQuantity = function (name, change) {
         }
     }
 
+    cartCounter();
     updateCheckoutButton();
-}
-
-
-
-const basketCounterHTML = document.getElementById("basketCounter");
-
-window.cartCounter = function () {
-    // Get the number of items in orderItems
-    const numberOfItems = Object.keys(orderItems).length;
-    console.log(numberOfItems);
-    console.log(orderItems);
-
-    basketCounterHTML.textContent = numberOfItems;
+    saveOrders();
 }
 
 function removeItem(name) {
     if (orderItems[name]) {
-        // const pricePerItem = orderItems[name].price / orderItems[name].quantity;
-        // subTotal -= orderItems[name].price; // Subtract the full price of the item from the total
-        // payableAmount = subTotal - discountAmount + taxAmount; // Update global payableAmount
         delete orderItems[name];
 
-        // document.getElementById(
-        //     "sub-total"
-        // ).textContent = `₱ ${subTotal.toFixed(2)}`;
-        // document.getElementById(
-        //     "payable-amount"
-        // ).textContent = `₱ ${payableAmount.toFixed(2)}`;
         document.getElementById("item-" + name).remove();
-
-        // // If no items are left, reset totals
-        // if (Object.keys(orderItems).length === 0) {
-        //     resetOrder();
-        // } else {
-        //     // Update the total after removal
-        //     updateTotal(-orderItems[name].price); // Ensure total isn't negative
-        // }
-
-        cartCounter();
     }
 }
 
-// // Close Modal
-// closeModalBtn?.addEventListener("click", () => {
-//     // get the category, product name, prodct price, quantity, quantity-price from modal
-//     let category = document.getElementById("modalProductCategory").textContent;
-//     let productName = document.getElementById("modalProductTitle").textContent;
-//     let productPrice = parseFloat(
-//         document.getElementById("modalProductPrice").textContent.split("Php ")[1]
-//     );
-//     let quantity = parseInt(document.getElementById("quantity").textContent);
-//     let totalPrice = parseFloat(
-//         document.getElementById("modalProductPrice").textContent.split("Php ")[1]
-//     );
-
-//     if (orderItems[productName]) {
-//         orderItems[name].quantity++;
-//         orderItems[name].price += price;
-
-//         // Update the quantity and price in the DOM
-//         const itemRow = document.getElementById("item-" + name);
-//         itemRow.querySelector(".item-qty").textContent =
-//             orderItems[name].quantity;
-//         itemRow.querySelector(".item-price").textContent = `₱ ${orderItems[
-//             name
-//         ].price.toFixed(2)}`;
-//     } else {
-//         // If item does not exist, add it to the order
-//         orderItems[name] = {
-//             quantity: 1,
-//             price: price,
-//         };
-
-//         // Add the item to the right panel
-//         const orderItem = `
-//                     <div class="flex items-center justify-between py-3 border-b">
-//                         <!-- Item Details -->
-//                         <div class="flex items-center">
-//                             <div>
-//                                 <p class="cart-product-name font-medium text-gray-800"></p>
-//                                 <p class="cart-product-price text-sm text-gray-500"></p>
-//                             </div>
-//                         </div>
-
-//                         <div class="flex items-center">
-//                             <button class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
-//                             <span class="cart-product-quantity px-4 text-gray-800"></span>
-//                             <button class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
-//                         </div>
-
-//                         <div class="flex items-center">
-//                             <p class="cart-quantity-price mr-4 font-medium text-gray-800"></p>
-//                         </div>
-//                     </div>
-//                 `;
-
-//         // Append the new item to the order list
-//         document
-//             .getElementById("order-items-container")
-//             .insertAdjacentHTML("beforeend", orderItem);
-//     }
-
-//     console.table({
-//         category,
-//         productName,
-//         productPrice,
-//         quantity,
-//         totalPrice,
-//     });
-
-//     const orderCartContainer = document.getElementById("order-cart");
-//     const subtotal = document.getElementById("order-subtotal");
-//     const orderTotal = document.getElementById("order-total");
-
-//     orderCartContainer.innerHTML = "";
-
-//     Object.keys(orderItems).forEach((name) => {
-//         const item = orderItems[name];
-//         const itemRow = `
-//         <div class="flex justify-between text-sm text-gray-600 mb-2">
-//             <span>${item.quantity}   ${name}</span>
-//             <span>₱ ${item.price.toFixed(2)}</span>
-//         </div>`;
-//         orderCartContainer.insertAdjacentHTML("beforeend", itemRow);
-//     });
-
-//     // // Add product to cart
-//     // addToCart({
-//     //     category,
-//     //     productName,
-//     //     productPrice,
-//     //     quantity,
-//     //     totalPrice,
-//     // });
-
-//     modal.classList.add("hidden");
-// });
-
-// Close modal on clicking outside the content
-
-
 window.checkout = function () {
-    // store the orderItems in localStorage for later retrieval
-    localStorage.setItem("orderItems", JSON.stringify(orderItems));
-
-    // store the orderNote in sessionStorage for later retrieval
-    sessionStorage.setItem("orderNote", document.getElementById("orderNote").value);
-
-    // console log the both setitemm and setitem
-    console.log("orderitems ls: ", localStorage.getItem("orderItems"));
-    console.log("ordernote ss: ", sessionStorage.getItem("orderNote"));
+    // Store the order items in localStorage
+    saveOrders();
 
     // Redirect to the order summary page
     window.location.href = "/order/checkout";
 }
 
-const checkoutButton = document.getElementById("checkoutBtn");
+function saveOrders() {
+    // CHANGE ALL TO LOCALSTORAGE IF YOU WANT TO STORE DATA EVEN WHEN TAB IS CLOSED
+    // store the orderItems in localStorage for later retrieval
+    sessionStorage.setItem("orderItems", JSON.stringify(orderItems));
 
-function updateCheckoutButton() {
-    // Check if orderItems is empty
-    const hasItems = Object.keys(orderItems).length > 0;
+    // store the orderNote in sessionStorage for later retrieval
+    sessionStorage.setItem("orderNote", document.getElementById("orderNote").value);
 
-    if (hasItems) {
-        checkoutButton.disabled = false; // Enable the button
-        checkoutButton.classList.remove("opacity-50", "cursor-not-allowed"); // Remove disabled styles
-    } else {
-        checkoutButton.disabled = true; // Disable the button
-        checkoutButton.classList.add("opacity-50", "cursor-not-allowed"); // Add disabled styles
-    }
+    // store the orderSubtotal in sessionStorage for later retrieval
+    sessionStorage.setItem("orderSubtotal", document.getElementById("orderSubtotal").textContent);
 }
+
+
+
 
 const isLocalStorageEnabled = () => {
     try {
