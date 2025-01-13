@@ -38,6 +38,11 @@ Route::prefix('menu')->group(function () {
     Route::view('order-sidebar', 'menu.order-sidebar'); // sidebar for orders
 });
 
+
+Route::prefix('order')->group(function () {
+    Route::view('checkout', 'order-checkout.order-checkout');
+});
+
 // Group for order checkout views
 Route::prefix('order-checkout')->group(function () {
     Route::prefix('modals')->group(function () {

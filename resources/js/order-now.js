@@ -10,7 +10,8 @@ let modeOfPayment = null;
 
 const orderItems = {};
 
-
+// Initialize button state on page load
+window.addEventListener("DOMContentLoaded", updateCheckoutButton, console.log("DOM fully loaded and parsed"));
 
 window.filterProducts = function (categoryId) {
     const allSections = document.querySelectorAll(".category-section");
@@ -95,13 +96,14 @@ window.deleteNote = function () {
 };
 
 
+
 // Store the initial visibility state of the sections and products
 const initialState = {
     sections: Array.from(document.querySelectorAll(".category-section")),
     products: Array.from(document.querySelectorAll(".product-card")),
 };
 
-// all about visibility
+// all about visibility of cards when searching, also taken care of behavior of search input/bar
 window.addEventListener("load", function () {
     const searchInput = document.getElementById("searchInput");
     const searchButton = document.getElementById("searchButton");
@@ -134,10 +136,6 @@ window.addEventListener("load", function () {
     //     document.querySelector(".search-header").classList.add("hidden");
     // });
 });
-
-// document.getElementById("searchButton").addEventListener("click", function () {
-//     document.getElementById("searchInput").focus();
-// });
 
 // Open Modal
 window.openModal = function (data) {
@@ -258,7 +256,7 @@ window.addEventListener("load", () => {
         updateTotal(totalPrice);
 
         cartCounter();
-        console.table({orderItems,});
+        updateCheckoutButton();
     });
 });
 
@@ -308,6 +306,8 @@ window.changeQuantity = function (name, change) {
             updateTotal(change * productPrice);
         }
     }
+
+    updateCheckoutButton();
 }
 
 
@@ -452,3 +452,27 @@ modal.addEventListener("click", (e) => {
         modal.classList.add("hidden");
     }
 });
+
+window.checkout = function () {
+    localStorage.setItem("orderItems", JSON.stringify(orderItems));
+
+    // Redirect to the order summary page
+    window.location.href = "/order/checkout";
+}
+
+const checkoutButton = document.getElementById("checkoutBtn");
+
+function updateCheckoutButton() {
+    // Check if orderItems is empty
+    const hasItems = Object.keys(orderItems).length > 0;
+
+    if (hasItems) {
+        checkoutButton.disabled = false; // Enable the button
+        checkoutButton.classList.remove("opacity-50", "cursor-not-allowed"); // Remove disabled styles
+    } else {
+        checkoutButton.disabled = true; // Disable the button
+        checkoutButton.classList.add("opacity-50", "cursor-not-allowed"); // Add disabled styles
+    }
+}
+
+

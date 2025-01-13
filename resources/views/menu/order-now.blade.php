@@ -207,7 +207,7 @@
                     <span id="orderTotal" class="order-total">₱ 0.00</span>
                 </div>
                 <!-- Checkout Button -->
-                <button class="w-full py-3 mt-6 text-white bg-green-500 rounded-3xl hover:bg-green-600">
+                <button id="checkoutBtn" onclick="checkout()" class="w-full py-3 mt-6 text-white bg-green-500 rounded-3xl hover:bg-green-600">
                     Checkout
                 </button>
             </div>
