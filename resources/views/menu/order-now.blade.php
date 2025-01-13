@@ -11,11 +11,10 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <script src="{{ asset('js/order-now.js') }}" defer></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- <script src="{{ asset('js/order-now.js') }}" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script> --}}
 
-
-    {{-- @vite(['resources/js/app.js', 'resources/css/app.css']) --}}
+    @vite(['resources/js/app.js', 'resources/css/app.css'])
 
     <style>
         body {
