@@ -291,7 +291,7 @@ window.addEventListener("load", () => {
     });
 });
 
-function changeQuantity(name, change) {
+window.changeQuantity = function (name, change) {
     if (orderItems[name]) {
         const productPrice = orderItems[name].totalPrice / orderItems[name].quantity; // Price per item
 
