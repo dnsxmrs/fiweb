@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
-    {{-- <script src="{{ asset('js/order-now.js') }}" defer></script>
+{{--
+    <script src="{{ asset('js/order-now.js') }}" defer></script>
     <script src="https://cdn.tailwindcss.com"></script> --}}
 
     @vite(['resources/js/app.js', 'resources/css/app.css'])

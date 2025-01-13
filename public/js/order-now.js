@@ -3,6 +3,7 @@ const modal = document.getElementById("modal");
 const addToBagBtn = document.getElementById("addToBagBtn"); // Trigger button (replace/add multiple IDs if needed)
 const closeModalBtn = document.getElementById("closeModalBtn");
 
+
 // for computations
 let order_subtotal = 0.0;
 const orderItems = {};
@@ -12,6 +13,8 @@ let discountAmount = 0.0;
 let modeOfPayment = null;
 let constProductPrice = 0.0;
 let constProductId = 1;
+
+
 
 window.filterProducts = function (categoryId) {
     const allSections = document.querySelectorAll(".category-section");
@@ -266,8 +269,10 @@ window.addEventListener("load", () => {
                 .insertAdjacentHTML("beforeend", orderItem);
 
             // Update the total after the change
-            document.getElementById("basketCounter").textContent = `₱ ${order_subtotal.toFixed(2)}`;
+            // document.getElementById("basketCounter").textContent = `₱ ${order_subtotal.toFixed(2)}`;
         }
+
+        cartCounter();
 
         console.table({
             orderItems,
@@ -315,10 +320,42 @@ window.changeQuantity = function (name, change) {
     }
 }
 
-basketCounter = 0;
-// count the number of items in orderItems
+const basketCounterHTML = document.getElementById("basketCounter");
 
+window.cartCounter = function () {
+    // Get the number of items in orderItems
+    const numberOfItems = Object.keys(orderItems).length;
+    console.log(numberOfItems); // Output: 2
 
+    basketCounterHTML.textContent = numberOfItems;
+}
+
+function removeItem(name) {
+    if (orderItems[name]) {
+        // const pricePerItem = orderItems[name].price / orderItems[name].quantity;
+        // subTotal -= orderItems[name].price; // Subtract the full price of the item from the total
+        // payableAmount = subTotal - discountAmount + taxAmount; // Update global payableAmount
+        delete orderItems[name];
+
+        // document.getElementById(
+        //     "sub-total"
+        // ).textContent = `₱ ${subTotal.toFixed(2)}`;
+        // document.getElementById(
+        //     "payable-amount"
+        // ).textContent = `₱ ${payableAmount.toFixed(2)}`;
+        document.getElementById("item-" + name).remove();
+
+        // // If no items are left, reset totals
+        // if (Object.keys(orderItems).length === 0) {
+        //     resetOrder();
+        // } else {
+        //     // Update the total after removal
+        //     updateTotal(-orderItems[name].price); // Ensure total isn't negative
+        // }
+
+        cartCounter();
+    }
+}
 
 // // Close Modal
 // closeModalBtn?.addEventListener("click", () => {
