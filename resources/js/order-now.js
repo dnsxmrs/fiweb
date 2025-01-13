@@ -1,18 +1,27 @@
 // JavaScript to open/close modal
 const modal = document.getElementById("modal");
-const addToBagBtn = document.getElementById("addToBagBtn"); // Trigger button (replace/add multiple IDs if needed)
-const closeModalBtn = document.getElementById("closeModalBtn");
-
-// for computations
-let constProductPrice = 0.0;
-let constProductId = 1;
-let modeOfPayment = null;
 
 const orderItems = {};
+const tax = 0.12;
+const delivery_fee = 50;
+
+let modeOfPayment = null;
+let constProductPrice = 0.0;
+let constProductId = 1;
+let order_subtotal = 0.0;
+let discountAmount = 0.0;
+let totalAmount = 0.0;
+
 
 // Initialize button state on page load
-window.addEventListener("DOMContentLoaded", updateCheckoutButton, console.log("DOM fully loaded and parsed"));
+window.addEventListener("load", () => {
+    console.log("DOM fully loaded and parsed")
 
+    updateCheckoutButton();
+    // loadOrdersFromLocalStorage();
+});
+
+// when a category tabs is cicked, the coresponding category is displayed
 window.filterProducts = function (categoryId) {
     const allSections = document.querySelectorAll(".category-section");
 
@@ -30,18 +39,12 @@ window.filterProducts = function (categoryId) {
     });
 };
 
+// Search for products, categories, search headers
 window.searchProducts = function () {
-    const searchInput = document.getElementById("searchInput");
-    const searchValue = searchInput.value.toLowerCase().trim(); // Get the search value and trim extra spaces
-    const allSections = document.querySelectorAll(".category-section");
-    const searchHeader = document.querySelector(".search-header"); // Updated to target the h3 inside .search-header
+    const searchValue = document.getElementById("searchInput").value.toLowerCase().trim(); // Get the search value and trim extra spaces
+    const allSections = document.querySelectorAll(".category-section"); // Get all category sections
+    const searchHeader = document.getElementById("search-header"); // Updated to target the h3, the search results text
 
-    console.log("search input: " + searchInput);
-    console.log("search value: " + searchValue);
-    console.log("all sections: " + allSections);
-    console.log("search header: " + searchHeader);
-
-    let totalResults = 0; // Variable to store the total number of results found
     let sectionHasVisibleProduct = false; // Track if at least one product in the section matches
     let sectionProductCount = 0; // Track how many products match in this section
 
@@ -49,13 +52,13 @@ window.searchProducts = function () {
     allSections.forEach((section) => {
         sectionHasVisibleProduct = false;
         const products = section.querySelectorAll(".product-card");
-        console.log("products: " + products);
+
         products.forEach((product) => {
             const productName = product.getAttribute("data-name").toLowerCase(); // Accessing the data-name attribute
 
             // If the product name includes the search term, show it
             if (productName.includes(searchValue)) {
-                product.style.display = "block";
+                product.style.display = "block"; // Display the product if it matches
                 sectionProductCount++; // Increment count for matching products in this section
                 sectionHasVisibleProduct = true; // Set this to true if this product is visible
             } else {
@@ -65,25 +68,135 @@ window.searchProducts = function () {
 
         // If no products match, hide the entire section; otherwise, show the section
         if (sectionHasVisibleProduct) {
-            console.log("section has visible product");
             section.style.display = "block"; // Show the section if at least one product matches
         } else {
             section.style.display = "none"; // Hide the section if no products match
         }
     });
 
-    // Update the section heading dynamically based on search results
-    console.log(searchHeader, sectionProductCount);
     if (searchHeader) {
         searchHeader.classList.remove("hidden"); // Show the search header
-
         if (sectionProductCount > 0) {
             searchHeader.textContent = `Search results for "${searchValue}" (${sectionProductCount} found)`;
-            totalResults += sectionProductCount; // Update total results count
         } else {
             searchHeader.textContent = `No results found for "${searchValue}"`;
         }
     }
+};
+
+// Open Modal, when pressed add to bag
+window.openModal = function (data) {
+    console.table(data);
+
+    // Set initial price
+    let quantity = 1;
+    constProductPrice = data.product.price;
+    constProductId = data.product.id;
+
+    // Update total price when quantity changes
+    const priceDisplay = document.getElementById("modalProductPrice");
+    const quantityDisplay = document.getElementById("quantity");
+    const decreaseBtn = document.getElementById("decreaseBtn");
+    const increaseBtn = document.getElementById("increaseBtn");
+
+    // Populate the modal with the product details
+    document.getElementById("modalProductId").textContent = data.product.id;
+    document.getElementById("modalProductImage").src = data.product.image;
+    document.getElementById("modalProductTitle").textContent = data.product.name;
+    document.getElementById("modalProductCategory").textContent = data.category.name;
+    priceDisplay.textContent = "Php " + constProductPrice;
+    quantityDisplay.textContent = quantity;
+
+    // Function to update the total price and button state
+    const updatePriceAndState = () => {
+        quantityDisplay.textContent = quantity;
+        priceDisplay.textContent = "Php " + (constProductPrice * quantity).toFixed(2);
+
+        // Disable buttons based on quantity
+        decreaseBtn.disabled = quantity <= 1;
+        increaseBtn.disabled = quantity >= 30;
+        decreaseBtn.classList.toggle("opacity-50", quantity <= 1);
+        increaseBtn.classList.toggle("opacity-50", quantity >= 30);
+    };
+
+        // Function to change the quantity (both decrease and increase)
+    window.modalChangeQuantity = function (change) {
+        quantity += change;
+        updatePriceAndState();
+    };
+
+    // Initial price and button state update
+    updatePriceAndState();
+
+    // Show the modal
+    modal.classList.remove("hidden");
+};
+
+// Close Modal when clicked outside the content
+modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.classList.add("hidden");
+    }
+});
+
+window.addToMyBag = function () {
+    const name =document.getElementById("modalProductTitle").textContent;
+    const quantity = parseInt(document.getElementById("quantity").textContent);
+    const totalPrice = parseFloat(document.getElementById("modalProductPrice").textContent.split("Php ")[1]);
+
+    console.table({name, totalPrice, quantity});
+
+    if (orderItems[name]) {
+        // If item already exists, update the quantity and price
+        orderItems[name].quantity += quantity;
+        orderItems[name].totalPrice += totalPrice;
+
+        // Update the quantity and price in the DOM
+        const itemRow = document.getElementById("item-" + name);
+        itemRow.querySelector(".cart-product-quantity").textContent = orderItems[name].quantity;
+        itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[name].totalPrice.toFixed(2)}`;
+    } else {
+        // If item does not exist, add it to the order
+        orderItems[name] = {
+            quantity: quantity,
+            totalPrice: totalPrice,
+        };
+
+        // Add the item to the right panel
+        const orderItem = `
+                <div id="item-${name}" class="flex items-center justify-between py-3 border-b">
+                    <!-- Item Details -->
+                    <div class="flex items-center">
+                        <div>
+                            <p class="cart-product-name font-medium text-gray-800">${name}</p>
+                            <p class="cart-product-price text-sm text-gray-500">₱ ${(parseFloat(constProductPrice) || 0).toFixed(2)}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center">
+                        <button onclick="changeQuantity('${name}', -1)" id="cart-decrease" class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
+                        <span class="cart-product-quantity px-2 text-gray-800">${orderItems[name].quantity}</span>
+                        <button onclick="changeQuantity('${name}', 1)" id="cart-increase" class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
+                    </div>
+
+                    <div class="flex items-center">
+                        <p class="cart-quantity-price font-medium text-gray-800">₱ ${orderItems[name].totalPrice.toFixed(2)}</p>
+                    </div>
+                </div>
+            `;
+
+        // Append the new item to the order list
+        document
+            .getElementById("order-cart")
+            .insertAdjacentHTML("beforeend", orderItem);
+    }
+
+    updateTotal(totalPrice);
+
+    cartCounter();
+    updateCheckoutButton();
+
+    modal.classList.add("hidden");
 };
 
 window.deleteNote = function () {
@@ -94,8 +207,6 @@ window.deleteNote = function () {
         console.error("Element with ID 'orderNote' not found.");
     }
 };
-
-
 
 // Store the initial visibility state of the sections and products
 const initialState = {
@@ -137,135 +248,13 @@ window.addEventListener("load", function () {
     // });
 });
 
-// Open Modal
-window.openModal = function (data) {
-    console.table(data);
 
-    // Set initial price
-    let quantity = 1;
-    let totalPrice = data.product.price;
-    constProductPrice = data.product.price;
-    constProductId = data.product.id;
-
-    console.log(totalPrice, quantity);
-
-    const modal = document.getElementById("modal");
-    // Update total price when quantity changes
-    const priceDisplay = document.getElementById("modalProductPrice");
-    const quantityDisplay = document.getElementById("quantity");
-
-    // Populate the modal with the product details
-    document.getElementById("modalProductImage").src = data.product.id;
-    document.getElementById("modalProductImage").src = data.product.image;
-    document.getElementById("modalProductTitle").textContent =
-        data.product.name;
-    document.getElementById("modalProductCategory").textContent =
-        data.category.name;
-    document.getElementById("modalProductPrice").textContent =
-        "Php " + data.product.price;
-    document.getElementById("quantity").textContent = quantity;
-
-    // Decrease Quantity
-    document.getElementById("decreaseBtn").addEventListener("click", () => {
-        if (quantity > 1) {
-            quantity--;
-            quantityDisplay.textContent = quantity;
-            priceDisplay.textContent =
-                "Php " + (data.product.price * quantity).toFixed(2); // Update total price
-        }
-    });
-
-    // Increase Quantity
-    document.getElementById("increaseBtn").addEventListener("click", () => {
-        if (quantity < 30) {
-            quantity++;
-            quantityDisplay.textContent = quantity;
-            priceDisplay.textContent =
-                "Php " + (data.product.price * quantity).toFixed(2); // Update total price
-        }
-    });
-
-    // Show the modal
-    modal.classList.remove("hidden");
-};
-
-// // for computations
-// let order_subtotal = 0.0;
-// const orderItems = {};
-// const tax = 0.12;
-// const delivery_fee = 50;
-// let discountAmount = 0.0;
-// let modeOfPayment = null;
-// let constProductPrice = 0.0;
-// let constProductId = 1;
 
 window.addEventListener("load", () => {
-    closeModalBtn?.addEventListener("click", () => {
-        const category = document.getElementById("modalProductCategory").textContent;
-        const name =document.getElementById("modalProductTitle").textContent;
-        const quantity = parseInt(document.getElementById("quantity").textContent);
-        const totalPrice = parseFloat(document.getElementById("modalProductPrice").textContent.split("Php ")[1]);
 
-        console.table({ category, name, totalPrice, quantity});
-
-        if (orderItems[name]) {
-            // If item already exists, update the quantity and price
-            orderItems[name].quantity += quantity;
-            orderItems[name].totalPrice += totalPrice;
-
-            // Update the quantity and price in the DOM
-            const itemRow = document.getElementById("item-" + name);
-            itemRow.querySelector(".cart-product-quantity").textContent = orderItems[name].quantity;
-            itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[name].totalPrice.toFixed(2)}`;
-        } else {
-            // If item does not exist, add it to the order
-            orderItems[name] = {
-                quantity: quantity,
-                totalPrice: totalPrice,
-            };
-
-            // Add the item to the right panel
-            const orderItem = `
-                    <div id="item-${name}" class="flex items-center justify-between py-3 border-b">
-                        <!-- Item Details -->
-                        <div class="flex items-center">
-                            <div>
-                                <p class="cart-product-name font-medium text-gray-800">${name}</p>
-                                <p class="cart-product-price text-sm text-gray-500">₱ ${(parseFloat(constProductPrice) || 0).toFixed(2)}</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center">
-                            <button onclick="changeQuantity('${name}', -1)" id="cart-decrease" class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
-                            <span class="cart-product-quantity px-2 text-gray-800">${orderItems[name].quantity}</span>
-                            <button onclick="changeQuantity('${name}', 1)" id="cart-increase" class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
-                        </div>
-
-                        <div class="flex items-center">
-                            <p class="cart-quantity-price font-medium text-gray-800">₱ ${orderItems[name].totalPrice.toFixed(2)}</p>
-                        </div>
-                    </div>
-                `;
-
-            // Append the new item to the order list
-            document
-                .getElementById("order-cart")
-                .insertAdjacentHTML("beforeend", orderItem);
-        }
-
-        updateTotal(totalPrice);
-
-        cartCounter();
-        updateCheckoutButton();
-    });
 });
 
-let order_subtotal = 0.0;
-let discountAmount = 0.0;
-let totalAmount = 0.0;
 
-const tax = 0.12;
-const delivery_fee = 50;
 
 
 window.updateTotal = function (price) {
@@ -447,14 +436,18 @@ function removeItem(name) {
 // });
 
 // Close modal on clicking outside the content
-modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-        modal.classList.add("hidden");
-    }
-});
+
 
 window.checkout = function () {
+    // store the orderItems in localStorage for later retrieval
     localStorage.setItem("orderItems", JSON.stringify(orderItems));
+
+    // store the orderNote in sessionStorage for later retrieval
+    sessionStorage.setItem("orderNote", document.getElementById("orderNote").value);
+
+    // console log the both setitemm and setitem
+    console.log("orderitems ls: ", localStorage.getItem("orderItems"));
+    console.log("ordernote ss: ", sessionStorage.getItem("orderNote"));
 
     // Redirect to the order summary page
     window.location.href = "/order/checkout";
@@ -475,4 +468,24 @@ function updateCheckoutButton() {
     }
 }
 
+const isLocalStorageEnabled = () => {
+    try {
+        const key = `__storage__test`;
+        window.localStorage.setItem(key, null);
+        window.localStorage.removeItem(key);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
 
+const isSessionStorageEnabled = () => {
+    try {
+        const key = `__storage__test`;
+        window.sessionStorage.setItem(key, null);
+        window.sessionStorage.removeItem(key);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};

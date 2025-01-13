@@ -123,8 +123,8 @@
 
             <main class="container px-12 py-8 mx-auto">
                 {{-- header for searching --}}
-                <section class="search-header mb-12 hidden">
-                    <h3 class="mb-4 text-2xl font-semibold text-brown-700">Text for search results</h3>
+                <section id="search-header" class="search-header mb-12 hidden">
+                    <h3 class="mb-4 text-2xl font-semibold text-brown-700"></h3>
                 </section>
                 <!-- Grouped Products by Categories -->
                 @foreach ($categories as $category)
@@ -221,6 +221,9 @@
                 <!-- Header -->
                 <h2 class="mb-4 text-2xl font-bold text-white">Customize your order</h2>
 
+                {{-- Product Id --}}
+                <div id="modalProductId" class="hidden"></div>
+
                 <!-- Product Image -->
                 <img id="modalProductImage" src="" alt=""
                     class="mx-auto w-[350px] h-[200px] rounded-lg mb-4">
@@ -234,16 +237,16 @@
 
                 <!-- Quantity Selector -->
                 <div class="flex items-center justify-center pb-5 mb-6">
-                    <button id="decreaseBtn" class="px-4 py-2 text-xl font-bold text-white bg-black rounded-full">
+                    <button onclick="modalChangeQuantity(-1)" id="decreaseBtn" class="px-4 py-2 text-xl font-bold text-white bg-black rounded-full">
                         -</button>
                     <span id='quantity' class="mx-6 text-xl text-white">
                         1</span>
-                    <button id="increaseBtn" class="px-4 py-2 text-xl font-bold text-white bg-black rounded-full">
+                    <button onclick="modalChangeQuantity(1)" id="increaseBtn" class="px-4 py-2 text-xl font-bold text-white bg-black rounded-full">
                         +</button>
                 </div>
 
                 <!-- Add to Bag Button -->
-                <button id="closeModalBtn" class="w-full py-3 text-sm font-semibold text-white bg-black rounded-full">
+                <button onclick="addToMyBag()" id="closeModalBtn" class="w-full py-3 text-sm font-semibold text-white bg-black rounded-full">
                     Add to my bag
                 </button>
             </div>
