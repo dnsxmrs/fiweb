@@ -6,13 +6,10 @@ const closeModalBtn = document.getElementById("closeModalBtn");
 // for computations
 let constProductPrice = 0.0;
 let constProductId = 1;
-let order_subtotal = 0.0;
-let discountAmount = 0.0;
 let modeOfPayment = null;
 
 const orderItems = {};
-const tax = 0.12;
-const delivery_fee = 50;
+
 
 
 window.filterProducts = function (categoryId) {
@@ -88,42 +85,54 @@ window.searchProducts = function () {
     }
 };
 
+window.deleteNote = function () {
+    const orderNoteElement = document.getElementById("orderNote"); // Use the correct ID as a string
+    if (orderNoteElement) {
+        orderNoteElement.value = ""; // Clear the value if the element exists
+    } else {
+        console.error("Element with ID 'orderNote' not found.");
+    }
+};
+
+
 // Store the initial visibility state of the sections and products
 const initialState = {
     sections: Array.from(document.querySelectorAll(".category-section")),
     products: Array.from(document.querySelectorAll(".product-card")),
 };
 
+// all about visibility
 window.addEventListener("load", function () {
     const searchInput = document.getElementById("searchInput");
-    searchInput.addEventListener("blur", function () {
-        // Your logic here
-        // Reset the search input value
-        this.value = "";
-        // Reset the display state to the initial state
-        initialState.sections.forEach((section, index) => {
-            section.style.display =
-                initialState.sections[index].style.display;
-            const products = section.querySelectorAll(".product-card");
-            products.forEach((product, i) => {
-                product.style.display =
-                    initialState.products[i].style.display;
-            });
-        });
-        // Reset the search results header
-        document.querySelector(".search-header").classList.add("hidden");
-    });
-});
-
-window.addEventListener("load", function () {
     const searchButton = document.getElementById("searchButton");
-    const searchInput = document.getElementById("searchInput");
 
     if (searchButton && searchInput) {
         searchButton.addEventListener("click", function () {
             searchInput.focus();
         });
     }
+
+    // Search input event listener
+    searchInput.addEventListener("input", function () {
+        // Your logic here
+        if (searchInput.value.length === 0) {
+            document.querySelector(".search-header").classList.add("hidden");
+        }
+    });
+
+    // // if the search input is lost focus
+    // searchInput.addEventListener("blur", function () {
+    //     // Reset the search input value
+    //     this.value = "";
+    //     // Reset the display state to the initial state
+    //     initialState.sections.forEach((section, index) => {
+    //         section.style.display = "block";
+    //         const products = section.querySelectorAll(".product-card");
+    //         products.forEach((product, i) => {product.style.display = "block";});
+    //     });
+    //     // Reset the search results header
+    //     document.querySelector(".search-header").classList.add("hidden");
+    // });
 });
 
 // document.getElementById("searchButton").addEventListener("click", function () {
@@ -193,46 +202,29 @@ window.openModal = function (data) {
 // let constProductId = 1;
 
 window.addEventListener("load", () => {
-    console.log("Order Now Page Loaded");
     closeModalBtn?.addEventListener("click", () => {
-        console.log("Close Modal Button Clicked");
-        // Logic to close the modal
-        // get the category, product name, prodct price, quantity, quantity-price from modal
         const category = document.getElementById("modalProductCategory").textContent;
         const name =document.getElementById("modalProductTitle").textContent;
-        const totalPrice = parseFloat(document.getElementById("modalProductPrice").textContent.split("Php ")[1]);
         const quantity = parseInt(document.getElementById("quantity").textContent);
+        const totalPrice = parseFloat(document.getElementById("modalProductPrice").textContent.split("Php ")[1]);
 
-        // cns
-        // let totalPrice = parseFloat(document.getElementById("modalProductPrice").textContent.split("Php ")[1]);
-
-        // log the fetched details
         console.table({ category, name, totalPrice, quantity});
 
         if (orderItems[name]) {
-            console.log("Item already exists in the order");
+            // If item already exists, update the quantity and price
             orderItems[name].quantity += quantity;
             orderItems[name].totalPrice += totalPrice;
-
-            console.log("Name:", name);
-            console.log("Quantity:", quantity);
-            console.log("Product Price:", totalPrice);
 
             // Update the quantity and price in the DOM
             const itemRow = document.getElementById("item-" + name);
             itemRow.querySelector(".cart-product-quantity").textContent = orderItems[name].quantity;
             itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[name].totalPrice.toFixed(2)}`;
         } else {
-            console.log("Item does not exist in the order");
             // If item does not exist, add it to the order
             orderItems[name] = {
                 quantity: quantity,
                 totalPrice: totalPrice,
             };
-
-            console.log("Name:", name);
-            console.log("Quantity:", quantity);
-            console.log("Product Price:", totalPrice);
 
             // Add the item to the right panel
             const orderItem = `
@@ -261,36 +253,36 @@ window.addEventListener("load", () => {
             document
                 .getElementById("order-cart")
                 .insertAdjacentHTML("beforeend", orderItem);
-
-            // Update the total after the change
-            // document.getElementById("basketCounter").textContent = `₱ ${order_subtotal.toFixed(2)}`;
         }
 
-        order_subtotal += totalPrice
+        updateTotal(totalPrice);
 
         cartCounter();
-
-        console.table({
-            orderItems,
-        });
-
-        // const orderCartContainer = document.getElementById("order-cart");
-        // const subtotal = document.getElementById("order-subtotal");
-        // const orderTotal = document.getElementById("order-total");
-
-        // orderCartContainer.innerHTML = "";
-
-        // Object.keys(orderItems).forEach((name) => {
-        //     const item = orderItems[name];
-        //     const itemRow = `
-        // <div class="flex justify-between text-sm text-gray-600 mb-2">
-        //     <span>${item.quantity}   ${name}</span>
-        //     <span>₱ ${item.price.toFixed(2)}</span>
-        // </div>`;
-        //     orderCartContainer.insertAdjacentHTML("beforeend", itemRow);
-        // });
+        console.table({orderItems,});
     });
 });
+
+let order_subtotal = 0.0;
+let discountAmount = 0.0;
+let totalAmount = 0.0;
+
+const tax = 0.12;
+const delivery_fee = 50;
+
+
+window.updateTotal = function (price) {
+    order_subtotal += price;
+    totalAmount = order_subtotal + delivery_fee;
+
+    document.getElementById("orderSubtotal").textContent = `₱ ${order_subtotal.toFixed(2)}`;
+    document.getElementById("deliveryFee").textContent = `₱ ${delivery_fee.toFixed(2)}`;
+
+    if (Object.keys(orderItems).length === 0) {
+        document.getElementById("orderTotal").textContent = `₱ 0.00`;
+    } else {
+        document.getElementById("orderTotal").textContent = `₱ ${totalAmount.toFixed(2)}`;
+    }
+}
 
 window.changeQuantity = function (name, change) {
     if (orderItems[name]) {
@@ -299,6 +291,8 @@ window.changeQuantity = function (name, change) {
         if (change < 0 && orderItems[name].quantity === 1) {
             // If the quantity is already 1, do not allow to decrease below 0, remove item instead
             removeItem(name);
+
+            updateTotal(-productPrice);
         } else {
             orderItems[name].quantity += change;
 
@@ -310,11 +304,13 @@ window.changeQuantity = function (name, change) {
             itemRow.querySelector(".cart-product-quantity").textContent = orderItems[name].quantity;
             itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[name].totalPrice.toFixed(2)}`;
 
-            // // Update the total after the change
-            // updateTotal(change * productPrice);
+            // Update the total after the change
+            updateTotal(change * productPrice);
         }
     }
 }
+
+
 
 const basketCounterHTML = document.getElementById("basketCounter");
 

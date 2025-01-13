@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-{{--
-    <script src="{{ asset('js/order-now.js') }}" defer></script>
+
+    {{-- <script src="{{ asset('js/order-now.js') }}" defer></script>
     <script src="https://cdn.tailwindcss.com"></script> --}}
 
     @vite(['resources/js/app.js', 'resources/css/app.css'])
@@ -186,7 +186,7 @@
                     <textarea id="orderNote" rows="1" placeholder="Order Note..."
                         class="orderNote flex-grow p-2 text-xs text-gray-700 bg-gray-100 border rounded focus:outline-none focus:ring-2 focus:ring-[#E9B303]"></textarea>
                     <!-- Trash Can Icon -->
-                    <button class="ml-2 text-gray-500 hover:text-red-600">
+                    <button onclick="deleteNote()" ="ml-2 text-gray-500 hover:text-red-600">
                         <img src="assets/trashcan.png" alt="Trash Can" class="h-10 w-7" />
                     </button>
                 </div>
@@ -196,15 +196,15 @@
             <div class="p-6 pb-10 mt-auto border-t bg-gray-50">
                 <div class="flex justify-between text-gray-800">
                     <span>Subtotal</span>
-                    <span class="order-subtotal"></span>
+                    <span id="orderSubtotal" lass="order-subtotal">₱ 0.00</span>
                 </div>
                 <div class="flex justify-between mt-2 text-gray-800">
                     <span>Delivery Fee</span>
-                    <span>Php 50.00</span>
+                    <span id="deliveryFee">₱ 50.00</span>
                 </div>
                 <div class="flex justify-between mt-4 text-lg font-bold text-gray-800">
                     <span>Total</span>
-                    <span class="order-total"></span>
+                    <span id="orderTotal" class="order-total">₱ 0.00</span>
                 </div>
                 <!-- Checkout Button -->
                 <button class="w-full py-3 mt-6 text-white bg-green-500 rounded-3xl hover:bg-green-600">
