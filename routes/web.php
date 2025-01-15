@@ -13,10 +13,7 @@ Route::get('/',[WebController::class, 'getCategory'])->name('landing');
 // order now
 Route::get('/order-now', [WebController::class, 'orderNow'])->name('order-now');
 
-
-
-
-
+Route::get('/checkout', [WebController::class, 'checkout'])->name('checkout');
 
 
 
@@ -57,6 +54,6 @@ Route::prefix('order-checkout')->group(function () {
         Route::view('payment-unsuccessful', 'order-checkout.order-checkout-modals.payment-unsuccessful');
     });
 
-    Route::view('checkout', 'order-checkout.order-checkout');
+
     Route::view('details', 'order-checkout.order-details');
 });

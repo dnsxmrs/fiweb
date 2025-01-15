@@ -7,14 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="icon" href="{{ asset('favicon.ico') }}?v=2" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    {{-- <script src="{{ asset('js/order-now.js') }}" defer></script>
-    <script src="https://cdn.tailwindcss.com"></script> --}}
+    <script src="{{ asset('js/order-now.js') }}" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    @vite(['resources/js/app.js', 'resources/css/app.css'])
+    {{-- @vite(['resources/js/app.js', 'resources/css/app.css']) --}}
 
     <style>
         body {
@@ -196,11 +196,15 @@
             <div class="p-6 pb-10 mt-auto border-t bg-gray-50">
                 <div class="flex justify-between text-gray-800">
                     <span>Subtotal</span>
-                    <span id="orderSubtotal" lass="order-subtotal">₱ 0.00</span>
+                    <span id="orderSubtotal" class="order-subtotal">₱ 0.00</span>
+                </div>
+                <div class="flex justify-between mt-2 text-gray-800">
+                    <span>Tax</span>
+                    <span id="orderTax" class="order-tax">₱ 0.00</span>
                 </div>
                 <div class="flex justify-between mt-2 text-gray-800">
                     <span>Delivery Fee</span>
-                    <span id="deliveryFee">₱ 50.00</span>
+                    <span id="deliveryFee" class="order-delivery-fee">₱ 50.00</span>
                 </div>
                 <div class="flex justify-between mt-4 text-lg font-bold text-gray-800">
                     <span>Total</span>

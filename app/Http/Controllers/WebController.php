@@ -22,4 +22,9 @@ class WebController extends Controller
 
         return view('menu.order-now', compact('categories', 'products'));
     }
+
+    public function checkout()
+    {
+        return view('order-checkout.order-checkout');
+    }
 }

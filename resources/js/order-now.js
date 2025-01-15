@@ -6,6 +6,7 @@ const basketCounterHTML = document.getElementById("basketCounter");
 const orderItems = {}; // loaded
 const tax = 0.12;
 const delivery_fee = 50;
+const currentProduct = {};
 
 let modeOfPayment = null;
 let constProductPrice = 0.0;
@@ -53,7 +54,7 @@ function addItemToOrderPanel(name, itemDetails) {
             <div class="flex items-center">
                 <div>
                     <p class="cart-product-name font-medium text-gray-800">${name}</p>
-                    <p class="cart-product-price text-sm text-gray-500">₱ ${(itemDetails.totalPrice / itemDetails.quantity).toFixed(2)}</p>
+                    <p class="cart-product-price text-sm text-gray-500">₱ ${(itemDetails.price).toFixed(2)}</p>
                 </div>
             </div>
 
@@ -257,6 +258,12 @@ window.openModal = function (data) {
     // Initial price and button state update
     updatePriceAndState();
 
+    currentProduct[data.product.name] = {
+        id: constProductId,
+        img: data.product.image,
+        price: constProductPrice,
+    };
+
     // Show the modal
     modal.classList.remove("hidden");
 };
@@ -284,12 +291,16 @@ window.addToMyBag = function () {
         // Update the quantity and price in the DOM
         const itemRow = document.getElementById("item-" + name);
         itemRow.querySelector(".cart-product-quantity").textContent = orderItems[name].quantity;
-        itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[name].totalPrice.toFixed(2)}`;
+        itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[name].totalPrice.toFixed(2)}`;;
     } else {
         // If item does not exist, add it to the order
         orderItems[name] = {
             quantity: quantity,
             totalPrice: totalPrice,
+
+            id: currentProduct[name].id,
+            img: currentProduct[name].img,
+            price: currentProduct[name].price,
         };
 
         // Add the item to the right panel
@@ -299,7 +310,7 @@ window.addToMyBag = function () {
                     <div class="flex items-center">
                         <div>
                             <p class="cart-product-name font-medium text-gray-800">${name}</p>
-                            <p class="cart-product-price text-sm text-gray-500">₱ ${(parseFloat(constProductPrice) || 0).toFixed(2)}</p>
+                            <p class="cart-product-price text-sm text-gray-500">₱ ${orderItems[name].price.toFixed(2)}</p>
                         </div>
                     </div>
 
@@ -387,7 +398,7 @@ window.checkout = function () {
     saveOrders();
 
     // Redirect to the order summary page
-    window.location.href = "/order/checkout";
+    window.location.href = "/checkout";
 }
 
 function saveOrders() {
