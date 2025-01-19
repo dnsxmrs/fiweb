@@ -20,7 +20,6 @@
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
-            height: 100%;
         }
 
         html {

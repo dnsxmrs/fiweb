@@ -19,7 +19,7 @@
     </style>
 </head>
 
-<body class="bg-white">
+<body class="bg-gray-100">
     <!-- Navbar -->
     <header class="sticky top-0 z-10" style="height: 80px; box-shadow: 0 4px 6px rgba(139, 69, 19, 0.3); background-color: #066744;">
         <div class="container flex items-center justify-between h-full px-4 mx-auto" style="background-color:#066744">
