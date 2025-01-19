@@ -74,27 +74,29 @@
         </div>
     </header>
 
-    <!-- Menu header -->
-    <div class="relative sticky z-10 h-40 bg-center bg-cover top-20"
-        style="background-image: url('assets/coffee-shop-bg.png'); margin-bottom: 0;">
-        <div class="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-30">
-            <h1 class="text-5xl font-bold text-white">MENU</h1>
-            <p class="mt-2 text-2xl font-light text-white">What are you craving today?</p>
-        </div>
+<!-- Menu header -->
+<div class="relative sticky z-10 h-40 bg-center bg-cover top-20" style="background-image: url('assets/coffee-shop-bg.png'); margin-bottom: 0;">
+    <div class="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-30">
+        <h1 class="text-5xl font-bold text-white">MENU</h1>
+        <p class="mt-2 text-2xl font-light text-white">What are you craving today?</p>
     </div>
+</div>
 
-    <!-- Tabs Section -->
-    <div class="sticky z-10 bg-white shadow-md top-60">
-        <div class="flex justify-center py-4 space-x-4">
-            <button class="px-4 py-2 text-lg font-medium text-black border-b-2 border-black hover:text-black-800">All
-                Menu</button>
-            <button class="px-4 py-2 font-medium text-black font-lg hover:text-black-800">Coffee</button>
-            <button class="px-4 py-2 font-medium text-black font-lg hover:text-black-800">Non-coffee</button>
-            <button class="px-4 py-2 font-medium text-black font-lg hover:text-black-800">Frappuccino</button>
-            <button class="px-4 py-2 font-medium text-black font-lg hover:text-black-800">Snack</button>
-            <button class="px-4 py-2 font-medium text-black font-lg hover:text-black-800">Dessert</button>
-        </div>
+<!-- Tabs Section -->
+<div class="sticky z-10 bg-white shadow-md top-60">
+    <div class="flex py-4 space-x-4 overflow-x-auto md:space-x-8 whitespace-nowrap scrollbar-hide">
+        <button class="inline-block px-4 py-2 text-lg font-medium text-black border-b-2 border-black hover:text-black-800">All Menu</button>
+        <button class="inline-block px-4 py-2 font-medium text-black hover:text-black-800">Coffee</button>
+        <button class="inline-block px-4 py-2 font-medium text-black hover:text-black-800">Non-coffee</button>
+        <button class="inline-block px-4 py-2 font-medium text-black hover:text-black-800">Frappuccino</button>
+        <button class="inline-block px-4 py-2 font-medium text-black hover:text-black-800">Snack</button>
+        <button class="inline-block px-4 py-2 font-medium text-black hover:text-black-800">Dessert</button>
     </div>
+</div>
+
+
+
+
 
     <!-- Menu Section -->
     <main class="container px-4 py-8 mx-auto">

@@ -25,6 +25,15 @@
         html {
             height: 100%;
         }
+         /* Hide horizontal scrollbar */
+         .scrollbar-hide::-webkit-scrollbar {
+                  display: none;
+                }
+
+                .scrollbar-hide {
+                  -ms-overflow-style: none;  /* IE and Edge */
+                  scrollbar-width: none; /* Firefox */
+                }
     </style>
 </head>
 
@@ -102,8 +111,8 @@
                 </div>
 
                 <!-- Tabs Section for Filtering -->
-                <div class="sticky z-10 bg-white shadow-md">
-                    <div class="flex justify-center py-4 space-x-4">
+                <div class="sticky z-10 bg-white shadow-md top-60">
+                    <div class="flex py-4 space-x-4 overflow-x-auto md:space-x-8 whitespace-nowrap scrollbar-hide">
                         <button onclick="filterProducts('all')"
                             class="px-4 py-2 text-lg font-medium text-black border-b-2 border-black hover:text-black-800">
                             All Menu
@@ -118,6 +127,7 @@
                     </div>
                 </div>
             </div>
+
 
 
             <main class="container px-12 py-8 mx-auto">
