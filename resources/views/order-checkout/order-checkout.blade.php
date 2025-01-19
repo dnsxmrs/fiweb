@@ -8,14 +8,13 @@
 
     <link rel="icon" href="{{ asset('favicon.ico') }}?v=2" type="image/x-icon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <script src="{{ asset('js/checkout.js') }}" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     {{-- @vite(['resources/js/app.js', 'resources/css/app.css']) --}}
 
@@ -33,6 +32,10 @@
         select::placeholder {
             color: #4A5568;
             /* Dark gray placeholder */
+        }
+
+        label:has(+ .border-red-500) {
+            color: #f87171; /* Label text turns red */
         }
     </style>
 </head>
@@ -94,7 +97,6 @@
 
                     <!-- Left Section: Contact and Address Details -->
                     <div class="col-span-2 space-y-4">
-
                         <!-- Contact Details -->
                         <div class="p-6 bg-white rounded-lg shadow-md">
                             <h2 class="mb-4 text-lg font-bold">Contact Details</h2>
@@ -102,25 +104,35 @@
                                 <div>
                                     <label for="firstName" class="block text-sm font-medium text-gray-700">First
                                         Name<span class="text-red-500"> *</span></label>
-                                    <input type="text" id="firstName"
+                                    <input required type="text" id="firstName"
                                         placeholder="Juan"
-                                        class="mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
-                                </div>
+                                        class="validate mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
+                                    </div>
                                 <div>
                                     <label for="lastName" class="block text-sm font-medium text-gray-700">Last
                                         Name<span class="text-red-500"> *</span></label>
                                     <input type="text" id="lastName"
                                         placeholder="dela Cruz"
-                                        class="mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
+                                        class="validate mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
                                 </div>
                             </div>
-                            <div class="mt-4">
-                                <label for="contactNumber" class="block text-sm font-medium text-gray-700">Contact
-                                    Number<span class="text-red-500"> *</span>
-                                </label>
-                                <input type="text" id="contactNumber"
-                                    placeholder="09123456789"
-                                    class="mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
+                                <div>
+                                    <label for="contactNumber" class="block text-sm font-medium text-gray-700">Contact
+                                        Number<span class="text-red-500"> *</span>
+                                    </label>
+                                    <input type="text" id="contactNumber"
+                                        placeholder="09123456789"
+                                        class="validate mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
+                                    </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700">
+                                        Email<span class="text-red-500"> *</span>
+                                    </label>
+                                    <input type="email" id="email"
+                                        placeholder="email@gmail.com"
+                                        class="validate mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
+                                    </div>
                             </div>
                         </div>
 
@@ -133,7 +145,7 @@
                                     Region<span class="text-red-500"> *</span></label>
                                 <div class="relative mt-1">
                                     <select id="region"
-                                        class="w-full px-4 py-3 bg-gray-100 text-black border border-gray-300 rounded-md appearance-none focus:ring-[#E9B303] focus:border-[#E9B303]">
+                                        class="validate w-full px-4 py-3 bg-gray-100 text-black border border-gray-300 rounded-md appearance-none focus:ring-[#E9B303] focus:border-[#E9B303]">
                                         <option value="" disabled selected>Select a region</option>
                                     </select>
                                     <!-- Dropdown Icon -->
@@ -153,7 +165,7 @@
                                     Province<span class="text-red-500"> *</span></label>
                                 <div class="relative mt-1">
                                     <select id="province"
-                                        class="w-full px-4 py-3 bg-gray-100 text-black border border-gray-300 rounded-md appearance-none focus:ring-[#E9B303] focus:border-[#E9B303]">
+                                        class="validate w-full px-4 py-3 bg-gray-100 text-black border border-gray-300 rounded-md appearance-none focus:ring-[#E9B303] focus:border-[#E9B303]">
                                         <option value="" disabled selected>Select a province</option>
                                     </select>
                                     <!-- Dropdown Icon -->
@@ -173,7 +185,7 @@
                                     Municipality<span class="text-red-500"> *</span></label>
                                 <div class="relative mt-1">
                                     <select id="municipality"
-                                        class="w-full px-4 py-3 bg-gray-100 text-black border border-gray-300 rounded-md appearance-none focus:ring-[#E9B303] focus:border-[#E9B303]">
+                                        class="validate w-full px-4 py-3 bg-gray-100 text-black border border-gray-300 rounded-md appearance-none focus:ring-[#E9B303] focus:border-[#E9B303]">
                                         <option value="" disabled selected>Select a municipality</option>
                                     </select>
                                     <!-- Dropdown Icon -->
@@ -193,7 +205,7 @@
                                     Barangay<span class="text-red-500"> *</span></label>
                                 <div class="relative mt-1">
                                     <select id="barangay"
-                                        class="w-full px-4 py-3 bg-gray-100 text-black border border-gray-300 rounded-md appearance-none focus:ring-[#E9B303] focus:border-[#E9B303]">
+                                        class="validate w-full px-4 py-3 bg-gray-100 text-black border border-gray-300 rounded-md appearance-none focus:ring-[#E9B303] focus:border-[#E9B303]">
                                         <option value="" disabled selected>Select a barangay</option>
                                     </select>
                                     <!-- Dropdown Icon -->
@@ -214,7 +226,7 @@
                                 </label>
                                 <input type="text" id="street"
                                     placeholder="Strawberry Street"
-                                    class="mt-1 block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
+                                    class="validate mt-1 block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
                             </div>
 
                             {{-- UNIT/FLOOR --}}
@@ -224,25 +236,25 @@
                                 </label>
                                 <input type="text" id="unit"
                                     placeholder="Block 33 Lot 8 Phase 1A"
-                                    class="mt-1 block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
+                                    class="validate mt-1 block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
                             </div>
 
                             {{-- ADDRESS TYPE --}}
                             <div class="mt-4">
                                 <span class="block text-sm font-medium text-gray-700">Select address type<span
                                         class="text-red-500"> *</span>
-                                    <div class="flex items-center mt-1 space-x-4">
-                                        <label class="flex items-center space-x-2">
-                                            <input type="radio" name="addressType" value="Residential" checked
-                                                class="form-radio text-[#E9B303] focus:ring-[#E9B303]">
-                                            <span>Residential</span>
-                                        </label>
-                                        <label class="flex items-center space-x-2">
-                                            <input type="radio" name="addressType" value="Office"
-                                                class="form-radio text-[#E9B303] focus:ring-[#E9B303]">
-                                            <span>Office</span>
-                                        </label>
-                                    </div>
+                                <div class="flex items-center mt-1 space-x-4">
+                                    <label class="flex items-center space-x-2">
+                                        <input type="radio" name="addressType" value="Residential" checked
+                                            class="form-radio text-[#E9B303] focus:ring-[#E9B303]">
+                                        <span>Residential</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2">
+                                        <input type="radio" name="addressType" value="Office"
+                                            class="form-radio text-[#E9B303] focus:ring-[#E9B303]">
+                                        <span>Office</span>
+                                    </label>
+                                </div>
                             </div>
                                 {{-- <div class="mt-6">
                                     <button
@@ -259,7 +271,7 @@
                                     delivery time<span class="text-red-500"> *</span>
                                 </label>
                                 <div class="relative mt-2">
-                                    <input type="text" id="datepicker" placeholder="Select Date"
+                                    <input type="text" id="datepickerCheckout" placeholder="Select Date"
                                         class="mt-1 block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
                                     {{-- <!-- Dropdown Icon -->
                                     <div class="absolute inset-y-0 flex items-center pointer-events-none right-3">
@@ -282,9 +294,9 @@
                                 <div class="relative mt-2">
                                     <select id="discount"
                                         class="w-full px-4 py-3 bg-gray-100 text-black border border-gray-300 rounded-md appearance-none focus:ring-[#E9B303] focus:border-[#E9B303]">
-                                        <option value="ND">No Discount</option>
-                                        <option value="PWD">PWD Discount</option>
-                                        <option value="Senior Citizen">Senior Citizen Discount</option>
+                                        <option value="nd" selected>No Discount</option>
+                                        <option value="pwd">PWD Discount</option>
+                                        <option value="sc">Senior Citizen Discount</option>
                                     </select>
                                     <!-- Dropdown Icon -->
                                     <div class="absolute inset-y-0 flex items-center pointer-events-none right-3">
@@ -325,7 +337,7 @@
                                     <label
                                         class="flex items-center justify-between p-4 bg-white border border-black rounded-md shadow-md cursor-pointer">
                                         <span class="flex items-center space-x-2">
-                                            <input type="radio" name="paymentMethod" value="debitCreditCard"
+                                            <input checked type="radio" name="paymentMethod" value="card"
                                                 class="form-radio text-[#E9B303] focus:ring-[#E9B303]">
                                             <span>Debit/Credit Card</span>
                                         </span>
@@ -423,7 +435,8 @@
                     <!-- Place Order and Terms -->
                     <div class="flex items-center px-5 space-x-4">
                         <!-- Place Order Button -->
-                        <button id="placeOrder"
+                        <button
+                            id="placeOrderButton"
                             class="bg-gray-400 px-10 py-2 font-bold text-white rounded-full w-60"
                             disabled>
                             Place Order
@@ -447,9 +460,13 @@
             </div>
         </div>
     </main>
-
-
-
+    <script>
+        // // perform console when dom is loaded
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     const payUrl = "{{ route('pay') }}";
+        //     console.log("lalalal", payUrl);
+        // });
+    </script>
 </body>
 
 </html>

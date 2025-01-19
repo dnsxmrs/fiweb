@@ -1,6 +1,6 @@
 const basketCounterHTML = document.getElementById("basketCounter");
 const termsCheckBox = document.getElementById("terms-checkbox");
-const placeOrderBtn = document.getElementById("placeOrder");
+const placeOrderBtn = document.getElementById("placeOrderButton");
 
 const savedOrders = sessionStorage.getItem("orderItems");
 const orderNote = sessionStorage.getItem("orderNote");
@@ -12,6 +12,95 @@ const currentProduct = {};
 const delivery_fee = 50;
 const tax = 0.12;
 const directTax = 1.12;
+
+const prefixes = {
+    '0817': 'Globe Telecom / TM',
+    '0905': 'Globe Telecom / TM',
+    '0906': 'Globe Telecom / TM',
+    '0915': 'Globe Telecom / TM',
+    '0916': 'Globe Telecom / TM',
+    '0917': 'Globe Telecom / TM',
+    '0926': 'Globe Telecom / TM',
+    '0927': 'Globe Telecom / TM',
+    '0935': 'Globe Telecom / TM',
+    '0936': 'Globe Telecom / TM',
+    '0937': 'ABS-CBN Mobile',
+    '0945': 'Globe Telecom / TM',
+    '0955': 'Globe Telecom / TM',
+    '0956': 'Globe Telecom / TM',
+    '0965': 'Globe Telecom / TM',
+    '0966': 'Globe Telecom / TM',
+    '0967': 'Globe Telecom / TM',
+    '0975': 'Globe Telecom / TM',
+    '0976': 'Globe Telecom / Gomo / TM',
+    '0977': 'Globe Telecom / TM',
+    '0995': 'Globe Telecom / TM',
+    '0996': 'Cherry Prepaid',
+    '0997': 'Globe Telecom / TM',
+    '09175': 'Globe Postpaid',
+    '09176': 'Globe Postpaid',
+    '09178': 'Globe Postpaid',
+    '09253': 'Globe Postpaid',
+    '09255': 'Globe Postpaid',
+    '09256': 'Globe Postpaid',
+    '09257': 'Globe Postpaid',
+    '09258': 'Globe Postpaid',
+    '0813': 'Smart / TNT',
+    '0907': 'Smart / TNT',
+    '0908': 'Smart / TNT',
+    '0909': 'Smart / TNT',
+    '0910': 'Smart / TNT',
+    '0811': 'Smart / TNT',
+    '0912': 'Smart / TNT',
+    '0913': 'Smart / TNT',
+    '0914': 'Smart / TNT',
+    '0918': 'Smart / TNT',
+    '0919': 'Smart / TNT',
+    '0920': 'Smart / TNT',
+    '0921': 'Smart / TNT',
+    '0928': 'Smart / TNT',
+    '0929': 'Smart / TNT',
+    '0930': 'Smart / TNT',
+    '0938': 'Smart / TNT',
+    '0939': 'Smart / TNT',
+    '0940': 'Smart / TNT',
+    '0946': 'Smart / TNT',
+    '0947': 'Smart / TNT',
+    '0948': 'Smart / TNT',
+    '0949': 'Smart / TNT',
+    '0950': 'Smart / TNT',
+    '0951': 'Smart / TNT',
+    '0961': 'Smart / TNT',
+    '0963': 'Smart / TNT',
+    '0968': 'Smart / TNT',
+    '0969': 'Smart / TNT',
+    '0970': 'Smart / TNT',
+    '0981': 'Smart / TNT',
+    '0989': 'Smart / TNT',
+    '0992': 'Smart / TNT',
+    '0998': 'Smart / TNT',
+    '0999': 'Smart / TNT',
+    '0895': 'Dito',
+    '0896': 'Dito',
+    '0897': 'Dito',
+    '0898': 'Dito',
+    '0991': 'Dito',
+    '0992': 'Dito',
+    '0993': 'Dito',
+    '0994': 'Dito',
+    '0922': 'Sun Cellular',
+    '0923': 'Sun Cellular',
+    '0924': 'Sun Cellular',
+    '0925': 'Sun Cellular',
+    '0931': 'Sun Cellular',
+    '0932': 'Sun Cellular',
+    '0933': 'Sun Cellular',
+    '0934': 'Sun Cellular',
+    '0941': 'Sun Cellular',
+    '0942': 'Sun Cellular',
+    '0943': 'Sun Cellular',
+    '0944': 'Sun Cellular'
+};
 
 let productPrice = 0.0;
 let productId = 1;
@@ -31,7 +120,7 @@ window.addEventListener("load", () => {
 
     updatePlaceOrder();
 
-    flatpickr("#datepicker", {
+    flatpickr("#datepickerCheckout", {
         enableTime: true,
         noCalendar: true,
         dateFormat: "h:i K", // 12-hour format with AM/PM
@@ -39,6 +128,28 @@ window.addEventListener("load", () => {
         maxTime: "23:00", // Maximum time in 24-hour format (11 PM)
         minuteIncrement: 1,
         defaultDate: "15:00",
+    });
+
+    document.querySelectorAll('.validate').forEach(field => {
+        field.addEventListener('blur', function () {
+            if (field.value.trim() === "") {
+                field.classList.add('border-red-500'); // Add red border if empty
+
+                // Find the label associated with this input and add a red text color
+                const label = document.querySelector(`label[for="${field.id}"]`);
+                if (label) {
+                    label.classList.add('text-red-500'); // Add red text color to label
+                }
+            } else {
+                field.classList.remove('border-red-500'); // Remove red border if valid
+
+                // Find the label associated with this input and remove red text color
+                const label = document.querySelector(`label[for="${field.id}"]`);
+                if (label) {
+                    label.classList.remove('text-red-500'); // Remove red text color from label
+                }
+            }
+        });
     });
 });
 
@@ -136,7 +247,7 @@ function loadDropdown() {
                 if (region.code === '040000000'){
                     const option = document.createElement('option');
                     option.value = region.code;
-                    // option.textContent = region.regionName + ' ' + region.name;
+                    option.setAttribute('data-rname', region.name); // Store the region code as a custom data attribute
                     option.textContent = region.name;
                     regionSelect.appendChild(option);
                 }
@@ -156,6 +267,7 @@ function loadDropdown() {
                         if (province.code === '045800000'){
                             const option = document.createElement('option');
                             option.value = province.code;
+                            option.setAttribute('data-pname', province.name); // Store the region code as a custom data attribute
                             option.textContent = province.name;
                             provinceSelect.appendChild(option);
                         }
@@ -182,6 +294,7 @@ function loadDropdown() {
                         if (city.code === '045808000'){
                             const option = document.createElement('option');
                             option.value = city.code;
+                            option.setAttribute('data-cname', city.name);
                             option.textContent = city.name;
                             municipalitySelect.appendChild(option);
                         }
@@ -206,6 +319,7 @@ function loadDropdown() {
                         if (barangay.code === '045808010' || barangay.code === '045808002'){
                             const option = document.createElement('option');
                             option.value = barangay.code;
+                            option.setAttribute('data-bname', barangay.name);
                             option.textContent = barangay.name;
                             barangaySelect.appendChild(option);
                         }
@@ -228,3 +342,229 @@ function updatePlaceOrder() {
         }
     });
 }
+
+function placeOrderBtnClick() {
+    // validate all fields if filled/valid input
+    const fields = document.querySelectorAll(".validate"); // Select all fields with the validation class
+    let firstInvalidField = null;
+
+    fields.forEach((field) => {
+        if (!field.value.trim()) {
+            field.classList.add("border-red-500"); // Highlight the invalid field
+            if (!firstInvalidField) {
+                firstInvalidField = field; // Set the first invalid field
+            }
+            const label = document.querySelector(`label[for="${field.id}"]`);
+            console.log("label: ", label);
+            if (label) {
+                console.log("found: ", label);
+                label.classList.add('text-red-500'); // Add red text color to label
+            }
+        } else {
+            field.classList.remove("border-red-500"); // Remove error highlight if valid
+            const label = document.querySelector(`label[for="${field.id}"]`);
+            if (label) {
+                label.classList.remove('text-red-500'); // Remove red text color from label
+            }
+        }
+    });
+
+    if (firstInvalidField) {
+        firstInvalidField.scrollIntoView({ behavior: "smooth", block: "center" }); // Scroll to the invalid field
+        firstInvalidField.focus(); // Optionally focus on the field
+    } else {
+        // Submit the form or proceed with the order placement
+        // document.getElementById("orderForm").submit();
+    }
+
+    // parse the orders in object format
+    let firstName = document.getElementById("firstName").value;
+    let lastName = document.getElementById("lastName").value;
+    let contactNumber = document.getElementById("contactNumber").value;
+    let email = document.getElementById("email").value;
+
+    let regionElement = document.getElementById("region");
+    let provinceElement = document.getElementById("province");
+    let municipalityElement = document.getElementById("municipality");
+    let barangayElement = document.getElementById("barangay");
+
+    // Get the selected options and their data attributes
+    let regionRName = regionElement.selectedOptions[0].getAttribute("data-rname");
+    let provincePName = provinceElement.selectedOptions[0].getAttribute("data-pname");
+    let municipalityMName = municipalityElement.selectedOptions[0].getAttribute("data-cname");
+    let barangayBName = barangayElement.selectedOptions[0].getAttribute("data-bname");
+
+    let street = document.getElementById("street").value;
+    let unit = document.getElementById("unit").value;
+    let addressType = document.querySelector('input[name="addressType"]:checked').value;
+    let deliveryTime = document.getElementById("datepickerCheckout").value;
+    let paymentType = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+    const orderPayload = {
+        customerDetails: {
+            firstName: firstName,
+            lastName: lastName,
+            contactNumber: contactNumber,
+            email: email,
+        },
+        addressDetails: {
+            region: regionRName,
+            province: provincePName,
+            municipality: municipalityMName,
+            barangay: barangayBName,
+            street: street,
+            unit: unit,
+            addressType: addressType,
+        },
+        paymentDetails: {
+            paymentType: paymentType,
+            subtotal: order_subtotal,
+            deliveryFee: delivery_fee,
+            tax: taxAmount,
+            total: totalAmount,
+        },
+        orderDetails: {
+            items: orderItems, // Assuming `orderItems` is already an array of objects
+            deliveryTime: deliveryTime,
+            note: orderNote,
+        },
+    };
+
+    console.log("orderPayload: ", orderPayload);
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    console.log("csrfToken: ", csrfToken);
+    const payUrl = "{{ route('pay') }}";
+    console.log("payUrl: ", payUrl);
+
+
+    // Send the data to the server
+    fetch("/payment", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+        },
+        body: JSON.stringify(orderPayload),
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Failed to submit order');
+        }
+    }).then(data => {
+        console.log('Order submitted successfully:', data);
+
+        // success();
+
+        setTimeout(() => {
+            // Redirect to menu page
+            window.location.href = data.redirect;
+        });
+    })
+    .catch(error => {
+        console.error('Error submitting order:', error);
+    });
+
+
+    // .then(response => {
+    //     if (response.ok) {
+    //         console.log('Order submitted successfully');
+    //         return response.json();
+    //     } else {
+    //         console.error('Failed to submit order');
+    //         // throw new Error('Failed to submit order');
+    //     }
+    // })
+    // .then(data => {
+    //     console.log('Order submitted successfully:', data);
+
+    //     // success();
+
+    //     setTimeout(() => {
+    //         // Redirect to menu page
+    //         window.location.href = data.redirect;
+    //     });
+
+    // })
+    // .catch(error => {
+    //     console.error('Error submitting order:', error);
+    // });
+
+//     // Call your server to create a payment session with PayMongo
+//     fetch('/payment', {
+//         method: 'POST',
+//         body: JSON.stringify({ paymentMethod: paymentMethod.value, amount: 1000 }), // Pass amount dynamically
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRF-TOKEN': '{{ csrf_token() }}',
+//         }
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         // Assuming PayMongo returns a URL for redirection
+//         const paymentUrl = data.paymentUrl;
+//         if (paymentUrl) {
+//             window.location.href = paymentUrl; // Redirect to PayMongo's payment page
+//         } else {
+//             alert("Error generating payment link.");
+//         }
+//     })
+//     .catch(error => {
+//         console.error('Error creating payment session:', error);
+//         alert("Something went wrong. Please try again.");
+//     });
+};
+
+// Attach the event listener to the button
+placeOrderBtn.addEventListener("click", placeOrderBtnClick);
+
+function validateContactDetails() {
+    // get value
+    let firstName = document.getElementById("firstName").value;
+    let lastName = document.getElementById("lastName").value;
+    let contactNumber = document.getElementById("contactNumber").value;
+    let email = document.getElementById("email").value;
+
+    regex = '^(09|\\+639)\\d{9}$'
+
+}
+
+function parseOrders() {
+
+
+
+    // get the data from the ui element
+    subTotal = parseFloat(document.getElementById("sub-total").textContent.replace('₱ ', '').replace(',', ''));
+    payableAmount = parseFloat(document.getElementById("payable-amount").textContent.replace('₱ ', '').replace(',',
+        ''));
+    const orderType = document.getElementById("order-type").value;
+
+    // Transform orderItems into array of objects
+    const transformedOrderItems = Object.entries(orderItems).map(([name, details]) => {
+        return {
+            name: name,
+            quantity: details.quantity,
+            price: details.price
+        };
+    });
+
+    // Prepare the data to send
+    const payload = {
+        orderItems: transformedOrderItems,
+        orderType: orderType,
+        taxAmount: taxAmount,
+        discountType: discountType,
+        discountAmount: discountAmount,
+        subTotal: subTotal,
+        payableAmount: payableAmount,
+        modeOfPayment: modeOfPayment
+    };
+
+    // return the payload
+    return payload;
+}
+
+// i should have functions for pushing ui with validation errors
+
+
