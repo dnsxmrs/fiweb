@@ -5,6 +5,7 @@ use App\Http\Controllers\APIController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WebController;
+use App\Http\Controllers\PaymentController;
 
 
 // Landing page
@@ -15,9 +16,12 @@ Route::get('/order-now', [WebController::class, 'orderNow'])->name('order-now');
 
 Route::get('/checkout', [WebController::class, 'checkout'])->name('checkout');
 
+Route::post('/payment', [PaymentController::class, 'pay'])->name('pay');
+
+Route::get('/orders', [PaymentController::class, 'orders'])->name('orders');
 
 
-
+// Route::view('details', 'order-checkout.order-details')->name('order-details');
 
 
 
@@ -55,5 +59,5 @@ Route::prefix('order-checkout')->group(function () {
     });
 
 
-    Route::view('details', 'order-checkout.order-details');
+
 });

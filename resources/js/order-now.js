@@ -4,16 +4,19 @@ const checkoutButton = document.getElementById("checkoutBtn");
 const basketCounterHTML = document.getElementById("basketCounter");
 
 const orderItems = {}; // loaded
-const tax = 0.12;
-const delivery_fee = 50;
 const currentProduct = {};
+const delivery_fee = 50;
+const tax = 0.12;
+const directTax = 1.12;
+
+let productPrice = 0.0;
+let productId = 1;
 
 let modeOfPayment = null;
-let constProductPrice = 0.0;
-let constProductId = 1;
 let order_subtotal = 0.0; // loaded
 let discountAmount = 0.0;
 let totalAmount = 0.0; // loaded
+let taxAmount = 0.0;
 
 
 // Initialize button state on page load
@@ -54,7 +57,7 @@ function addItemToOrderPanel(name, itemDetails) {
             <div class="flex items-center">
                 <div>
                     <p class="cart-product-name font-medium text-gray-800">${name}</p>
-                    <p class="cart-product-price text-sm text-gray-500">₱ ${(itemDetails.price).toFixed(2)}</p>
+                    <p class="cart-product-price text-sm text-gray-500">₱ ${parseFloat(itemDetails.price).toFixed(2)}</p>
                 </div>
             </div>
 
@@ -79,10 +82,13 @@ function addItemToOrderPanel(name, itemDetails) {
 
 function updateTotal(price) {
     order_subtotal += price;
-    totalAmount = order_subtotal + delivery_fee;
+    taxAmount = parseFloat(order_subtotal * tax);
+    totalAmount = order_subtotal + taxAmount;
+    totalAmount += delivery_fee
 
     document.getElementById("orderSubtotal").textContent = `₱ ${order_subtotal.toFixed(2)}`;
     document.getElementById("deliveryFee").textContent = `₱ ${delivery_fee.toFixed(2)}`;
+    document.getElementById("orderTax").textContent = `₱ ${taxAmount.toFixed(2)}`;
 
     if (Object.keys(orderItems).length === 0) {
         document.getElementById("orderTotal").textContent = `₱ 0.00`;
@@ -286,7 +292,7 @@ window.addToMyBag = function () {
     if (orderItems[name]) {
         // If item already exists, update the quantity and price
         orderItems[name].quantity += quantity;
-        orderItems[name].totalPrice += totalPrice;
+        orderItems[name].totalPrice += parseFloat(totalPrice);
 
         // Update the quantity and price in the DOM
         const itemRow = document.getElementById("item-" + name);
@@ -296,7 +302,7 @@ window.addToMyBag = function () {
         // If item does not exist, add it to the order
         orderItems[name] = {
             quantity: quantity,
-            totalPrice: totalPrice,
+            totalPrice: parseFloat(totalPrice),
 
             id: currentProduct[name].id,
             img: currentProduct[name].img,
@@ -310,7 +316,7 @@ window.addToMyBag = function () {
                     <div class="flex items-center">
                         <div>
                             <p class="cart-product-name font-medium text-gray-800">${name}</p>
-                            <p class="cart-product-price text-sm text-gray-500">₱ ${orderItems[name].price.toFixed(2)}</p>
+                            <p class="cart-product-price text-sm text-gray-500">₱ ${parseFloat(currentProduct[name].price).toFixed(2)}</p>
                         </div>
                     </div>
 
@@ -336,6 +342,8 @@ window.addToMyBag = function () {
     cartCounter();
     updateCheckoutButton();
     saveOrders();
+
+    console.log("AFTER", orderItems)
 
     modal.classList.add("hidden");
 };
@@ -368,7 +376,7 @@ window.changeQuantity = function (name, change) {
             orderItems[name].quantity += change;
 
             // Update price after quantity change
-            orderItems[name].totalPrice = productPrice * orderItems[name].quantity;
+            orderItems[name].totalPrice = parseFloat(productPrice * orderItems[name].quantity);
 
             // Update the quantity and price in the DOM
             const itemRow = document.getElementById("item-" + name);
@@ -409,8 +417,13 @@ function saveOrders() {
     // store the orderNote in sessionStorage for later retrieval
     sessionStorage.setItem("orderNote", document.getElementById("orderNote").value);
 
+    // store the tax in sessionStorage for later retrieval
+    sessionStorage.setItem("taxAmount", document.getElementById("orderTax").textContent);
+
     // store the orderSubtotal in sessionStorage for later retrieval
     sessionStorage.setItem("orderSubtotal", document.getElementById("orderSubtotal").textContent);
+
+    console.log("Order items saved to localStorage");
 }
 
 
