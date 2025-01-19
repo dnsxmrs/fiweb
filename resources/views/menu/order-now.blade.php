@@ -21,19 +21,22 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
         }
-
         html {
             height: 100%;
         }
-         /* Hide horizontal scrollbar */
          .scrollbar-hide::-webkit-scrollbar {
                   display: none;
                 }
-
-                .scrollbar-hide {
-                  -ms-overflow-style: none;  /* IE and Edge */
-                  scrollbar-width: none; /* Firefox */
+         .scrollbar-hide {
+                  -ms-overflow-style: none;
+                  scrollbar-width: none;
                 }
+         .active {
+        border-bottom: 2px solid black;
+    }
+    .menu-button {
+            transition: border-bottom 0.3s ease, color 0.3s ease;
+        }
     </style>
 </head>
 
@@ -111,22 +114,38 @@
                 </div>
 
                 <!-- Tabs Section for Filtering -->
-                <div class="sticky z-10 bg-white shadow-md top-60">
+                <div class="z-10 bg-white shadow-md top-60">
                     <div class="flex py-4 space-x-4 overflow-x-auto md:space-x-8 whitespace-nowrap scrollbar-hide">
-                        <button onclick="filterProducts('all')"
-                            class="px-4 py-2 text-lg font-medium text-black border-b-2 border-black hover:text-black-800">
+                        <button onclick="filterProducts('all');"
+                            class="px-4 py-2 text-lg font-medium text-black "
+                            style="margin-left:15px;">
                             All Menu
                         </button>
 
                         @foreach ($categories as $category)
-                            <button onclick="filterProducts('{{ $category->category_number }}')"
-                                class="px-4 py-2 text-lg font-medium text-black hover:text-black-800">
+                            <button onclick="filterProducts('{{ $category->category_number }}'); setActive(this);"
+                                class="px-4 py-2 text-lg font-medium text-black hover:text-black-800 menu-button">
                                 {{ $category->name }}
                             </button>
                         @endforeach
                     </div>
                 </div>
-            </div>
+
+                <script>
+                    function setActive(button) {
+                        // Remove active class from all buttons
+                        const buttons = document.querySelectorAll('.menu-button');
+                        buttons.forEach(btn => btn.classList.remove('active'));
+
+                        // Add active class to clicked button
+                        button.classList.add('active');
+                    }
+
+                    function filterProducts(category) {
+                        // Implement your filtering logic here
+                        console.log('Filtering products by category:', category);
+                    }
+                </script>
 
 
 

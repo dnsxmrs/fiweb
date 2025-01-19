@@ -82,17 +82,7 @@
     </div>
 </div>
 
-<!-- Tabs Section -->
-<div class="sticky z-10 bg-white shadow-md top-60">
-    <div class="flex py-4 space-x-4 overflow-x-auto md:space-x-8 whitespace-nowrap scrollbar-hide">
-        <button class="inline-block px-4 py-2 text-lg font-medium text-black border-b-2 border-black hover:text-black-800">All Menu</button>
-        <button class="inline-block px-4 py-2 font-medium text-black hover:text-black-800">Coffee</button>
-        <button class="inline-block px-4 py-2 font-medium text-black hover:text-black-800">Non-coffee</button>
-        <button class="inline-block px-4 py-2 font-medium text-black hover:text-black-800">Frappuccino</button>
-        <button class="inline-block px-4 py-2 font-medium text-black hover:text-black-800">Snack</button>
-        <button class="inline-block px-4 py-2 font-medium text-black hover:text-black-800">Dessert</button>
-    </div>
-</div>
+<
 
 
 
