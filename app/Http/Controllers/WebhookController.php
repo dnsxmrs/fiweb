@@ -340,7 +340,7 @@ class WebhookController extends Controller
         }
     }
 
-    public function getCategories(Request $request)
+    public function getOrders(Request $request)
     {
         // log the incoming request
         Log::info('Received order request', [

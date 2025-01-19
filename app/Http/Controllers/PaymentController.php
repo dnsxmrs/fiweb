@@ -36,7 +36,7 @@ class PaymentController extends Controller
                 'addressDetails.addressType' => 'required|in:Residential,Office',
 
                 // Payment details validation
-                'paymentDetails.paymentType' => 'required|in:card,cash,cashless',
+                'paymentDetails.paymentType' => 'required|in:card,gcash,paymaya',
                 'paymentDetails.subtotal' => 'required|numeric|min:0',
                 'paymentDetails.deliveryFee' => 'required|numeric|min:0',
                 'paymentDetails.tax' => 'required|numeric|min:0',

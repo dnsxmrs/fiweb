@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\WebhookController;
+use App\Http\Middleware\CheckKdsSource;
 use App\Http\Middleware\CheckPosSource;
 
 
@@ -26,7 +27,13 @@ Route::middleware([CheckPosSource::class])->group(function () {
         Route::match(['post', 'put', 'delete'], '/product-update', [WebhookController::class, 'product']);
         // Route::match(['get', 'post', 'put', 'delete'], '/order-update', [WebhookController::class, 'order']);
 
-        Route::get('/get-orders', [WebhookController::class, 'getCategories']);
+        Route::get('/get-orders', [WebhookController::class, 'getOrders']);
+    });
+});
+
+Route::middleware([CheckKdsSource::class])->group(function () {
+    Route::prefix('v1')->group(function () {
+
     });
 });
 

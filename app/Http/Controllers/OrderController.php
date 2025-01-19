@@ -72,7 +72,7 @@ class OrderController extends Controller
                 'orderDetails.deliveryTime' => 'required|string|max:255',
                 'orderDetails.note' => 'nullable|string|max:500',
 
-                'paymentDetails.paymentType' => 'required|in:card,cash,cashless',
+                'paymentDetails.paymentType' => 'required|in:card,gcash,paymaya',
                 'paymentDetails.subtotal' => 'required|numeric|min:0',
                 'paymentDetails.deliveryFee' => 'required|numeric|min:0',
                 'paymentDetails.tax' => 'required|numeric|min:0',
