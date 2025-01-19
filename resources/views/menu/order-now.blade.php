@@ -18,7 +18,7 @@
 
     <style>
         body {
-            font-family: 'Barlow', sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             height: 100%;
         }
@@ -31,15 +31,15 @@
 
 <body class="bg-gray-100">
     <!-- Navbar -->
-    <header class="sticky top-0 z-20 bg-white" style="height: 80px; box-shadow: 0 4px 6px rgba(139, 69, 19, 0.3);">
+    <header class="sticky top-0 z-20" style="height: 80px; box-shadow: 0 4px 6px rgba(139, 69, 19, 0.3); background-color: #066744;">
         <div class="container flex items-center justify-between h-full px-4 mx-auto">
             <!-- Logo and Text -->
             <div class="flex items-center space-x-3">
                 <img src="assets/Caffeinated Logo.png" alt="Caffeinated Logo" class="w-12 h-12">
                 <div class="flex items-center">
                     <div>
-                        <span class="text-2xl font-bold leading-none text-black">CAFFEINATED</span>
-                        <p class="text-sm font-medium text-gray-500">Food Delivery</p>
+                        <span class="text-2xl font-bold leading-none text-white">CAFFEINATED</span>
+                        <p class="text-sm font-medium text-white">Food Delivery</p>
                     </div>
 
                     <!-- Navigation Links -->
@@ -66,17 +66,17 @@
                 </div>
 
                 <!-- Basket Icon -->
-                <button class="basketBtn relative flex items-center">
+                <button class="relative flex items-center basketBtn">
                     <img src="assets/order-bag.png" alt="Order Bag" class="w-12 h-12">
                     <span
                         id="basketCounter"
-                        class="basketCounter absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full">
+                        class="absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full basketCounter">
                         0</span>
                 </button>
 
                 <!-- Guest Button -->
                 <button
-                    class="flex items-center justify-center w-40 h-10 px-6 py-3 text-lg text-white bg-black rounded-full hover:bg-brown-600">
+                    class="flex items-center justify-center w-40 h-10 px-6 py-3 text-lg text-black bg-white rounded-full hover:bg-brown-600">
                     <img src="{{ asset('assets/Male User.png') }}" alt="User" class="w-5 h-5 mr-2">Guest
                 </button>
 
@@ -91,7 +91,7 @@
     {{-- main content --}}
     <div class="container flex w-full">
         {{-- menu and header --}}
-        <div class="content w-full">
+        <div class="w-full content">
             <div>
                 <!-- Menu header -->
                 <div class="relative sticky z-10 h-40 bg-center bg-cover"
@@ -112,7 +112,7 @@
 
                         @foreach ($categories as $category)
                             <button onclick="filterProducts('{{ $category->category_number }}')"
-                                class="px-4 py-2 font-medium text-black text-lg hover:text-black-800">
+                                class="px-4 py-2 text-lg font-medium text-black hover:text-black-800">
                                 {{ $category->name }}
                             </button>
                         @endforeach
@@ -123,7 +123,7 @@
 
             <main class="container px-12 py-8 mx-auto">
                 {{-- header for searching --}}
-                <section id="search-header" class="search-header mb-12 hidden">
+                <section id="search-header" class="hidden mb-12 search-header">
                     <h3 class="mb-4 text-2xl font-semibold text-brown-700"></h3>
                 </section>
                 <!-- Grouped Products by Categories -->
@@ -134,7 +134,7 @@
                             @foreach ($products as $product)
                                 @if ($product->category_number === $category->category_number)
                                     <!-- Product Cards -->
-                                    <div class="product-card mx-auto bg-white rounded-lg shadow-md w-70"
+                                    <div class="mx-auto bg-white rounded-lg shadow-md product-card w-70"
                                         data-name="{{ $product->name }}">
                                         <!-- Product Image -->
                                         <div class="p-4">
@@ -177,7 +177,7 @@
                 </div>
 
                 <!-- Order Items -->
-                <div id="order-cart" class="order-cart flex flex-col">
+                <div id="order-cart" class="flex flex-col order-cart">
                     {{-- items added to cart goes here --}}
                 </div>
 
