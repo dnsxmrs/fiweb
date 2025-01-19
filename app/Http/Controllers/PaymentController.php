@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\OrderController;
+use App\Models\Payment;
+use App\Models\Order;
+use App\Models\OrderProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
-use App\Models\OrderProduct;
-use Ixudra\Curl\Facades\Curl;
-
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\Validation\ValidationException;
+use Ixudra\Curl\Facades\Curl;
 
 class PaymentController extends Controller
 {
@@ -58,12 +59,10 @@ class PaymentController extends Controller
         }
     }
 
-
-
-
     public function pay(Request $request)
     {
         try{
+            Log::info($request);
             // Validate the request
             $validatedRequest = $this->validateRequest($request);
             Log::info('Validated request: ', $validatedRequest);
@@ -87,16 +86,9 @@ class PaymentController extends Controller
             $extractOrder = json_decode($orderCreated->getContent(), true)['data'];
             Log::info('Extracted Order: ', $extractOrder);
 
-            // Debugging data types
-            var_dump($extractOrder);  // Expected: array
-            // var_dump($items);         // Expected: array of associative arrays
-
-
             $orderProducts = OrderProduct::where('order_id', $extractOrder['id'])
                 ->with('product')
                 ->get();
-            // Ensure you pass it as an array
-            var_dump($orderProducts); // Expected: Eloquent Collection
             Log::info($orderProducts);
             $decodedData = json_decode($orderProducts, true); // Decoding as an associative array
             Log::info($decodedData);
@@ -104,10 +96,11 @@ class PaymentController extends Controller
             $items = [];
             foreach ($decodedData as $selectedProduct) {
                 if ($selectedProduct['product'] && $selectedProduct['product']['name']) {
+                    Log::info('Selected Product: ', $selectedProduct);
                     $items[] = [
                         'name' => $selectedProduct['product']['name'],
-                        'quantity' => (int) $selectedProduct['quantity'],
-                        'amount' => $selectedProduct['price'] * $selectedProduct['quantity'] * 100,
+                        'quantity' => $selectedProduct['quantity'],
+                        'amount' => $selectedProduct['price'] * 100,
                         'currency' => 'PHP',
                         'description' => $extractOrder['order_number'],
                     ];
@@ -161,7 +154,7 @@ class PaymentController extends Controller
                         'cancel_url' => route('checkout'),
                         'description' => $extractOrder['order_number'],
                         'metadata' => [
-                            'order_id' => base64_encode($extractOrder['order_number']),
+                            'order_id' => base64_encode($extractOrder['id']),
                         ]
                     ],
                 ]
@@ -184,6 +177,7 @@ class PaymentController extends Controller
             // Check if the 'data' property exists before accessing it
             if (isset($response->data)) {
                 Session::put('session_id', $response->data->id);
+                Log::info('Session ID: ' . $response->data->id);
             } else {
                 // Handle the error or log the response if 'data' is missing
                 Log::error('Error: PayMongo response does not contain "data" property');
@@ -191,12 +185,13 @@ class PaymentController extends Controller
             }
 
             $checkOutUrl = $response->data->attributes->checkout_url;
+            Log::info('Checkout URL: '. $checkOutUrl);
 
             // Return with checkout url for redirection
             return response()->json([
                 'success' => true,
                 'message' => 'Successful payment processing',
-                'redirect' => $checkOutUrl
+                'redirect' => $checkOutUrl,
             ]);
 
         } catch (\Exception $e) {
@@ -208,8 +203,117 @@ class PaymentController extends Controller
 
     public function orders()
     {
-        // get all orders from this session
+        $sessionId = Session::get('session_id');
+        Log::info('Session ID: ' . $sessionId);
 
-        return view('order-checkout.order-details');
+        $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions/' . $sessionId)
+        ->withHeader('Content-Type: application/json')
+        ->withHeader('Accept: application/json')
+        ->withHeader('Authorization: Basic ' . base64_encode(env('AUTH_PAY')))
+        ->asJson()
+        ->get();
+
+        if ($response->data->attributes->payments[0]->attributes->status === "paid") {
+            // Log::info((array) $response);
+            Log::info('Logging object:', ['object' => json_encode($response)]);
+
+            $orderId = (int) base64_decode($response->data->attributes->metadata->order_id);
+            $amount = $response->data->attributes->payments[0]->attributes->amount;
+            $description = $response->data->attributes->payments[0]->attributes->description;
+            $modeOfPayment = $response->data->attributes->payment_method_used;
+            $status = $response->data->attributes->payments[0]->attributes->status;
+
+            Log::info("message", [
+                'order_id' => $orderId,
+                'total' => $amount,
+                'description' => $description,
+                'payment_type' => $modeOfPayment,
+                'status' => $status,
+            ]);
+
+            // load the details
+            $paymentToStore = [
+                'order_id' => $orderId,
+                'total' => $amount,
+                'description' => 'Payment for ' . $description,
+                'payment_type' => $modeOfPayment,
+                'status' => $status,
+            ];
+
+            Log::info('Payment to store: ', $paymentToStore);
+
+            $payment = $this->storePayment(new Request($paymentToStore));
+
+            Log::info('Payment stored: ', json_decode($payment->getContent(), true));
+            Log::info('Payment Log object:', ['object' => json_encode($payment)]);
+
+            if (!$payment) {
+
+                return response()->json([
+                    'message' => 'Unsuccessful to save payment'
+                ], 400);
+            }
+
+            return $this->showDetails($orderId);
+        }
+    }
+
+    public function storePayment(Request $request)
+    {
+        $payment = $request->validate([
+            'order_id' => 'nullable|exists:orders,id',
+            'total' => 'required|numeric|min:0',
+            'description' => 'nullable|max:255',
+            'payment_type' => 'required|in:cash,card,gcash,paymaya',
+            'status' => 'required|in:paid,unpaid',
+        ]);
+
+        Log::info('Payment: ', $payment);
+
+        // create payment record
+        $recordedPayment = Payment::create([
+            'order_id' => $payment['order_id'],
+            'total' => $payment['total'],
+            'description' => $payment['description'],
+            'payment_type' => $payment['payment_type'],
+            'status' => 'paid'
+        ]);
+
+        Log::info($recordedPayment);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment recorded successfully',
+            'data' => $recordedPayment
+        ], 200);
+    }
+
+    public function showDetails($orderId = null)
+    {
+        if (!$orderId) {
+            return view('order-checkout.order-details');
+        }
+
+        // retrieve order based on orderid
+        $orders = Order::find($orderId);
+
+        // get the order and the orderProduct and pass to view
+        $orderProducts = OrderProduct::where('order_id', $orderId)
+        ->with('product')
+        ->get();
+
+        // get the corresponding payment
+        $payments = Payment::where('order_id', $orderId)->first();
+
+        Log::info($orders);
+        Log::info($orderProducts);
+
+        return view('order-checkout.order-details', compact('orderProducts', 'orders', 'payments'));
+    }
+
+    // push order to pos
+    public function pushOrder()
+    {
+
     }
 }

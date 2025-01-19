@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Product;
-use App\Models\Category;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Log;
 
+use App\Models\Category;
+use App\Models\Order;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends Controller
 {
@@ -316,7 +317,7 @@ class WebhookController extends Controller
 
             $product->delete();
 
-            \Log::info('Product deleted successfully', [
+            Log::info('Product deleted successfully', [
                 'product_id' => $validatedData['product_id'],
             ]);
 
@@ -326,7 +327,7 @@ class WebhookController extends Controller
                 'product_id' => $validatedData['product_id'],
             ], 200);
         } catch (\Exception $e) {
-            \Log::error('Failed to delete product', [
+            Log::error('Failed to delete product', [
                 'error' => $e->getMessage(),
                 'product_id' => $validatedData['product_id'],
             ]);
@@ -337,5 +338,23 @@ class WebhookController extends Controller
                 'error_details' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function getCategories(Request $request)
+    {
+        // log the incoming request
+        Log::info('Received order request', [
+            'request_method' => $request->method(),
+            'request_data' => $request->all(),
+        ]);
+
+        // get all orders
+        $orders = Order::with('orderProducts')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order fetched successfully!',
+            'orders' => $orders
+        ], 201);
     }
 }

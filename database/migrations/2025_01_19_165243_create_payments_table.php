@@ -19,10 +19,6 @@ return new class extends Migration
             $table->enum('payment_type',['card','gcash', 'paymaya']); // card, gcash, paymaya,etc.
             $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
 
-            $table->decimal('subtotal', 10, 2);
-            $table->decimal('delivery_fee', 10, 2);
-            $table->decimal('tax', 10, 2);
-
             $table->timestamps();
         });
     }

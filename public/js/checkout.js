@@ -446,21 +446,17 @@ function placeOrderBtnClick() {
             'X-CSRF-TOKEN': csrfToken,
         },
         body: JSON.stringify(orderPayload),
-    }).then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Failed to submit order');
-        }
-    }).then(data => {
-        console.log('Order submitted successfully:', data);
+    })
+    .then(response => response.text()) // Parse as text first
+    .then(rawData => {
+        console.log('Raw server response:', rawData);
 
-        // success();
+        // Attempt to parse JSON
+        const data = JSON.parse(rawData);
+        console.log('Parsed JSON:', data);
 
-        setTimeout(() => {
-            // Redirect to menu page
-            window.location.href = data.redirect;
-        });
+        // Handle success
+        window.location.href = data.redirect;
     })
     .catch(error => {
         console.error('Error submitting order:', error);

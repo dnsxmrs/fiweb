@@ -24,6 +24,9 @@ Route::middleware([CheckPosSource::class])->group(function () {
         // Webhook routes for updating products and categories
         Route::match(['post', 'put', 'delete'], '/category-update', [WebhookController::class, 'category']);
         Route::match(['post', 'put', 'delete'], '/product-update', [WebhookController::class, 'product']);
+        // Route::match(['get', 'post', 'put', 'delete'], '/order-update', [WebhookController::class, 'order']);
+
+        Route::get('/get-orders', [WebhookController::class, 'getCategories']);
     });
 });
 

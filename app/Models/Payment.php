@@ -16,9 +16,6 @@ class Payment extends Model
         'description',
         'payment_type',
         'status',
-        'subtotal',
-        'delivery_fee',
-        'tax',
     ];
 
     // Relationship with Order

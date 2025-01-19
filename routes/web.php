@@ -11,14 +11,20 @@ use App\Http\Controllers\PaymentController;
 // Landing page
 Route::get('/',[WebController::class, 'getCategory'])->name('landing');
 
-// order now
+// order now - menu
 Route::get('/order-now', [WebController::class, 'orderNow'])->name('order-now');
 
+// fill out form in checkout
 Route::get('/checkout', [WebController::class, 'checkout'])->name('checkout');
 
+// after placing order in checkout
 Route::post('/payment', [PaymentController::class, 'pay'])->name('pay');
 
+// can be used for emails - checkouturl for paymongo - details after this
 Route::get('/orders', [PaymentController::class, 'orders'])->name('orders');
+
+// independent details url
+Route::get('/order-details', [PaymentController::class, 'showDetails'])->name('showDetails');
 
 
 // Route::view('details', 'order-checkout.order-details')->name('order-details');
