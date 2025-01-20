@@ -349,12 +349,14 @@ class WebhookController extends Controller
         ]);
 
         // get all orders
-        $orders = Order::with('orderProducts')->get();
+        $orders = Order::with('orderProducts')->paginate(10);
+
+        Log::info('orders', [
+            'orders' => $orders,
+        ]);
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Order fetched successfully!',
-            'orders' => $orders
-        ], 201);
+            'data' => $orders
+        ]);
     }
 }

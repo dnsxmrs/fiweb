@@ -9,6 +9,9 @@ const delivery_fee = 50;
 const tax = 0.12;
 const directTax = 1.12;
 
+const constProductPrice = 0.0;
+const constProductId = 1;
+
 let productPrice = 0.0;
 let productId = 1;
 

@@ -27,7 +27,7 @@ Route::middleware([CheckPosSource::class])->group(function () {
         Route::match(['post', 'put', 'delete'], '/product-update', [WebhookController::class, 'product']);
         // Route::match(['get', 'post', 'put', 'delete'], '/order-update', [WebhookController::class, 'order']);
 
-        Route::get('/get-orders', [WebhookController::class, 'getOrders']);
+        Route::match(['get', 'post', 'put', 'delete'], '/get-orders-paginate', [WebhookController::class, 'getOrders']);
     });
 });
 
