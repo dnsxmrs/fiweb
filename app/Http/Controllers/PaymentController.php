@@ -62,140 +62,110 @@ class PaymentController extends Controller
     public function pay(Request $request)
     {
         try{
-            Log::info($request);
-            // Validate the request
-            $validatedRequest = $this->validateRequest($request);
-            Log::info('Validated request: ', $validatedRequest);
+            // Validate and process request data
+            $orders = $this->validateRequest($request);
 
-            $tax = $validatedRequest['paymentDetails']['tax'];
-            $deliveryFee = $validatedRequest['paymentDetails']['deliveryFee'];
-            $total = $validatedRequest['paymentDetails']['total'];
-            // paymentType
-            $paymentType = $validatedRequest['paymentDetails']['paymentType'];
-
-            // Log the tax, total amount and delivery fee
-            Log::info('Tax: ' . $tax);
-            Log::info('Delivery Fee: ' . $deliveryFee);
-            Log::info('Total: ' . $total);
+            $tax = $orders['paymentDetails']['tax'];
+            $deliveryFee = $orders['paymentDetails']['deliveryFee'];
+            // // paymentType
+            // $paymentType = $orders['paymentDetails']['paymentType'];
 
             $storeOrder = new OrderController();
-            $orderCreated = $storeOrder->storeOrder(new Request($validatedRequest));
-            Log::info('Order created: ', json_decode($orderCreated->getContent(), true));
+            $orderCreated = $storeOrder->storeOrder(new Request($orders));
 
-            // Extract order data from the response
-            $extractOrder = json_decode($orderCreated->getContent(), true)['data'];
-            Log::info('Extracted Order: ', $extractOrder);
+            if ($orderCreated) {
+                // Extract order data from the response
+                $extractedOrder = $orderCreated->getData()->data;
 
-            $orderProducts = OrderProduct::where('order_id', $extractOrder['id'])
+                $orderProducts = OrderProduct::where('order_id', $extractedOrder->id)
                 ->with('product')
                 ->get();
-            Log::info($orderProducts);
-            $decodedData = json_decode($orderProducts, true); // Decoding as an associative array
-            Log::info($decodedData);
 
-            $items = [];
-            foreach ($decodedData as $selectedProduct) {
-                if ($selectedProduct['product'] && $selectedProduct['product']['name']) {
-                    Log::info('Selected Product: ', $selectedProduct);
-                    $items[] = [
-                        'name' => $selectedProduct['product']['name'],
-                        'quantity' => $selectedProduct['quantity'],
-                        'amount' => $selectedProduct['price'] * 100,
-                        'currency' => 'PHP',
-                        'description' => $extractOrder['order_number'],
-                    ];
+                $items = [];
+
+                foreach ($orderProducts as $orderProduct) {
+                    if ($orderProduct->product && $orderProduct->product->product_name) {
+
+                        $items[] = [
+                            'name' => $orderProduct->product->name,
+                            'quantity' => $orderProduct->quantity,
+                            'amount' => $orderProduct->price * 100, // Convert to PHP cents
+                            'currency' => 'PHP',
+                            'description' => $extractedOrder->order_number,
+                        ];
+                    }
                 }
-            }
-            Log::info('Items: ', $items);
 
-            // Add taxes as a line item
-            $items[] = [
-                'name' => 'Tax (12%)',
-                'quantity' => 1,
-                'amount' => intval($tax * 100), // Convert to PHP cents
-                'currency' => 'PHP',
-                'description' => 'VAT Tax',
-            ];
+                // Add taxes as a line item
+                $items[] = [
+                    'name' => 'Tax (12%)',
+                    'quantity' => 1,
+                    'amount' => intval($tax * 100), // Convert to PHP cents
+                    'currency' => 'PHP',
+                    'description' => 'VAT Tax',
+                ];
 
-            // Add taxes as a line item
-            $items[] = [
-                'name' => 'Delivery Fee',
-                'quantity' => 1,
-                'amount' => intval($deliveryFee * 100), // Convert to PHP cents
-                'currency' => 'PHP',
-                'description' => 'Delivery Fee Amount',
-            ];
+                $items[] = [
+                    'name' => 'Delivery Fee',
+                    'quantity' => 1,
+                    'amount' => intval($deliveryFee * 100), // Convert to PHP cents
+                    'currency' => 'PHP',
+                    'description' => 'Delivery Fee Amount',
+                ];
 
-            // Log the items
-            Log::info('Items: ', $items);
+                if (empty($items)) {
+                    Log::error('No valid items to process for payment');
+                    return response()->json([
+                        'error' => 'No valid items to process for payment'
+                    ], 400);
+                }
 
-
-            // // create payment
-            // // transform the array to be sent
-            // $payment = [
-            //     'order_id' => $extractOrder->id,
-            //     'amount' => $extractOrder->total,
-            //     'description' => 'Payment for ' . $extractOrder->order_number,
-            //     'mode_of_payment' => $validatedRequest['paymentDetails']['paymentType'],
-            //     'status' => 'paid'
-            // ];
-
-            $data = [
-                'data' => [
-                    'attributes' => [
-                        'send_email_receipt' => false,
-                        'show_description' => true,
-                        'show_line_items' => true,
-                        'line_items' => $items,
-                        'payment_method_types' => [
-                            'card',
-                            'gcash',
-                            'paymaya'
+                $data = [
+                    'data' => [
+                        'attributes' => [
+                            'send_email_receipt' => false,
+                            'show_description' => true,
+                            'show_line_items' => true,
+                            'line_items' => $items,
+                            'payment_method_types' => [
+                                'card',
+                                'gcash',
+                                'paymaya'
+                            ],
+                            'success_url' => route('orders'),
+                            'cancel_url' => route('checkout'),
+                            'description' => $extractedOrder->order_number,
+                            'metadata' => [
+                                'order_id' => base64_encode($extractedOrder->id),
+                            ]
                         ],
-                        'success_url' => route('orders'),
-                        'cancel_url' => route('checkout'),
-                        'description' => $extractOrder['order_number'],
-                        'metadata' => [
-                            'order_id' => base64_encode($extractOrder['id']),
-                        ]
-                    ],
-                ]
-            ];
+                    ]
+                ];
 
-            // Log::info($data);
+                // Send POST request to PayMongo's checkout endpoint
+                $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
+                    ->withHeader('Content-Type: application/json')
+                    ->withHeader('Accept: application/json')
+                    ->withHeader('Authorization: Basic ' . base64_encode(env('AUTH_PAY')))
+                    ->withData($data)
+                    ->asJson()
+                    ->post();
 
-            // Send POST request to PayMongo's checkout endpoint
-            $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
-            ->withHeader('Content-Type: application/json')
-            ->withHeader('Accept: application/json')
-            ->withHeader('Authorization: Basic ' . base64_encode(env('AUTH_PAY')))
-            ->withData($data)
-            ->asJson()
-            ->post();
-
-            // Log the response to check its structure
-            Log::info('PayMongo Response:', (array) $response);
-
-            // Check if the 'data' property exists before accessing it
-            if (isset($response->data)) {
+                // Store session ID in the session
                 Session::put('session_id', $response->data->id);
-                Log::info('Session ID: ' . $response->data->id);
-            } else {
-                // Handle the error or log the response if 'data' is missing
-                Log::error('Error: PayMongo response does not contain "data" property');
-                // You may also handle a fallback or return a specific error to the user
+
+                $checkOutUrl = $response->data->attributes->checkout_url;
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Successful payment processing',
+                    'redirect' => $checkOutUrl,
+                ]);
+
             }
 
-            $checkOutUrl = $response->data->attributes->checkout_url;
-            Log::info('Checkout URL: '. $checkOutUrl);
-
-            // Return with checkout url for redirection
-            return response()->json([
-                'success' => true,
-                'message' => 'Successful payment processing',
-                'redirect' => $checkOutUrl,
-            ]);
-
+            Log::error('Order could not be created');
+            return response()->json(['error' => 'Order creation failed'], 400);
         } catch (\Exception $e) {
             Log::error($e);
 
