@@ -148,7 +148,9 @@ class PaymentController extends Controller
                         'show_line_items' => true,
                         'line_items' => $items,
                         'payment_method_types' => [
-                            $paymentType
+                            'card',
+                            'gcash',
+                            'paymaya'
                         ],
                         'success_url' => route('orders'),
                         'cancel_url' => route('checkout'),
