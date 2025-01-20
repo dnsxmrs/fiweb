@@ -160,7 +160,7 @@ class PaymentController extends Controller
                 ]
             ];
 
-            Log::info('Payload sent to PayMongo:', ['payload' => $data]);
+            Log::info($data);
 
             // Send POST request to PayMongo's checkout endpoint
             $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
