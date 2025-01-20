@@ -349,7 +349,9 @@ class WebhookController extends Controller
         ]);
 
         // get all orders
-        $orders = Order::with('orderProducts')->paginate(10);
+        $orders = Order::with('orderProducts') ;
+
+        // dd($orders);
 
         Log::info('orders', [
             'orders' => $orders,

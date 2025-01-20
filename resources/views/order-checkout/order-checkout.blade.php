@@ -813,109 +813,125 @@
                 // document.getElementById("orderForm").submit();
             }
 
-            // parse the orders in object format
-            let firstName = document.getElementById("firstName").value;
-            let lastName = document.getElementById("lastName").value;
-            let contactNumber = document.getElementById("contactNumber").value;
-            let email = document.getElementById("email").value;
+            if (validateContactDetails()) {
+                // parse the orders in object format
+                let firstName = document.getElementById("firstName").value;
+                let lastName = document.getElementById("lastName").value;
+                let contactNumber = document.getElementById("contactNumber").value;
+                let email = document.getElementById("email").value;
 
-            let regionElement = document.getElementById("region");
-            let provinceElement = document.getElementById("province");
-            let municipalityElement = document.getElementById("municipality");
-            let barangayElement = document.getElementById("barangay");
+                let regionElement = document.getElementById("region");
+                let provinceElement = document.getElementById("province");
+                let municipalityElement = document.getElementById("municipality");
+                let barangayElement = document.getElementById("barangay");
 
-            // Get the selected options and their data attributes
-            let regionRName = regionElement.selectedOptions[0].getAttribute("data-rname");
-            let provincePName = provinceElement.selectedOptions[0].getAttribute("data-pname");
-            let municipalityMName = municipalityElement.selectedOptions[0].getAttribute("data-cname");
-            let barangayBName = barangayElement.selectedOptions[0].getAttribute("data-bname");
+                // Get the selected options and their data attributes
+                let regionRName = regionElement.selectedOptions[0].getAttribute("data-rname");
+                let provincePName = provinceElement.selectedOptions[0].getAttribute("data-pname");
+                let municipalityMName = municipalityElement.selectedOptions[0].getAttribute("data-cname");
+                let barangayBName = barangayElement.selectedOptions[0].getAttribute("data-bname");
 
-            let street = document.getElementById("street").value;
-            let unit = document.getElementById("unit").value;
-            let addressType = document.querySelector('input[name="addressType"]:checked').value;
-            let deliveryTime = document.getElementById("datepickerCheckout").value;
-            let paymentType = document.querySelector('input[name="paymentMethod"]:checked').value;
+                let street = document.getElementById("street").value;
+                let unit = document.getElementById("unit").value;
+                let addressType = document.querySelector('input[name="addressType"]:checked').value;
+                let deliveryTime = document.getElementById("datepickerCheckout").value;
+                let paymentType = document.querySelector('input[name="paymentMethod"]:checked').value;
 
-            const orderPayload = {
-                customerDetails: {
-                    firstName: firstName,
-                    lastName: lastName,
-                    contactNumber: contactNumber,
-                    email: email,
-                },
-                addressDetails: {
-                    region: regionRName,
-                    province: provincePName,
-                    municipality: municipalityMName,
-                    barangay: barangayBName,
-                    street: street,
-                    unit: unit,
-                    addressType: addressType,
-                },
-                paymentDetails: {
-                    paymentType: paymentType,
-                    subtotal: order_subtotal,
-                    deliveryFee: delivery_fee,
-                    tax: taxAmount,
-                    total: totalAmount,
-                },
-                orderDetails: {
-                    items: orderItems, // Assuming `orderItems` is already an array of objects
-                    deliveryTime: deliveryTime,
-                    note: orderNote,
-                },
-            };
+                const orderPayload = {
+                    customerDetails: {
+                        firstName: firstName,
+                        lastName: lastName,
+                        contactNumber: contactNumber,
+                        email: email,
+                    },
+                    addressDetails: {
+                        region: regionRName,
+                        province: provincePName,
+                        municipality: municipalityMName,
+                        barangay: barangayBName,
+                        street: street,
+                        unit: unit,
+                        addressType: addressType,
+                    },
+                    paymentDetails: {
+                        paymentType: paymentType,
+                        subtotal: order_subtotal,
+                        deliveryFee: delivery_fee,
+                        tax: taxAmount,
+                        total: totalAmount,
+                    },
+                    orderDetails: {
+                        items: orderItems, // Assuming `orderItems` is already an array of objects
+                        deliveryTime: deliveryTime,
+                        note: orderNote,
+                    },
+                };
 
-            console.log("orderPayload: ", orderPayload);
+                console.log("orderPayload: ", orderPayload);
 
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            console.log("csrfToken: ", csrfToken);
-            const payUrl = "{{ route('pay') }}";
-            console.log("payUrl: ", payUrl);
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                console.log("csrfToken: ", csrfToken);
+                const payUrl = "{{ route('pay') }}";
+                console.log("payUrl: ", payUrl);
 
 
-            // Send the data to the server
-            fetch(payUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                body: JSON.stringify(orderPayload),
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Failed to submit order');
-                }
-            })
-            .then(data => {
-                console.log('Order submitted successfully:', data);
+                // Send the data to the server
+                fetch(payUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    body: JSON.stringify(orderPayload),
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to submit order');
+                    }
+                })
+                .then(data => {
+                    console.log('Order submitted successfully:', data);
 
-                // success();
+                    // success();
 
-                setTimeout(() => {
-                    // Redirect to menu page
-                    window.location.href = data.redirect;
+                    setTimeout(() => {
+                        // Redirect to menu page
+                        window.location.href = data.redirect;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error submitting order:', error);
                 });
-            })
-            .catch(error => {
-                console.error('Error submitting order:', error);
-            });
+            }
         }
 
 
 
         function validateContactDetails() {
-            // get value
-            let firstName = document.getElementById("firstName").value;
-            let lastName = document.getElementById("lastName").value;
-            let contactNumber = document.getElementById("contactNumber").value;
-            let email = document.getElementById("email").value;
+            // Get values
+            let contactNumber = document.getElementById("contactNumber").value.trim();
+            let email = document.getElementById("email").value.trim();
 
-            regex = '^(09|\\+639)\\d{9}$'
+            // Regular expressions
+            let contactNumberRegex = /^(09|\+639)\d{9}$/; // For PH contact numbers
+            let emailRegex = /^[^\s@]+@gmail\.com$/; // Only allow Gmail addresses
 
+            // Validate contact number
+            if (!contactNumberRegex.test(contactNumber)) {
+                alert("Input Philippine phone number");
+                return false;
+            }
+
+            // Validate email
+            if (!emailRegex.test(email)) {
+                alert("Input valid gmail address");
+                return false;
+            }
+
+            // If all validations pass
+            return true;
         }
 
         function parseOrders() {
