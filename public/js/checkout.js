@@ -464,55 +464,6 @@ function placeOrderBtnClick() {
     .catch(error => {
         console.error('Error submitting order:', error);
     });
-
-
-    // .then(response => {
-    //     if (response.ok) {
-    //         console.log('Order submitted successfully');
-    //         return response.json();
-    //     } else {
-    //         console.error('Failed to submit order');
-    //         // throw new Error('Failed to submit order');
-    //     }
-    // })
-    // .then(data => {
-    //     console.log('Order submitted successfully:', data);
-
-    //     // success();
-
-    //     setTimeout(() => {
-    //         // Redirect to menu page
-    //         window.location.href = data.redirect;
-    //     });
-
-    // })
-    // .catch(error => {
-    //     console.error('Error submitting order:', error);
-    // });
-
-//     // Call your server to create a payment session with PayMongo
-//     fetch('/payment', {
-//         method: 'POST',
-//         body: JSON.stringify({ paymentMethod: paymentMethod.value, amount: 1000 }), // Pass amount dynamically
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRF-TOKEN': '{{ csrf_token() }}',
-//         }
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         // Assuming PayMongo returns a URL for redirection
-//         const paymentUrl = data.paymentUrl;
-//         if (paymentUrl) {
-//             window.location.href = paymentUrl; // Redirect to PayMongo's payment page
-//         } else {
-//             alert("Error generating payment link.");
-//         }
-//     })
-//     .catch(error => {
-//         console.error('Error creating payment session:', error);
-//         alert("Something went wrong. Please try again.");
-//     });
 };
 
 

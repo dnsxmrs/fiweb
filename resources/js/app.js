@@ -3,3 +3,6 @@ import './bootstrap';
 import './order-now';
 
 import './checkout';
+
+// import 'public/js/order-now';
+// import 'public/js/checkout';

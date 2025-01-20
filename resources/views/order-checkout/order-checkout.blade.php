@@ -285,36 +285,6 @@
                             </div>
                         </div>
 
-                        <!-- Discounts Section -->
-                        <div class="p-6 mt-6 bg-white rounded-lg shadow-md">
-                            <h2 class="mb-4 text-lg font-bold">Discounts</h2>
-                            <div>
-                                <label for="discount" class="block text-sm font-medium text-gray-700">Select Senior or
-                                    PWD Discount</label>
-                                <div class="relative mt-2">
-                                    <select id="discount"
-                                        class="w-full px-4 py-3 bg-gray-100 text-black border border-gray-300 rounded-md appearance-none focus:ring-[#E9B303] focus:border-[#E9B303]">
-                                        <option value="nd" selected>No Discount</option>
-                                        <option value="pwd">PWD Discount</option>
-                                        <option value="sc">Senior Citizen Discount</option>
-                                    </select>
-                                    <!-- Dropdown Icon -->
-                                    <div class="absolute inset-y-0 flex items-center pointer-events-none right-3">
-                                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 9l-7 7-7-7"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-4">
-                                <button
-                                    class="px-6 py-2 font-bold text-white bg-black rounded-md hover:bg-gray-800">Register
-                                    SC/PWD Discount</button>
-                            </div>
-                        </div>
-
                         <!-- Payment Section -->
                         <div class="p-6 mt-6 bg-white rounded-lg shadow-md">
                             <h2 class="mb-4 text-lg font-bold">Payment</h2>
