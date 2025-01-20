@@ -18,7 +18,7 @@ class WebController extends Controller
     public function orderNow()
     {
         $categories = Category::all();
-        $products = Product::all();
+        $products = Product::where('isAvailable', 1)->get();
 
         return view('menu.order-now', compact('categories', 'products'));
     }
