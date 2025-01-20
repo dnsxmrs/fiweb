@@ -905,7 +905,7 @@
 
 
             // Send the data to the server
-            fetch("/payment", {
+            fetch(payUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
