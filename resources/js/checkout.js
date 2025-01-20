@@ -151,6 +151,9 @@ window.addEventListener("load", () => {
             }
         });
     });
+
+    // Attach the event listener to the button
+    placeOrderBtn.addEventListener("click", placeOrderBtnClick);
 });
 
 function loadOrderItems() {
@@ -512,8 +515,7 @@ function placeOrderBtnClick() {
 //     });
 };
 
-// Attach the event listener to the button
-placeOrderBtn.addEventListener("click", placeOrderBtnClick);
+
 
 function validateContactDetails() {
     // get value
@@ -527,9 +529,6 @@ function validateContactDetails() {
 }
 
 function parseOrders() {
-
-
-
     // get the data from the ui element
     subTotal = parseFloat(document.getElementById("sub-total").textContent.replace('₱ ', '').replace(',', ''));
     payableAmount = parseFloat(document.getElementById("payable-amount").textContent.replace('₱ ', '').replace(',',
