@@ -13,10 +13,10 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    {{-- <script src="{{ asset('js/checkout.js') }}" defer></script>
-    <script src="https://cdn.tailwindcss.com"></script> --}}
+    {{-- <script src="{{ asset('js/checkout.js') }}" defer></script> --}}
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    @vite(['resources/js/app.js', 'resources/css/app.css'])
+    {{-- @vite(['resources/js/app.js', 'resources/css/app.css']) --}}
 
     <style>
         body {
@@ -913,21 +913,27 @@
                 },
                 body: JSON.stringify(orderPayload),
             })
-            .then(response => response.text()) // Parse as text first
-            .then(rawData => {
-                console.log('Raw server response:', rawData);
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to submit order');
+                }
+            })
+            .then(data => {
+                console.log('Order submitted successfully:', data);
 
-                // Attempt to parse JSON
-                const data = JSON.parse(rawData);
-                console.log('Parsed JSON:', data);
+                // success();
 
-                // Handle success
-                window.location.href = data.redirect;
+                setTimeout(() => {
+                    // Redirect to menu page
+                    window.location.href = data.redirect;
+                });
             })
             .catch(error => {
                 console.error('Error submitting order:', error);
             });
-        };
+        }
 
 
 
