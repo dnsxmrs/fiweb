@@ -20,7 +20,7 @@
 
     <style>
         body {
-            font-family: 'Barlow', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         select:focus {
@@ -70,7 +70,7 @@
                 <button class="relative flex items-center">
                     <img src="assets/order-bag.png" alt="Order Bag" class="w-12 h-12">
                     <span id="basketCounter"
-                        class="basketCounter absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full"></span>
+                        class="absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full basketCounter"></span>
                 </button>
 
                 <!-- Guest Button -->
@@ -116,7 +116,7 @@
                                         class="validate mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
                                 </div>
                             </div>
-                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
+                            <div class="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2">
                                 <div>
                                     <label for="contactNumber" class="block text-sm font-medium text-gray-700">Contact
                                         Number<span class="text-red-500"> *</span>
@@ -378,8 +378,8 @@
                                 <thead class="text-xs uppercase bg-[#E9B303]">
                                     <tr>
                                         <th scope="col" class="px-6 py-3 text-white">Item</th>
-                                        <th scope="col" class="pl-3 pr-1 py-3 text-white text-center">Qty.</th>
-                                        <th scope="col" class="pl-1 pr-3 py-3 text-white">Price</th>
+                                        <th scope="col" class="py-3 pl-3 pr-1 text-center text-white">Qty.</th>
+                                        <th scope="col" class="py-3 pl-1 pr-3 text-white">Price</th>
                                     </tr>
                                 </thead>
                                 <tbody id="orderItems">
@@ -437,7 +437,7 @@
                         <!-- Place Order Button -->
                         <button
                             id="placeOrderButton"
-                            class="bg-gray-400 px-10 py-2 font-bold text-white rounded-full w-60"
+                            class="px-10 py-2 font-bold text-white bg-gray-400 rounded-full w-60"
                             disabled>
                             Place Order
                         </button>
