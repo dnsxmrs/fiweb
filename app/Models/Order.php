@@ -36,7 +36,7 @@ class Order extends Model
     // Relationship with OrderProduct
     public function orderProducts()
     {
-        return $this->hasMany(OrderProduct::class);
+        return $this->hasMany(OrderProduct::class, 'order_id');
     }
 
     // Relationship with Payment

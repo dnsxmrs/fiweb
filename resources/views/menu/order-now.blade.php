@@ -24,14 +24,14 @@
         html {
             height: 100%;
         }
-         .scrollbar-hide::-webkit-scrollbar {
-                  display: none;
-                }
-         .scrollbar-hide {
-                  -ms-overflow-style: none;
-                  scrollbar-width: none;
-                }
-         .active {
+        .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+        .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        .active {
         border-bottom: 2px solid black;
     }
     .menu-button {

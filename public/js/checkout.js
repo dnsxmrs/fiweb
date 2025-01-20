@@ -151,6 +151,9 @@ window.addEventListener("load", () => {
             }
         });
     });
+
+    // Attach the event listener to the button
+    placeOrderBtn.addEventListener("click", placeOrderBtnClick);
 });
 
 function loadOrderItems() {
@@ -446,21 +449,17 @@ function placeOrderBtnClick() {
             'X-CSRF-TOKEN': csrfToken,
         },
         body: JSON.stringify(orderPayload),
-    }).then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Failed to submit order');
-        }
-    }).then(data => {
-        console.log('Order submitted successfully:', data);
+    })
+    .then(response => response.text()) // Parse as text first
+    .then(rawData => {
+        console.log('Raw server response:', rawData);
 
-        // success();
+        // Attempt to parse JSON
+        const data = JSON.parse(rawData);
+        console.log('Parsed JSON:', data);
 
-        setTimeout(() => {
-            // Redirect to menu page
-            window.location.href = data.redirect;
-        });
+        // Handle success
+        window.location.href = data.redirect;
     })
     .catch(error => {
         console.error('Error submitting order:', error);
@@ -516,8 +515,7 @@ function placeOrderBtnClick() {
 //     });
 };
 
-// Attach the event listener to the button
-placeOrderBtn.addEventListener("click", placeOrderBtnClick);
+
 
 function validateContactDetails() {
     // get value
@@ -531,9 +529,6 @@ function validateContactDetails() {
 }
 
 function parseOrders() {
-
-
-
     // get the data from the ui element
     subTotal = parseFloat(document.getElementById("sub-total").textContent.replace('₱ ', '').replace(',', ''));
     payableAmount = parseFloat(document.getElementById("payable-amount").textContent.replace('₱ ', '').replace(',',
