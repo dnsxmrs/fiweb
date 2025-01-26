@@ -18,18 +18,33 @@
 
     <style>
         body {
-            font-family: 'Barlow', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
         }
-
+        html {
+            height: 100%;
+        }
         select:focus {
             outline: none;
             border-color: #E9B303;
             box-shadow: 0 0 0 2px #E9B303;
         }
-
         select::placeholder {
             color: #4A5568;
             /* Dark gray placeholder */
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .active {
+            border-bottom: 2px solid black;
+        }
+        .menu-button {
+            transition: border-bottom 0.3s ease, color 0.3s ease;
         }
     </style>
 
@@ -37,15 +52,15 @@
 
 <body class="bg-gray-100">
     <!-- Navbar -->
-    <header class="sticky top-0 z-10 bg-white" style="height: 80px; box-shadow: 0 4px 6px rgba(139, 69, 19, 0.3);">
+    <header class="sticky top-0 z-20" style="height: 80px; box-shadow: 0 4px 6px rgba(139, 69, 19, 0.3); background-color: #066744;">
         <div class="container flex items-center justify-between h-full px-4 mx-auto">
             <!-- Logo and Text -->
             <div class="flex items-center space-x-3">
                 <img src="assets/Caffeinated Logo.png" alt="Caffeinated Logo" class="w-12 h-12">
                 <div class="flex items-center">
                     <div>
-                        <span class="text-2xl font-bold leading-none text-black">CAFFEINATED</span>
-                        <p class="text-sm font-medium text-gray-500">Food Delivery</p>
+                        <span class="text-2xl font-bold leading-none text-white">CAFFEINATED</span>
+                        <p class="text-sm font-medium text-white">Food Delivery</p>
                     </div>
 
                     <!-- Navigation Links -->
@@ -54,7 +69,7 @@
                             class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Home</a>
                         <a href="{{ route('order-now') }}"
                             class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Menu</a>
-                        <a href="#                       "
+                        <a href="{{ route("showDetails") }}"
                             class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Orders</a>
                     </nav>
                 </div>
@@ -63,7 +78,7 @@
             <div class="flex items-center space-x-2">
                 <!-- Search Bar -->
                 {{-- <div class="relative">
-                    <input id="searchInput" type="text" placeholder="Search..." name="search" value=""
+                    <input id="searchInput" type="text" placeholder="Search for products..." name="search" value=""
                         oninput="searchProducts()"
                         class="w-64 h-10 px-4 text-sm border rounded-full focus:outline-none focus:ring-2 focus:ring-[#E9B303] border-gray-300" />
                     <button id="searchButton" class="absolute top-0 right-2 h-full text-gray-500 hover:text-[#E9B303]">
@@ -72,22 +87,24 @@
                 </div> --}}
 
                 <!-- Basket Icon -->
-                <button class="relative flex items-center">
+                <button class="relative flex items-center basketBtn">
                     <img src="assets/order-bag.png" alt="Order Bag" class="w-12 h-12">
-                    <span id="basketCounter"
-                        class="basketCounter absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full"></span>
+                    <span
+                        id="basketCounter"
+                        class="absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full basketCounter">
+                        0</span>
                 </button>
 
                 <!-- Guest Button -->
                 <button
-                    class="flex items-center justify-center w-40 h-10 px-6 py-3 text-lg text-white bg-black rounded-full hover:bg-brown-600">
+                    class="flex items-center justify-center w-40 h-10 px-6 py-3 text-lg text-black bg-white rounded-full hover:bg-brown-600">
                     <img src="{{ asset('assets/Male User.png') }}" alt="User" class="w-5 h-5 mr-2">Guest
                 </button>
 
-                <!-- My Account Button -->
-                <button class="px-4 py-2 text-sm text-white rounded-md bg-brown-500 hover:bg-brown-600">
+                {{-- <!-- My Account Button -->
+                <button class="px-4 py-2 text-sm text-gray-700 rounded-md bg-brown-500 hover:bg-brown-600">
                     My account
-                </button>
+                </button> --}}
             </div>
         </div>
     </header>

@@ -1,4 +1,5 @@
 // JavaScript to open/close modal
+
 const modal = document.getElementById("modal");
 const checkoutButton = document.getElementById("checkoutBtn");
 const basketCounterHTML = document.getElementById("basketCounter");
@@ -6,21 +7,13 @@ const basketCounterHTML = document.getElementById("basketCounter");
 const orderItems = {}; // loaded
 const currentProduct = {};
 const delivery_fee = 50;
-const tax = 0.12;
-const directTax = 1.12;
 
 let constProductPrice = 0.0;
 let constProductId = 1;
 
-let productPrice = 0.0;
-let productId = 1;
-
 let modeOfPayment = null;
 let order_subtotal = 0.0; // loaded
-let discountAmount = 0.0;
 let totalAmount = 0.0; // loaded
-let taxAmount = 0.0;
-
 
 // Initialize button state on page load
 window.addEventListener("load", () => {
@@ -36,14 +29,14 @@ function loadOrdersFromLocalStorage() {
     if (savedOrders) {
         // Parse and restore the `orderItems` object
         const parsedOrders = JSON.parse(savedOrders);
-        for (const name in parsedOrders) {
-            if (parsedOrders.hasOwnProperty(name)) {
+        for (const id in parsedOrders) {
+            if (parsedOrders.hasOwnProperty(id)) {
                 // Restore each item to the `orderItems` object
-                orderItems[name] = parsedOrders[name];
+                orderItems[id] = parsedOrders[id];
 
                 // Add the item back to the DOM
-                addItemToOrderPanel(name, parsedOrders[name]);
-                totalPrice += parsedOrders[name].totalPrice;
+                addItemToOrderPanel(id, parsedOrders[id]);
+                totalPrice += parsedOrders[id].totalPrice;
             }
         }
     }
@@ -53,21 +46,22 @@ function loadOrdersFromLocalStorage() {
     updateCheckoutButton();
 }
 
-function addItemToOrderPanel(name, itemDetails) {
+function addItemToOrderPanel(id, itemDetails) {
     const orderPanel = document.querySelector(".order-cart");
     const itemHTML = `
-        <div id="item-${name}" class="flex items-center justify-between py-3 border-b">
+        <div id="item-${id}" class="flex items-center justify-between py-3 border-b">
             <div class="flex items-center">
                 <div>
-                    <p class="cart-product-name font-medium text-gray-800">${name}</p>
-                    <p class="cart-product-price text-sm text-gray-500">₱ ${parseFloat(itemDetails.price).toFixed(2)}</p>
+                    <p class="cart-product-price text-xs text-gray-500">${itemDetails.category}</p>
+                    <p class="cart-product-name font-medium text-gray-800">${itemDetails.name}</p>
+                    <p class="cart-product-price text-sm text-gray-500">₱ ${itemDetails.price.toFixed(2)}</p>
                 </div>
             </div>
 
             <div class="flex items-center">
-                <button onclick="changeQuantity('${name}', -1)" id="cart-decrease" class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
+                <button onclick="changeQuantity('${id}', -1)" id="cart-decrease" class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
                 <span class="cart-product-quantity px-2 text-gray-800">${itemDetails.quantity}</span>
-                <button onclick="changeQuantity('${name}', 1)" id="cart-increase" class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
+                <button onclick="changeQuantity('${id}', 1)" id="cart-increase" class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
             </div>
 
             <div class="flex items-center">
@@ -85,13 +79,10 @@ function addItemToOrderPanel(name, itemDetails) {
 
 function updateTotal(price) {
     order_subtotal += price;
-    taxAmount = parseFloat(order_subtotal * tax);
-    totalAmount = order_subtotal + taxAmount;
-    totalAmount += delivery_fee
+    totalAmount = order_subtotal + delivery_fee;
 
     document.getElementById("orderSubtotal").textContent = `₱ ${order_subtotal.toFixed(2)}`;
     document.getElementById("deliveryFee").textContent = `₱ ${delivery_fee.toFixed(2)}`;
-    document.getElementById("orderTax").textContent = `₱ ${taxAmount.toFixed(2)}`;
 
     if (Object.keys(orderItems).length === 0) {
         document.getElementById("orderTotal").textContent = `₱ 0.00`;
@@ -149,6 +140,7 @@ window.searchProducts = function () {
     const searchValue = document.getElementById("searchInput").value.toLowerCase().trim(); // Get the search value and trim extra spaces
     const allSections = document.querySelectorAll(".category-section"); // Get all category sections
     const searchHeader = document.getElementById("search-header"); // Updated to target the h3, the search results text
+    const searchContent = document.getElementById("search-content");
 
     let sectionHasVisibleProduct = false; // Track if at least one product in the section matches
     let sectionProductCount = 0; // Track how many products match in this section
@@ -181,10 +173,11 @@ window.searchProducts = function () {
 
     if (searchHeader) {
         searchHeader.classList.remove("hidden"); // Show the search header
+        searchContent.classList.remove("hidden");
         if (sectionProductCount > 0) {
-            searchHeader.textContent = `Search results for "${searchValue}" (${sectionProductCount} found)`;
+            searchContent.textContent = `Search results for "${searchValue}" (${sectionProductCount} found)`;
         } else {
-            searchHeader.textContent = `No results found for "${searchValue}"`;
+            searchContent.textContent = `No results found for "${searchValue}"`;
         }
     }
 };
@@ -229,8 +222,12 @@ window.openModal = function (data) {
 
     // Set initial price
     let quantity = 1;
-    constProductPrice = data.product.price;
+    constProductPrice = parseFloat(data.product.price);
     constProductId = data.product.id;
+
+    console.log("Product Price: " + constProductPrice);
+    console.log("Product ID: " + constProductId);
+    console.log("Quantity: " + quantity);
 
     // Update total price when quantity changes
     const priceDisplay = document.getElementById("modalProductPrice");
@@ -267,10 +264,13 @@ window.openModal = function (data) {
     // Initial price and button state update
     updatePriceAndState();
 
-    currentProduct[data.product.name] = {
+    currentProduct[data.product.id] = {
         id: constProductId,
+        name: data.product.name,
         img: data.product.image,
         price: constProductPrice,
+
+        category: data.category.name,
     };
 
     // Show the modal
@@ -286,51 +286,58 @@ modal.addEventListener("click", (e) => {
 
 //
 window.addToMyBag = function () {
-    const name =document.getElementById("modalProductTitle").textContent;
+    // const productId = currentProduct[constProductId];
+
+    const name = currentProduct[constProductId].name;
+    // const name =document.getElementById("modalProductTitle").textContent;
     const quantity = parseInt(document.getElementById("quantity").textContent);
     const totalPrice = parseFloat(document.getElementById("modalProductPrice").textContent.split("Php ")[1]);
 
-    console.table({name, totalPrice, quantity});
+    console.table({constProductId, name, totalPrice, quantity});
 
-    if (orderItems[name]) {
+    if (orderItems[constProductId]) {
         // If item already exists, update the quantity and price
-        orderItems[name].quantity += quantity;
-        orderItems[name].totalPrice += parseFloat(totalPrice);
+        orderItems[constProductId].quantity += quantity;
+        orderItems[constProductId].totalPrice += parseFloat(totalPrice);
 
         // Update the quantity and price in the DOM
-        const itemRow = document.getElementById("item-" + name);
-        itemRow.querySelector(".cart-product-quantity").textContent = orderItems[name].quantity;
-        itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[name].totalPrice.toFixed(2)}`;;
+        const itemRow = document.getElementById("item-" + constProductId);
+        itemRow.querySelector(".cart-product-quantity").textContent = orderItems[constProductId].quantity;
+        itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[constProductId].totalPrice.toFixed(2)}`;;
     } else {
-        // If item does not exist, add it to the order
-        orderItems[name] = {
-            quantity: quantity,
-            totalPrice: parseFloat(totalPrice),
 
-            id: currentProduct[name].id,
-            img: currentProduct[name].img,
-            price: currentProduct[name].price,
+        // If item does not exist, add it to the order
+        orderItems[constProductId] = {
+            id: constProductId,
+            name: name,
+            img: currentProduct[constProductId].img,
+            price: currentProduct[constProductId].price,
+            quantity: quantity,
+            totalPrice: totalPrice,
+
+            category: currentProduct[constProductId].category
         };
 
         // Add the item to the right panel
         const orderItem = `
-                <div id="item-${name}" class="flex items-center justify-between py-3 border-b">
+                <div id="item-${constProductId}" class="flex items-center justify-between py-3 border-b">
                     <!-- Item Details -->
                     <div class="flex items-center">
                         <div>
-                            <p class="cart-product-name font-medium text-gray-800">${name}</p>
-                            <p class="cart-product-price text-sm text-gray-500">₱ ${parseFloat(currentProduct[name].price).toFixed(2)}</p>
+                            <p class="cart-product-price text-xs text-gray-500">${orderItems[constProductId].category}</p>
+                            <p class="cart-product-name font-medium text-gray-800">${orderItems[constProductId].name}</p>
+                            <p class="cart-product-price text-xs text-gray-500">₱ ${orderItems[constProductId].price.toFixed(2)}</p>
                         </div>
                     </div>
 
                     <div class="flex items-center">
-                        <button onclick="changeQuantity('${name}', -1)" id="cart-decrease" class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
-                        <span class="cart-product-quantity px-2 text-gray-800">${orderItems[name].quantity}</span>
-                        <button onclick="changeQuantity('${name}', 1)" id="cart-increase" class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
+                        <button onclick="changeQuantity('${constProductId}', -1)" id="cart-decrease" class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
+                        <span class="cart-product-quantity px-2 text-gray-800">${orderItems[constProductId].quantity}</span>
+                        <button onclick="changeQuantity('${constProductId}', 1)" id="cart-increase" class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
                     </div>
 
                     <div class="flex items-center">
-                        <p class="cart-quantity-price font-medium text-gray-800">₱ ${orderItems[name].totalPrice.toFixed(2)}</p>
+                        <p class="cart-quantity-price font-medium text-gray-800">₱ ${orderItems[constProductId].totalPrice.toFixed(2)}</p>
                     </div>
                 </div>
             `;
@@ -366,25 +373,25 @@ window.deleteNote = function () {
 };
 
 
-window.changeQuantity = function (name, change) {
-    if (orderItems[name]) {
-        const productPrice = orderItems[name].totalPrice / orderItems[name].quantity; // Price per item
+window.changeQuantity = function (id, change) {
+    if (orderItems[id]) {
+        const productPrice = orderItems[id].totalPrice / orderItems[id].quantity; // Price per item
 
-        if (change < 0 && orderItems[name].quantity === 1) {
+        if (change < 0 && orderItems[id].quantity === 1) {
             // If the quantity is already 1, do not allow to decrease below 0, remove item instead
-            removeItem(name);
+            removeItem(id);
 
             updateTotal(-productPrice);
         } else {
-            orderItems[name].quantity += change;
+            orderItems[id].quantity += change;
 
             // Update price after quantity change
-            orderItems[name].totalPrice = parseFloat(productPrice * orderItems[name].quantity);
+            orderItems[id].totalPrice = parseFloat(productPrice * orderItems[id].quantity);
 
             // Update the quantity and price in the DOM
-            const itemRow = document.getElementById("item-" + name);
-            itemRow.querySelector(".cart-product-quantity").textContent = orderItems[name].quantity;
-            itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[name].totalPrice.toFixed(2)}`;
+            const itemRow = document.getElementById("item-" + id);
+            itemRow.querySelector(".cart-product-quantity").textContent = orderItems[id].quantity;
+            itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[id].totalPrice.toFixed(2)}`;
 
             // Update the total after the change
             updateTotal(change * productPrice);
@@ -396,11 +403,11 @@ window.changeQuantity = function (name, change) {
     saveOrders();
 }
 
-function removeItem(name) {
-    if (orderItems[name]) {
-        delete orderItems[name];
+function removeItem(id) {
+    if (orderItems[id]) {
+        delete orderItems[id];
 
-        document.getElementById("item-" + name).remove();
+        document.getElementById("item-" + id).remove();
     }
 }
 
@@ -419,9 +426,6 @@ function saveOrders() {
 
     // store the orderNote in sessionStorage for later retrieval
     sessionStorage.setItem("orderNote", document.getElementById("orderNote").value);
-
-    // store the tax in sessionStorage for later retrieval
-    sessionStorage.setItem("taxAmount", document.getElementById("orderTax").textContent);
 
     // store the orderSubtotal in sessionStorage for later retrieval
     sessionStorage.setItem("orderSubtotal", document.getElementById("orderSubtotal").textContent);
