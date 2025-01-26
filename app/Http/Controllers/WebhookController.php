@@ -340,13 +340,13 @@ class WebhookController extends Controller
         }
     }
 
-    public function getOrders(Request $request)
+    public function getOrders()
     {
         // log the incoming request
-        Log::info('Received order request', [
-            'request_method' => $request->method(),
-            'request_data' => $request->all(),
-        ]);
+        // Log::info('Received order request', [
+        //     'request_method' => $request->method(),
+        //     'request_data' => $request->all(),
+        // ]);
 
         // get all orders
         $orders = Order::with('orderProducts')->paginate(10);
@@ -356,7 +356,8 @@ class WebhookController extends Controller
         ]);
 
         return response()->json([
+            'success' => true,
             'data' => $orders
-        ]);
+        ], 200);
     }
 }
