@@ -130,8 +130,8 @@ class OrderController extends Controller
                 ]);
             }
 
-            Log::info($order);
-            Log::info('$');
+            // Log::info($order);
+            // Log::info('$');
 
             DB::commit();
 

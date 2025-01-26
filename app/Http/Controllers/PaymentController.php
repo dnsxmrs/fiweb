@@ -77,7 +77,7 @@ class PaymentController extends Controller
                 // Extract order data from the response
                 $extractedOrder = $orderCreated->getData()->data;
 
-                Log::info('',(array)$extractedOrder);
+                // Log::info('',(array)$extractedOrder);
 
 
                 $orderProducts = OrderProduct::where('order_id', $extractedOrder->id)
@@ -86,7 +86,7 @@ class PaymentController extends Controller
 
                 $items = [];
 
-                Log::info($orderProducts);
+                // Log::info($orderProducts);
 
                 foreach ($orderProducts as $orderProduct) {
                     if ($orderProduct->product && $orderProduct->product->name) {
