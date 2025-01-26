@@ -14,9 +14,9 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     {{-- <script src="{{ asset('js/checkout.js') }}" defer></script> --}}
-    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    @vite(['resources/js/app.js'])
+    {{-- @vite(['resources/js/app.js']) --}}
 
     <style>
         body {
