@@ -47,6 +47,7 @@ class OrderController extends Controller
 
     public function storeOrder(Request $request)
     {
+        DB::beginTransaction();
         try {
             // validate order data
             $orders = $request->validate([
@@ -67,6 +68,7 @@ class OrderController extends Controller
                 // Order details validation
                 'orderDetails.items' => 'required|array',
                 'orderDetails.items.*.id' => 'required|integer|exists:products,id',
+                'orderDetails.items.*.name' => 'required|string|max:255',
                 'orderDetails.items.*.quantity' => 'required|integer|min:1',
                 'orderDetails.items.*.price' => 'required|numeric|min:0',
                 'orderDetails.deliveryTime' => 'required|string|max:255',
@@ -78,8 +80,12 @@ class OrderController extends Controller
                 'paymentDetails.total' => 'required|numeric|min:0',
             ]);
 
-            // generate ordernumber
-            $orderNumber = 'CAFOL' . strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
+            $orderNumber = '';
+            do {
+                $orderNumber = 'CAFOL' . strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
+            } while (Order::where('order_number', $orderNumber)->exists());
+
+
 
             // create order
             $order = Order::create([
@@ -107,12 +113,14 @@ class OrderController extends Controller
                 'note' => $orders['orderDetails']['note'],
             ]);
 
+            Log::info('Validated Request:');
+
             // add the order products to the order
             foreach ($orders['orderDetails']['items'] as $orderItem) {
 
                 // get the product id of the respective name
                 $product = Product::where('id', $orderItem['id'])->first();
-
+                Log::info($product);
                 // create the order product record
                 OrderProduct::create([
                     'order_id' => $order->id,
@@ -121,6 +129,11 @@ class OrderController extends Controller
                     'price' => $orderItem['price'],
                 ]);
             }
+
+            Log::info($order);
+            Log::info('$');
+
+            DB::commit();
 
             return response()->json([
                 'success' => true,
