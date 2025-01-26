@@ -75,7 +75,6 @@ class OrderController extends Controller
                 'paymentDetails.paymentType' => 'required|in:card,gcash,paymaya',
                 'paymentDetails.subtotal' => 'required|numeric|min:0',
                 'paymentDetails.deliveryFee' => 'required|numeric|min:0',
-                'paymentDetails.tax' => 'required|numeric|min:0',
                 'paymentDetails.total' => 'required|numeric|min:0',
             ]);
 
@@ -87,7 +86,6 @@ class OrderController extends Controller
                 'order_number' => $orderNumber,
                 'order_type' => 'online',
                 'total' => $orders['paymentDetails']['total'],
-                'tax' => $orders['paymentDetails']['tax'],
                 'subtotal' => $orders['paymentDetails']['subtotal'],
                 'delivery_fee' => $orders['paymentDetails']['deliveryFee'],
                 'status' => 'pending',

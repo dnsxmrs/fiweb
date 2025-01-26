@@ -39,7 +39,6 @@ class PaymentController extends Controller
                 'paymentDetails.paymentType' => 'required|in:card,gcash,paymaya',
                 'paymentDetails.subtotal' => 'required|numeric|min:0',
                 'paymentDetails.deliveryFee' => 'required|numeric|min:0',
-                'paymentDetails.tax' => 'required|numeric|min:0',
                 'paymentDetails.total' => 'required|numeric|min:0',
 
                 // Order details validation
@@ -65,7 +64,6 @@ class PaymentController extends Controller
             // Validate and process request data
             $orders = $this->validateRequest($request);
 
-            $tax = $orders['paymentDetails']['tax'];
             $deliveryFee = $orders['paymentDetails']['deliveryFee'];
             // // paymentType
             // $paymentType = $orders['paymentDetails']['paymentType'];
@@ -95,15 +93,6 @@ class PaymentController extends Controller
                         ];
                     }
                 }
-
-                // Add taxes as a line item
-                $items[] = [
-                    'name' => 'Tax (12%)',
-                    'quantity' => 1,
-                    'amount' => intval($tax * 100), // Convert to PHP cents
-                    'currency' => 'PHP',
-                    'description' => 'VAT Tax',
-                ];
 
                 $items[] = [
                     'name' => 'Delivery Fee',
