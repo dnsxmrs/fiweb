@@ -58,17 +58,18 @@
                     <div class="overflow-x-auto">
                         <div class="flex space-x-8 w-max">
                             <!-- "All" Button -->
-                            <button class="flex flex-col items-center w-40 space-y-2 text-center">
+                            <button onclick="window.location.href='{{ route('order-now') }}'"
+                                    class="flex flex-col items-center w-40 space-y-2 text-center">
                                 <img class="p-4 bg-gray-100 rounded-full w-28 h-28" src="{{ asset('assets/All-icon.png') }}" alt="All">
                                 <p class="text-xl">All</p>
                             </button>
 
                             <!-- Dynamic categories -->
                             @foreach ($categories as $category)
-                                <button class="flex flex-col items-center w-40 space-y-2 text-center">
+                                <a href="{{ route('order-now') }}#{{ $category->category_id }}" class="flex flex-col items-center w-40 space-y-2 text-center">
                                     <img class="p-4 bg-gray-100 rounded-full w-28 h-28" src="{{ $category->image }}" alt="{{ $category->name }}">
                                     <p class="text-xl">{{ $category->name }}</p>
-                                </button>
+                                </a>
                             @endforeach
 
                             <!-- Static Buttons -->
@@ -84,7 +85,6 @@
                                 <img class="p-4 bg-gray-100 rounded-full w-28 h-28" src="{{ asset('assets/Frappuccino-icon.png') }}" alt="Frappuccino">
                                 <p class="text-xl">Frappuccino</p>
                             </button>
-                          
                         </div>
                     </div>
                 </div>

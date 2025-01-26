@@ -7,7 +7,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\PaymentController;
-
+use App\Http\Controllers\WebhookController;
 
 // Landing page
 Route::get('/',[WebController::class, 'getCategory'])->name('landing');
@@ -28,6 +28,7 @@ Route::get('/orders', [PaymentController::class, 'orders'])->name('orders');
 Route::get('/order-details', [PaymentController::class, 'showDetails'])->name('showDetails');
 
 // Route::view('details', 'order-checkout.order-details')->name('order-details');
+<<<<<<< HEAD
 
 // Get Orders for pos
 Route::get('/get-orders', [WebhookController::class, 'getOrders'])->name('orders.get');
@@ -38,6 +39,9 @@ Route::get('/get-orders', [WebhookController::class, 'getOrders'])->name('orders
 Route::get('/sign-up', function () {
     return view('account.sign-up');
 })->name('sign-up');
+=======
+Route::get('/get-orders', [WebhookController::class, 'getOrders'])->name('get-orders');
+>>>>>>> f749ebf5b210e3d0b3240609644b0283d360537f
 
 
 

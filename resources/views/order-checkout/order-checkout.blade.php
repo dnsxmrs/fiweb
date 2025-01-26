@@ -16,7 +16,7 @@
     {{-- <script src="{{ asset('js/checkout.js') }}" defer></script> --}}
     <script src="https://cdn.tailwindcss.com"></script>
 
-    {{-- @vite(['resources/js/app.js', 'resources/css/app.css']) --}}
+    {{-- @vite(['resources/js/app.js']) --}}
 
     <style>
         body {
@@ -35,7 +35,8 @@
         }
 
         label:has(+ .border-red-500) {
-            color: #f87171; /* Label text turns red */
+            color: #f87171;
+            /* Label text turns red */
         }
     </style>
 </head>
@@ -104,15 +105,13 @@
                                 <div>
                                     <label for="firstName" class="block text-sm font-medium text-gray-700">First
                                         Name<span class="text-red-500"> *</span></label>
-                                    <input required type="text" id="firstName"
-                                        placeholder="Juan"
+                                    <input required type="text" id="firstName" placeholder="Juan"
                                         class="validate mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
-                                    </div>
+                                </div>
                                 <div>
                                     <label for="lastName" class="block text-sm font-medium text-gray-700">Last
                                         Name<span class="text-red-500"> *</span></label>
-                                    <input type="text" id="lastName"
-                                        placeholder="dela Cruz"
+                                    <input type="text" id="lastName" placeholder="dela Cruz"
                                         class="validate mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
                                 </div>
                             </div>
@@ -121,18 +120,21 @@
                                     <label for="contactNumber" class="block text-sm font-medium text-gray-700">Contact
                                         Number<span class="text-red-500"> *</span>
                                     </label>
-                                    <input type="text" id="contactNumber"
-                                        placeholder="09123456789"
+                                    <input type="text" id="contactNumber" placeholder="09123456789"
                                         class="validate mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
-                                    </div>
+                                        <p id="cnValidation" class="hidden text-xs font-medium text-red-500 pt-1">
+                                            Input Philippine phone number</p>
+                                </div>
+
                                 <div>
                                     <label for="email" class="block text-sm font-medium text-gray-700">
                                         Email<span class="text-red-500"> *</span>
                                     </label>
-                                    <input type="email" id="email"
-                                        placeholder="email@gmail.com"
+                                    <input type="email" id="email" placeholder="email@gmail.com"
                                         class="validate mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
-                                    </div>
+                                        <p id="eaValidation" class="hidden text-xs font-medium text-red-500 pt-1">
+                                            Input valid gmail address</p>
+                                </div>
                             </div>
                         </div>
 
@@ -224,8 +226,7 @@
                                 <label for="street" class="block text-sm font-medium text-gray-700">Street/Building
                                     Name<span class="text-red-500"> *</span>
                                 </label>
-                                <input type="text" id="street"
-                                    placeholder="Strawberry Street"
+                                <input type="text" id="street" placeholder="Strawberry Street"
                                     class="validate mt-1 block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
                             </div>
 
@@ -234,8 +235,7 @@
                                 <label for="unit" class="block text-sm font-medium text-gray-700">Unit/Floor<span
                                         class="text-red-500"> *</span>
                                 </label>
-                                <input type="text" id="unit"
-                                    placeholder="Block 33 Lot 8 Phase 1A"
+                                <input type="text" id="unit" placeholder="Block 33 Lot 8 Phase 1A"
                                     class="validate mt-1 block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
                             </div>
 
@@ -243,20 +243,20 @@
                             <div class="mt-4">
                                 <span class="block text-sm font-medium text-gray-700">Select address type<span
                                         class="text-red-500"> *</span>
-                                <div class="flex items-center mt-1 space-x-4">
-                                    <label class="flex items-center space-x-2">
-                                        <input type="radio" name="addressType" value="Residential" checked
-                                            class="form-radio text-[#E9B303] focus:ring-[#E9B303]">
-                                        <span>Residential</span>
-                                    </label>
-                                    <label class="flex items-center space-x-2">
-                                        <input type="radio" name="addressType" value="Office"
-                                            class="form-radio text-[#E9B303] focus:ring-[#E9B303]">
-                                        <span>Office</span>
-                                    </label>
-                                </div>
+                                    <div class="flex items-center mt-1 space-x-4">
+                                        <label class="flex items-center space-x-2">
+                                            <input type="radio" name="addressType" value="Residential" checked
+                                                class="form-radio text-[#E9B303] focus:ring-[#E9B303]">
+                                            <span>Residential</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2">
+                                            <input type="radio" name="addressType" value="Office"
+                                                class="form-radio text-[#E9B303] focus:ring-[#E9B303]">
+                                            <span>Office</span>
+                                        </label>
+                                    </div>
                             </div>
-                                {{-- <div class="mt-6">
+                            {{-- <div class="mt-6">
                                     <button
                                         class="px-6 py-2 font-bold text-white bg-black rounded-md hover:bg-gray-800">Update
                                         address</button>
@@ -293,16 +293,6 @@
                                         class="text-red-500"> *</span>
                                     </label></p>
                                 <div class="mt-4 space-y-4">
-                                    {{-- <!-- Cash on Delivery -->
-                                    <label
-                                        class="flex items-center justify-between p-4 bg-white border border-black rounded-md shadow-md cursor-pointer">
-                                        <span class="flex items-center space-x-2">
-                                            <input type="radio" name="paymentMethod" value="cashOnDelivery"
-                                                class="form-radio text-[#E9B303] focus:ring-[#E9B303]">
-                                            <span>Cash On Delivery</span>
-                                        </span>
-                                    </label> --}}
-
                                     <!-- Debit/Credit Card -->
                                     <label
                                         class="flex items-center justify-between p-4 bg-white border border-black rounded-md shadow-md cursor-pointer">
@@ -359,23 +349,15 @@
 
                             <!-- Price Summary Section -->
                             <div class="mt-4">
-                                <div
-                                    class="flex justify-between pt-2 mt-4 text-gray-700 border-t">
+                                <div class="flex justify-between pt-2 mt-4 text-gray-700 border-t">
                                     <p>Subtotal</p>
                                     <p id="orderSubtotal"></p>
                                 </div>
-                                <div
-                                    class="flex justify-between mt-2 text-gray-700">
-                                    <p>Tax</p>
-                                    <p id="orderTax"></p>
-                                </div>
-                                <div
-                                    class="flex justify-between mt-2 text-gray-700">
+                                <div class="flex justify-between mt-2 text-gray-700">
                                     <p>Delivery fee</p>
                                     <p id="deliveryFee"></p>
                                 </div>
-                                <div
-                                    class="flex justify-between pt-2 mt-4 font-bold text-black border-t">
+                                <div class="flex justify-between pt-2 mt-4 font-bold text-black border-t">
                                     <p>Total</p>
                                     <p id="orderTotal"></p>
                                 </div>
@@ -401,14 +383,11 @@
                         Add Order
                     </button> --}}
 
-
                     <!-- Place Order and Terms -->
                     <div class="flex items-center px-5 space-x-4">
                         <!-- Place Order Button -->
-                        <button
-                            id="placeOrderButton"
-                            class="px-10 py-2 font-bold text-white bg-gray-400 rounded-full w-60"
-                            disabled>
+                        <button id="placeOrderButton"
+                            class="px-10 py-2 font-bold text-white bg-gray-400 rounded-full w-60" disabled>
                             Place Order
                         </button>
 
@@ -438,13 +417,10 @@
         const savedOrders = sessionStorage.getItem("orderItems");
         const orderNote = sessionStorage.getItem("orderNote");
         const orderSubtotal = sessionStorage.getItem("orderSubtotal");
-        const orderTax = sessionStorage.getItem("taxAmount");
 
         const orderItems = {}; // loaded
         const currentProduct = {};
         const delivery_fee = 50;
-        const tax = 0.12;
-        const directTax = 1.12;
 
         const prefixes = {
             '0817': 'Globe Telecom / TM',
@@ -542,7 +518,6 @@
         let order_subtotal = 0.0; // loaded
         let discountAmount = 0.0;
         let totalAmount = 0.0; // loaded
-        let taxAmount = 0.0;
 
         window.addEventListener("load", () => {
             console.log("checkout.js loaded");
@@ -557,17 +532,25 @@
                 enableTime: true,
                 noCalendar: true,
                 dateFormat: "h:i K", // 12-hour format with AM/PM
-                minTime: "15:00", // Minimum time in 24-hour format (3 PM)
-                maxTime: "23:00", // Maximum time in 24-hour format (11 PM)
+                minTime: "15:30", // Minimum time in 24-hour format (3:30 PM)
+                maxTime: "22:30", // Maximum time in 24-hour format (10:30 PM)
                 minuteIncrement: 1,
-                defaultDate: "15:00",
+                defaultDate: "15:30",
             });
 
+            let cnValidation = document.getElementById("cnValidation");
+            let eaValidation = document.getElementById("eaValidation");
+
             document.querySelectorAll('.validate').forEach(field => {
-                field.addEventListener('blur', function () {
+                field.addEventListener('blur', function() {
                     if (field.value.trim() === "") {
                         field.classList.add('border-red-500'); // Add red border if empty
-
+                        if (field.id === "contactNumber") {
+                            cnValidation.classList.remove("hidden");
+                        }
+                        if (field.id === "email") {
+                            eaValidation.classList.remove("hidden");
+                        }
                         // Find the label associated with this input and add a red text color
                         const label = document.querySelector(`label[for="${field.id}"]`);
                         if (label) {
@@ -575,11 +558,17 @@
                         }
                     } else {
                         field.classList.remove('border-red-500'); // Remove red border if valid
-
+                        if (field.id === "contactNumber") {
+                            cnValidation.classList.add("hidden");
+                        }
+                        if (field.id === "email") {
+                            eaValidation.classList.add("hidden");
+                        }
                         // Find the label associated with this input and remove red text color
                         const label = document.querySelector(`label[for="${field.id}"]`);
                         if (label) {
-                            label.classList.remove('text-red-500'); // Remove red text color from label
+                            label.classList.remove(
+                            'text-red-500'); // Remove red text color from label
                         }
                     }
                 });
@@ -595,19 +584,18 @@
             console.log("from order-now: ", orderItems);
             console.log("from order-now: ", orderNote);
             console.log("from order-now: ", orderSubtotal);
-            console.log("from order-now: ", orderTax);
 
             if (savedOrders) {
                 const parsedOrders = JSON.parse(savedOrders);
-                for (const name in parsedOrders) {
-                    if (parsedOrders.hasOwnProperty(name)) {
+                for (const id in parsedOrders) {
+                    if (parsedOrders.hasOwnProperty(id)) {
                         // Restore each item to the `orderItems` object
-                        orderItems[name] = parsedOrders[name];
+                        orderItems[id] = parsedOrders[id];
 
                         // Add the item back to the DOM
                         // addItemToOrderPanel(name, parsedOrders[name]);
-                        addItemToReceipt(name, parsedOrders[name]);
-                        totalPrice += parsedOrders[name].totalPrice;
+                        addItemToReceipt(id, parsedOrders[id]);
+                        totalPrice += parsedOrders[id].totalPrice;
                     }
                 }
 
@@ -624,7 +612,8 @@
             row.innerHTML = `
                 <td class="px-6 py-4">
                     <div class="flex flex-col font-bold text-black">
-                        <span>${name}</span>
+                        <span class="font-medium text-gray-400">${itemDetails.category}</span>
+                        <span>${itemDetails.name}</span>
                         <span class="font-medium text-gray-400">₱ ${itemDetails.price}</span>
                     </div>
                 </td>
@@ -636,13 +625,10 @@
 
         function updateTotal(price) {
             order_subtotal += price;
-            taxAmount = parseFloat(order_subtotal * tax);
-            totalAmount = order_subtotal + taxAmount;
-            totalAmount += delivery_fee
+            totalAmount = order_subtotal + delivery_fee;
 
             document.getElementById("orderSubtotal").textContent = `₱ ${order_subtotal.toFixed(2)}`;
             document.getElementById("deliveryFee").textContent = `₱ ${delivery_fee.toFixed(2)}`;
-            document.getElementById("orderTax").textContent = `₱ ${taxAmount.toFixed(2)}`;
 
             if (Object.keys(orderItems).length === 0) {
                 document.getElementById("orderTotal").textContent = `₱ 0.00`;
@@ -680,10 +666,11 @@
                     data.forEach(region => {
                         // remove if block to show all regions
                         // right now it is restricted to CALABARZON
-                        if (region.code === '040000000'){
+                        if (region.code === '040000000') {
                             const option = document.createElement('option');
                             option.value = region.code;
-                            option.setAttribute('data-rname', region.name); // Store the region code as a custom data attribute
+                            option.setAttribute('data-rname', region
+                            .name); // Store the region code as a custom data attribute
                             option.textContent = region.name;
                             regionSelect.appendChild(option);
                         }
@@ -700,10 +687,11 @@
                             data.forEach(province => {
                                 // remove if block to show all regions
                                 // right now it is restricted to CALABARZON
-                                if (province.code === '045800000'){
+                                if (province.code === '045800000') {
                                     const option = document.createElement('option');
                                     option.value = province.code;
-                                    option.setAttribute('data-pname', province.name); // Store the region code as a custom data attribute
+                                    option.setAttribute('data-pname', province
+                                    .name); // Store the region code as a custom data attribute
                                     option.textContent = province.name;
                                     provinceSelect.appendChild(option);
                                 }
@@ -727,7 +715,7 @@
                             data.forEach(city => {
                                 // remove if block to show all regions
                                 // right now it is restricted to CALABARZON
-                                if (city.code === '045808000'){
+                                if (city.code === '045808000') {
                                     const option = document.createElement('option');
                                     option.value = city.code;
                                     option.setAttribute('data-cname', city.name);
@@ -752,7 +740,7 @@
                             data.forEach(barangay => {
                                 // remove if block to show all regions
                                 // right now it is restricted to CALABARZON
-                                if (barangay.code === '045808010' || barangay.code === '045808002'){
+                                if (barangay.code === '045808010' || barangay.code === '045808002') {
                                     const option = document.createElement('option');
                                     option.value = barangay.code;
                                     option.setAttribute('data-bname', barangay.name);
@@ -768,7 +756,7 @@
 
         function updatePlaceOrder() {
             // Add an event listener to the checkbox
-            termsCheckBox.addEventListener('change', function () {
+            termsCheckBox.addEventListener('change', function() {
                 if (termsCheckBox.checked) {
                     placeOrderBtn.disabled = false;
                     placeOrderBtn.style.backgroundColor = "#0FAF00";
@@ -780,44 +768,18 @@
         }
 
         function placeOrderBtnClick() {
-            // validate all fields if filled/valid input
-            const fields = document.querySelectorAll(".validate"); // Select all fields with the validation class
-            let firstInvalidField = null;
-
-            fields.forEach((field) => {
-                if (!field.value.trim()) {
-                    field.classList.add("border-red-500"); // Highlight the invalid field
-                    if (!firstInvalidField) {
-                        firstInvalidField = field; // Set the first invalid field
-                    }
-                    const label = document.querySelector(`label[for="${field.id}"]`);
-                    console.log("label: ", label);
-                    if (label) {
-                        console.log("found: ", label);
-                        label.classList.add('text-red-500'); // Add red text color to label
-                    }
-                } else {
-                    field.classList.remove("border-red-500"); // Remove error highlight if valid
-                    const label = document.querySelector(`label[for="${field.id}"]`);
-                    if (label) {
-                        label.classList.remove('text-red-500'); // Remove red text color from label
-                    }
-                }
-            });
-
-            if (firstInvalidField) {
-                firstInvalidField.scrollIntoView({ behavior: "smooth", block: "center" }); // Scroll to the invalid field
-                firstInvalidField.focus(); // Optionally focus on the field
-            } else {
-                // Submit the form or proceed with the order placement
-                // document.getElementById("orderForm").submit();
+            if (!validateContactDetails()) {
+                // autto completion
+                console.log("not validated");
+                return;
             }
 
+            // If all validations pass
             // parse the orders in object format
             let firstName = document.getElementById("firstName").value;
             let lastName = document.getElementById("lastName").value;
-            let contactNumber = document.getElementById("contactNumber").value;
-            let email = document.getElementById("email").value;
+            let contactNumberelement = document.getElementById("contactNumber").value;
+            let emailelement = document.getElementById("email").value;
 
             let regionElement = document.getElementById("region");
             let provinceElement = document.getElementById("province");
@@ -836,12 +798,18 @@
             let deliveryTime = document.getElementById("datepickerCheckout").value;
             let paymentType = document.querySelector('input[name="paymentMethod"]:checked').value;
 
+            // Log the values of the elements
+            console.log("Region:", regionElement.value);
+            console.log("Province:", provinceElement.value);
+            console.log("Municipality:", municipalityElement.value);
+            console.log("Barangay:", barangayElement.value);
+
             const orderPayload = {
                 customerDetails: {
                     firstName: firstName,
                     lastName: lastName,
-                    contactNumber: contactNumber,
-                    email: email,
+                    contactNumber: contactNumberelement,
+                    email: emailelement,
                 },
                 addressDetails: {
                     region: regionRName,
@@ -856,7 +824,6 @@
                     paymentType: paymentType,
                     subtotal: order_subtotal,
                     deliveryFee: delivery_fee,
-                    tax: taxAmount,
                     total: totalAmount,
                 },
                 orderDetails: {
@@ -876,46 +843,112 @@
 
             // Send the data to the server
             fetch(payUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                body: JSON.stringify(orderPayload),
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Failed to submit order');
-                }
-            })
-            .then(data => {
-                console.log('Order submitted successfully:', data);
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    body: JSON.stringify(orderPayload),
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to submit order');
+                    }
+                })
+                .then(data => {
+                    console.log('Order submitted successfully:', data);
 
-                // success();
+                    // success();
 
-                setTimeout(() => {
-                    // Redirect to menu page
-                    window.location.href = data.redirect;
+                    setTimeout(() => {
+                        // Redirect to menu page
+                        window.location.href = data.redirect;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error submitting order:', error);
                 });
-            })
-            .catch(error => {
-                console.error('Error submitting order:', error);
-            });
         }
 
-
-
         function validateContactDetails() {
-            // get value
-            let firstName = document.getElementById("firstName").value;
-            let lastName = document.getElementById("lastName").value;
-            let contactNumber = document.getElementById("contactNumber").value;
-            let email = document.getElementById("email").value;
+            console.log('Validation started');
 
-            regex = '^(09|\\+639)\\d{9}$'
+            let regionElement = document.getElementById("region").value;
+            let provinceElement = document.getElementById("province").value;
+            let municipalityElement = document.getElementById("municipality").value;
+            let barangayElement = document.getElementById("barangay").value;
+            let street = document.getElementById("street").value;
+            let unit = document.getElementById("unit").value;
 
+            let contactNumber = document.getElementById("contactNumber");
+            let email = document.getElementById("email");
+
+            let cnValidation = document.getElementById("cnValidation");
+            let eaValidation = document.getElementById("eaValidation");
+
+            let firstInvalidField = null;
+            let validatedAll = true;
+
+            // validate all fields if filled/valid input
+            const fields = document.querySelectorAll(".validate"); // Select all fields with the validation class
+
+            fields.forEach((field) => {
+                if (!field.value.trim()) {
+                    field.classList.add("border-red-500"); // Highlight the invalid field
+                    if (!firstInvalidField) {
+                        firstInvalidField = field; // Set the first invalid field
+                    }
+                    const label = document.querySelector(`label[for="${field.id}"]`);
+                    if (label) {
+                        label.classList.add('text-red-500'); // Add red text color to label
+                    }
+                } else {
+                    field.classList.remove("border-red-500"); // Remove error highlight if valid
+                    const label = document.querySelector(`label[for="${field.id}"]`);
+                    if (label) {
+                        label.classList.remove('text-red-500'); // Remove red text color from label
+                    }
+                }
+                console.log('done validate fields');
+            });
+
+            if (firstInvalidField) {
+                firstInvalidField.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                }); // Scroll to the invalid field
+                firstInvalidField.focus(); // Optionally focus on the field
+            }
+
+            // Regular expressions
+            let contactNumberRegex = /^(09|\+639)\d{9}$/; // For PH contact numbers
+            let emailRegex = /^[^\s@]+@gmail\.com$/; // Only allow Gmail addresses
+
+            // Validate contact number
+            if (!contactNumberRegex.test(contactNumber.value.trim())) {
+                validatedAll = false;
+                console.log('done cn');
+                cnValidation.classList.remove("hidden");
+                // alert("Input Philippine phone number");
+            }
+
+            // Validate email
+            if (!emailRegex.test(email.value.trim())) {
+                validatedAll = false;
+                console.log('done cn');
+                eaValidation.classList.remove("hidden");
+                // alert("Input valid gmail address");
+            }
+
+            //validate if their values present
+            if (!regionElement || !provinceElement || !municipalityElement || !barangayElement || !street || !unit) {
+                validatedAll = false;
+                // alert("Please select a region, province, municipality, and barangay");
+            }
+
+            return validatedAll;
         }
 
         function parseOrders() {
@@ -938,7 +971,6 @@
             const payload = {
                 orderItems: transformedOrderItems,
                 orderType: orderType,
-                taxAmount: taxAmount,
                 discountType: discountType,
                 discountAmount: discountAmount,
                 subTotal: subTotal,
@@ -949,11 +981,6 @@
             // return the payload
             return payload;
         }
-
-        // i should have functions for pushing ui with validation errors
-
-
-
     </script>
 </body>
 

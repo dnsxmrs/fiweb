@@ -39,18 +39,19 @@ class PaymentController extends Controller
                 'paymentDetails.paymentType' => 'required|in:card,gcash,paymaya',
                 'paymentDetails.subtotal' => 'required|numeric|min:0',
                 'paymentDetails.deliveryFee' => 'required|numeric|min:0',
-                'paymentDetails.tax' => 'required|numeric|min:0',
                 'paymentDetails.total' => 'required|numeric|min:0',
 
                 // Order details validation
                 'orderDetails.items' => 'required|array',
                 'orderDetails.items.*.id' => 'required|integer|exists:products,id',
+                'orderDetails.items.*.name' => 'required|string|max:255',
                 'orderDetails.items.*.quantity' => 'required|integer|min:1',
                 'orderDetails.items.*.price' => 'required|numeric|min:0',
                 'orderDetails.deliveryTime' => 'required|string|max:255',
                 'orderDetails.note' => 'nullable|string|max:500',
             ]);
 
+            Log::info('Validated Request:');
             // Return the validated request
             return $validatedRequest;
         } catch (ValidationException $e) {
@@ -65,7 +66,6 @@ class PaymentController extends Controller
             // Validate and process request data
             $orders = $this->validateRequest($request);
 
-            $tax = $orders['paymentDetails']['tax'];
             $deliveryFee = $orders['paymentDetails']['deliveryFee'];
             // // paymentType
             // $paymentType = $orders['paymentDetails']['paymentType'];
@@ -77,14 +77,19 @@ class PaymentController extends Controller
                 // Extract order data from the response
                 $extractedOrder = $orderCreated->getData()->data;
 
+                // Log::info('',(array)$extractedOrder);
+
+
                 $orderProducts = OrderProduct::where('order_id', $extractedOrder->id)
                 ->with('product')
                 ->get();
 
                 $items = [];
 
+                // Log::info($orderProducts);
+
                 foreach ($orderProducts as $orderProduct) {
-                    if ($orderProduct->product && $orderProduct->product->product_name) {
+                    if ($orderProduct->product && $orderProduct->product->name) {
 
                         $items[] = [
                             'name' => $orderProduct->product->name,
@@ -95,15 +100,6 @@ class PaymentController extends Controller
                         ];
                     }
                 }
-
-                // Add taxes as a line item
-                $items[] = [
-                    'name' => 'Tax (12%)',
-                    'quantity' => 1,
-                    'amount' => intval($tax * 100), // Convert to PHP cents
-                    'currency' => 'PHP',
-                    'description' => 'VAT Tax',
-                ];
 
                 $items[] = [
                     'name' => 'Delivery Fee',

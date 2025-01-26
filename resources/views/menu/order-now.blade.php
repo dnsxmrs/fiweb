@@ -59,7 +59,7 @@
                             class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Home</a>
                         <a href="{{ route('order-now') }}"
                             class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Menu</a>
-                        <a href="#                       "
+                        <a href="{{ route("showDetails") }}"
                             class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Orders</a>
                     </nav>
                 </div>
@@ -68,7 +68,7 @@
             <div class="flex items-center space-x-2">
                 <!-- Search Bar -->
                 <div class="relative">
-                    <input id="searchInput" type="text" placeholder="Search..." name="search" value=""
+                    <input id="searchInput" type="text" placeholder="Search for products..." name="search" value=""
                         oninput="searchProducts()"
                         class="w-64 h-10 px-4 text-sm border rounded-full focus:outline-none focus:ring-2 focus:ring-[#E9B303] border-gray-300" />
                     <button id="searchButton" class="absolute top-0 right-2 h-full text-gray-500 hover:text-[#E9B303]">
@@ -131,32 +131,14 @@
                     </div>
                 </div>
 
-                <script>
-                    function setActive(button) {
-                        // Remove active class from all buttons
-                        const buttons = document.querySelectorAll('.menu-button');
-                        buttons.forEach(btn => btn.classList.remove('active'));
-
-                        // Add active class to clicked button
-                        button.classList.add('active');
-                    }
-
-                    function filterProducts(category) {
-                        // Implement your filtering logic here
-                        console.log('Filtering products by category:', category);
-                    }
-                </script>
-
-
-
             <main class="container px-12 py-8 mx-auto">
                 {{-- header for searching --}}
                 <section id="search-header" class="hidden mb-12 search-header">
-                    <h3 class="mb-4 text-2xl font-semibold text-brown-700"></h3>
+                    <h3 id="search-content" class="hidden mb-4 text-lg font-semibold text-brown-700"></h3>
                 </section>
                 <!-- Grouped Products by Categories -->
                 @foreach ($categories as $category)
-                    <section class="mb-12 category-section" data-category="{{ $category->category_number }}">
+                    <section id="{{$category->category_id}}" class="mb-12 category-section" data-category="{{ $category->category_number }}">
                         <h3 class="mb-4 text-2xl font-semibold text-brown-700">{{ $category->name }}</h3>
                         <div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                             @foreach ($products as $product)
@@ -180,7 +162,7 @@
                                         <!-- Add to Bag Button -->
                                         <button id="addToBagBtn" data-category="{{ $category->name }}"
                                             class="w-full text-sm py-2 text-white font-light bg-[#E9B303] hover:bg-[#C69702] rounded-b-lg transition"
-                                            onclick='openModal(@json(['product' => $product, 'category' => $category]))'>
+                                            onclick='openModal({!! json_encode(['product' => $product, 'category' => $category], JSON_HEX_APOS | JSON_HEX_QUOT) !!})'>
                                             Add to bag
                                         </button>
                                     </div>
@@ -205,7 +187,7 @@
                 </div>
 
                 <!-- Order Items -->
-                <div id="order-cart" class="flex flex-col order-cart">
+                <div id="order-cart" class="order-cart flex flex-col flex-grow overflow-y-auto max-h-[calc(100vh-500px)]">
                     {{-- items added to cart goes here --}}
                 </div>
 
@@ -225,10 +207,6 @@
                 <div class="flex justify-between text-gray-800">
                     <span>Subtotal</span>
                     <span id="orderSubtotal" class="order-subtotal">₱ 0.00</span>
-                </div>
-                <div class="flex justify-between mt-2 text-gray-800">
-                    <span>Tax</span>
-                    <span id="orderTax" class="order-tax">₱ 0.00</span>
                 </div>
                 <div class="flex justify-between mt-2 text-gray-800">
                     <span>Delivery Fee</span>

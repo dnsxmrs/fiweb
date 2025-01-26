@@ -15,7 +15,7 @@ class Order extends Model
         'order_number',
         'order_type',
         'total',
-        'tax',
+        // 'tax',
         'subtotal',
         'delivery_fee',
         'status',

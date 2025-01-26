@@ -9,6 +9,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
+use App\Models\OrderProduct;
+
 
 class WebhookController extends Controller
 {
@@ -349,7 +351,9 @@ class WebhookController extends Controller
         // ]);
 
         // get all orders
-        $orders = Order::with('orderProducts')->paginate(10);
+        $orders = Order::with('orderProducts')->get();
+
+        // dd($orders);
 
         Log::info('orders', [
             'orders' => $orders,
