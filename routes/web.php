@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\MenuController;
@@ -26,9 +27,21 @@ Route::get('/orders', [PaymentController::class, 'orders'])->name('orders');
 // independent details url
 Route::get('/order-details', [PaymentController::class, 'showDetails'])->name('showDetails');
 
-
 // Route::view('details', 'order-checkout.order-details')->name('order-details');
+<<<<<<< HEAD
+
+// Get Orders for pos
+Route::get('/get-orders', [WebhookController::class, 'getOrders'])->name('orders.get');
+
+//Signup Route
+
+// Simple route for viewing the sign-up page
+Route::get('/sign-up', function () {
+    return view('account.sign-up');
+})->name('sign-up');
+=======
 Route::get('/get-orders', [WebhookController::class, 'getOrders'])->name('get-orders');
+>>>>>>> f749ebf5b210e3d0b3240609644b0283d360537f
 
 
 
@@ -67,3 +80,5 @@ Route::prefix('order-checkout')->group(function () {
 
 
 });
+
+//Sign up route

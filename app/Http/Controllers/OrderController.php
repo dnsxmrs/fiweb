@@ -152,4 +152,5 @@ class OrderController extends Controller
     {
         return view('components.contact'); // Ensure this matches the Blade file name
     }
+
 }
