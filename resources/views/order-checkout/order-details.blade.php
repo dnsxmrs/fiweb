@@ -125,7 +125,7 @@
                         </li>
                         <li class="flex items-center space-x-2">
                             <span class="w-4 h-4 bg-[#E9B303] rounded-full"></span>
-                            <span class="text-black font-semibold">Order being prepared</span>
+                            <span class="font-semibold text-black">Order being prepared</span>
                         </li>
                         <li class="flex items-center space-x-2">
                             <span class="w-4 h-4 bg-gray-300 rounded-full"></span>
@@ -160,10 +160,10 @@
                 <div class="my-4 border-t"></div>
                 {{-- @foreach ($orderProducts as $item)
                     <div class="flex justify-between py-2">
-                        <span class="product_name text-black">{{ $item->product->name }}</span>
-                        <span class="product_price text-center">Php {{ number_format($item->price, 2) }}</span>
-                        <span class="quantity text-center">{{ $item->quantity }}</span>
-                        <span class="total_price text-right">Php {{ number_format($item->price * $item->quantity, 2) }}</span>
+                        <span class="text-black product_name">{{ $item->product->name }}</span>
+                        <span class="text-center product_price">Php {{ number_format($item->price, 2) }}</span>
+                        <span class="text-center quantity">{{ $item->quantity }}</span>
+                        <span class="text-right total_price">Php {{ number_format($item->price * $item->quantity, 2) }}</span>
                     </div>
                 @endforeach --}}
 
@@ -171,10 +171,10 @@
                     {{-- Display content when $orderProducts is passed and not null --}}
                     @foreach ($orderProducts as $item)
                         <div class="flex justify-between py-2">
-                            <span class="product_name text-black">{{ $item->product->name }}</span>
-                            <span class="product_price text-center">Php {{ number_format($item->price, 2) }}</span>
-                            <span class="quantity text-center">{{ $item->quantity }}</span>
-                            <span class="total_price text-right">Php {{ number_format($item->price * $item->quantity, 2) }}</span>
+                            <span class="text-black product_name">{{ $item->product->name }}</span>
+                            <span class="text-center product_price">Php {{ number_format($item->price, 2) }}</span>
+                            <span class="text-center quantity">{{ $item->quantity }}</span>
+                            <span class="text-right total_price">Php {{ number_format($item->price * $item->quantity, 2) }}</span>
                         </div>
                     @endforeach
                 @else
@@ -189,13 +189,13 @@
                     <!-- Subtotal -->
                     <div class="flex justify-between py-2">
                         <span class="text-gray-700">Subtotal</span>
-                        <span class="subtotal text-right">Php {{ number_format($orders->subtotal, 2) }}</span>
+                        <span class="text-right subtotal">Php {{ number_format($orders->subtotal, 2) }}</span>
                     </div>
 
                     <!-- Delivery Fee -->
                     <div class="flex justify-between py-2">
                         <span class="text-gray-700">Delivery fee</span>
-                        <span class="delivery_fee text-right">Php {{ number_format($orders->delivery_fee, 2) }}</span>
+                        <span class="text-right delivery_fee">Php {{ number_format($orders->delivery_fee, 2) }}</span>
                     </div>
 
                     <!-- Divider -->
@@ -204,19 +204,19 @@
                     <!-- Total -->
                     <div class="flex justify-between py-2 font-bold">
                         <span class="text-black">Total</span>
-                        <span class="total text-right">Php {{ number_format($orders->total, 2) }}</span>
+                        <span class="text-right total">Php {{ number_format($orders->total, 2) }}</span>
                     </div>
                 @else
                     <!-- Subtotal -->
                     <div class="flex justify-between py-2">
                         <span class="text-gray-700">Subtotal</span>
-                        <span class="subtotal text-right">Php 0.00</span>
+                        <span class="text-right subtotal">Php 0.00</span>
                     </div>
 
                     <!-- Delivery Fee -->
                     <div class="flex justify-between py-2">
                         <span class="text-gray-700">Delivery fee</span>
-                        <span class="delivery_fee text-right">Php 50.00</span>
+                        <span class="text-right delivery_fee">Php 50.00</span>
                     </div>
 
                     <!-- Divider -->
@@ -225,7 +225,7 @@
                     <!-- Total -->
                     <div class="flex justify-between py-2 font-bold">
                         <span class="text-black">Total</span>
-                        <span class="total text-right">Php 0.00</span>
+                        <span class="text-right total">Php 0.00</span>
                     </div>
                 @endisset
 
@@ -236,7 +236,7 @@
         <div class="w-[720px] mx-auto mb-20 mt-10 bg-white rounded-lg shadow-lg p-6">
             @isset($orders, $payments)
                 <h2 class="mb-2 text-lg font-bold text-gray-700">Payment</h2>
-                <p class="payment_type text-gray-700">{{ ucfirst($payments->payment_type) }}</p>
+                <p class="text-gray-700 payment_type">{{ ucfirst($payments->payment_type) }}</p>
 
                 <!-- Divider -->
                 <div class="my-4 border-t"></div>
@@ -246,15 +246,15 @@
                 <div class="space-y-6">
                     <div class="flex justify-between">
                         <span class="text-gray-700">Order Number</span>
-                        <span class="order_number font-medium text-black">{{ $orders->order_number }}</span>
+                        <span class="font-medium text-black order_number">{{ $orders->order_number }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-700">Contact Number</span>
-                        <span class="contact_number font-medium text-black">{{ $orders->contact_number }}</span>
+                        <span class="font-medium text-black contact_number">{{ $orders->contact_number }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-700">Delivery Address</span>
-                        <span class="address ml-12 font-medium text-right text-black">
+                        <span class="ml-12 font-medium text-right text-black address">
                             {{ $orders->street }}, {{ $orders->barangay }}, {{ $orders->municipality }},
                             {{ $orders->province }}, {{ $orders->region }} ({{ $orders->address_type }}),
                             Philippines
@@ -263,7 +263,7 @@
                 </div>
             @else
                 <h2 class="mb-2 text-lg font-bold text-gray-700">Payment</h2>
-                <p class="payment_type text-gray-700"></p>
+                <p class="text-gray-700 payment_type"></p>
                 <!-- Divider -->
                 <div class="my-4 border-t"></div>
                 <!-- Order Details Section -->
@@ -271,15 +271,15 @@
                 <div class="space-y-6">
                     <div class="flex justify-between">
                         <span class="text-gray-700">Order Number</span>
-                        <span class="order_number font-medium text-black"></span>
+                        <span class="font-medium text-black order_number"></span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-700">Contact Number</span>
-                        <span class="contact_number font-medium text-black"></span>
+                        <span class="font-medium text-black contact_number"></span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-700">Delivery Address</span>
-                        <span class="address ml-12 font-medium text-right text-black">
+                        <span class="ml-12 font-medium text-right text-black address">
                         </span>
                     </div>
                 </div>
