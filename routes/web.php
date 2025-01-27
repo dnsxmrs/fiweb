@@ -80,3 +80,7 @@ Route::prefix('order-checkout')->group(function () {
 });
 
 //Sign up route
+Route::get('/login', function () {
+    return view('account.log-in');
+})->name('login');
+//=======

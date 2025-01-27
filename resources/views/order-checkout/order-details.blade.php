@@ -234,7 +234,7 @@
 
         <!-- Payment Section -->
         <div class="w-[720px] mx-auto mb-20 mt-10 bg-white rounded-lg shadow-lg p-6">
-            @isset($orders, $payments)
+           <!--@isset($orders , $payments)-->
                 <h2 class="mb-2 text-lg font-bold text-gray-700">Payment</h2>
                 <p class="text-gray-700 payment_type">{{ ucfirst($payments->payment_type) }}</p>
 

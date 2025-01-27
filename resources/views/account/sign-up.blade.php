@@ -18,18 +18,40 @@
             <div class="mb-8">
                 <h3 class="mb-2 text-sm font-semibold text-gray-800">User Details</h3>
                 <div class="grid grid-cols-2 gap-6">
-                    <input type="text" placeholder="First Name *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
-                    <input type="text" placeholder="Last Name *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
+                    <!-- Label for First Name -->
+                    <div>
+                        <h3 class="mb-2 text-sm font-semibold text-gray-800">First Name</h3>
+                        <input type="text" placeholder="First Name *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
+                    </div>
+
+                    <!-- Label for Last Name -->
+                    <div>
+                        <h3 class="mb-2 text-sm font-semibold text-gray-800">Last Name</h3>
+                        <input type="text" placeholder="Last Name *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
+                    </div>
                 </div>
             </div>
+
 
             <!-- Login & Contact Section -->
             <div class="mb-8">
                 <h3 class="mb-2 text-sm font-semibold text-gray-800">Login & Contact Details</h3>
                 <div class="grid grid-cols-2 gap-6">
-                    <input type="email" placeholder="Email *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
-                    <input type="tel" placeholder="Contact Number *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
+                    <!-- Label and input for Email -->
+                    <div>
+                        <h3 class="mb-2 text-sm font-semibold text-gray-800">Email</h3>
+                        <input type="email" placeholder="Email *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
+                    </div>
+
+                    <!-- Label and input for Contact Number -->
+                    <div>
+                        <h3 class="mb-2 text-sm font-semibold text-gray-800">Contact Number</h3>
+                        <input type="tel" placeholder="Contact Number *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
+                    </div>
+
+                    <!-- Label and input for Password -->
                     <div class="relative">
+                        <h3 class="mb-2 text-sm font-semibold text-gray-800">Password</h3>
                         <input type="password" placeholder="Password *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
                         <button type="button" class="absolute text-gray-500 -translate-y-1/2 right-3 top-1/2" onclick="togglePassword(this)">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,7 +60,10 @@
                             </svg>
                         </button>
                     </div>
+
+                    <!-- Label and input for Confirm Password -->
                     <div class="relative">
+                        <h3 class="mb-2 text-sm font-semibold text-gray-800">Confirm Password</h3>
                         <input type="password" placeholder="Confirm Password *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
                         <button type="button" class="absolute text-gray-500 -translate-y-1/2 right-3 top-1/2" onclick="togglePassword(this)">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,6 +74,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Consent Section -->
             <div class="mb-8 text-center">
