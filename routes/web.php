@@ -37,9 +37,9 @@ Route::get('/get-orders', [WebhookController::class, 'getOrders'])->name('orders
 Route::get('/sign-up', function () {
     return view('account.sign-up');
 })->name('sign-up');
-=======
+//=======
 Route::get('/get-orders', [WebhookController::class, 'getOrders'])->name('get-orders');
->>>>>>> f749ebf5b210e3d0b3240609644b0283d360537f
+//>>>>>>> f749ebf5b210e3d0b3240609644b0283d360537f
 
 
 
