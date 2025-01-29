@@ -31,6 +31,7 @@ class Order extends Model
         'unit',
         'address_type',
         'delivery_time',
+        'note',
     ];
 
     // Relationship with OrderProduct

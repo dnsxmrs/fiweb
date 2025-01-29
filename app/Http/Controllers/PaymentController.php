@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Ixudra\Curl\Facades\Curl;
+use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
 {
@@ -51,7 +52,9 @@ class PaymentController extends Controller
                 'orderDetails.note' => 'nullable|string|max:500',
             ]);
 
-            Log::info('Validated Request:');
+            Log::error('Order validation payment', [
+                'req' => $validatedRequest,
+            ]);
             // Return the validated request
             return $validatedRequest;
         } catch (ValidationException $e) {
@@ -66,6 +69,8 @@ class PaymentController extends Controller
             // Validate and process request data
             $orders = $this->validateRequest($request);
 
+
+            $paymentType = $orders['paymentDetails']['paymentType'];
             $deliveryFee = $orders['paymentDetails']['deliveryFee'];
             // // paymentType
             // $paymentType = $orders['paymentDetails']['paymentType'];
@@ -77,8 +82,11 @@ class PaymentController extends Controller
                 // Extract order data from the response
                 $extractedOrder = $orderCreated->getData()->data;
 
-                // Log::info('',(array)$extractedOrder);
+                // Log::info('d',);
 
+                Log::info('what is dis', [
+                    'req' => (array)$extractedOrder,
+                ]);
 
                 $orderProducts = OrderProduct::where('order_id', $extractedOrder->id)
                 ->with('product')
@@ -86,7 +94,7 @@ class PaymentController extends Controller
 
                 $items = [];
 
-                // Log::info($orderProducts);
+                Log::info($orderProducts);
 
                 foreach ($orderProducts as $orderProduct) {
                     if ($orderProduct->product && $orderProduct->product->name) {
@@ -124,9 +132,7 @@ class PaymentController extends Controller
                             'show_line_items' => true,
                             'line_items' => $items,
                             'payment_method_types' => [
-                                'card',
-                                'gcash',
-                                'paymaya'
+                                $paymentType
                             ],
                             'success_url' => route('orders'),
                             'cancel_url' => route('checkout'),
@@ -222,6 +228,8 @@ class PaymentController extends Controller
                 ], 400);
             }
 
+            $this->pushOrder($orderId);
+
             return $this->showDetails($orderId);
         }
     }
@@ -279,9 +287,72 @@ class PaymentController extends Controller
         return view('order-checkout.order-details', compact('orderProducts', 'orders', 'payments'));
     }
 
-    // push order to pos
-    public function pushOrder()
+    // push order to posapi
+    public function pushOrder($order_id)
     {
+        $order = Order::find($order_id);
 
+        $order_status = $order->status;
+        $order_number = $order->order_number;
+        $order_date = $order->created_at;
+        $order_time = $order->created_at;
+        $notes = $order->note ?? 'No notes provided';
+
+        $orderProducts = OrderProduct::where('order_id', $order_id)
+            ->with('product')
+            ->get();
+
+        $orderItems = [];
+        foreach ($orderProducts as $orderProduct) {
+            if ($orderProduct->product && $orderProduct->product->name) {
+                $orderItems[] = [
+                    'name' => $orderProduct->product->name,
+                    'quantity' => (int) $orderProduct->quantity,
+                    'price' => (float) $orderProduct->price
+                ];
+            }
+        }
+
+        $pushOrder = [
+            'order_id' => $order_id,
+            'order_status' => $order_status,
+            'order_number' => $order_number,
+            'order_date' => $order_date,
+            'order_time' => $order_time,
+            'order_items' => $orderItems,
+            'notes' => $notes,
+        ];
+
+        Log::info('Pushing order rrr to pos', [
+            'pushorDER' => $pushOrder,
+        ]);
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . env('WEB_API_KEY'), // Include the Authorization Bearer token
+                // 'X-CSRF-TOKEN' => $csrfToken, // Include the CSRF token if necessary
+            ])->send('post', env('PUSH_ORDER_POS'), [
+                'json' => $pushOrder, // Send data as JSON
+            ]);
+
+            if ($response->failed()) {
+                Log::error('Failed to sync with OOS', [
+                    'status' => $response->status(),
+                    'message' => $response->body(),
+                    'headers' => $response->headers(),
+                    'request_payload' => $pushOrder, // Log the payload you sent
+                    'request_url' => env('PUSH_ORDER_POS'), // Log the target URL
+                ]);
+            } else {
+                Log::info('Successfully synced with OOS', [
+                    'status' => $response->status(),
+                    'message' => $response->body(),
+                    'headers' => $response->headers(),
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error syncing with OOS', [
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 }
