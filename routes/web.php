@@ -7,6 +7,8 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SignupController;
+
 
 // Landing page
 Route::get('/',[WebController::class, 'getCategory'])->name('landing');
@@ -84,3 +86,9 @@ Route::get('/login', function () {
     return view('account.log-in');
 })->name('login');
 //=======
+
+
+// Show signup form
+Route::get('/sign-up', [SignupController::class, 'showSignupForm'])->name('sign-up');
+
+

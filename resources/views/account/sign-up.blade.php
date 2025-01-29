@@ -14,93 +14,78 @@
                 <p class="text-sm text-gray-600">Tell us more about you so we can give you a better delivery experience.</p>
             </div>
 
-            <!-- User Details Section -->
-            <div class="mb-8">
-                <h3 class="mb-2 text-sm font-semibold text-gray-800">User Details</h3>
-                <div class="grid grid-cols-2 gap-6">
-                    <!-- Label for First Name -->
-                    <div>
-                        <h3 class="mb-2 text-sm font-semibold text-gray-800">First Name</h3>
-                        <input type="text" placeholder="First Name *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
-                    </div>
+            <form action="{{ route('user.new') }}" method="POST">
+                @csrf
 
-                    <!-- Label for Last Name -->
-                    <div>
-                        <h3 class="mb-2 text-sm font-semibold text-gray-800">Last Name</h3>
-                        <input type="text" placeholder="Last Name *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
-                    </div>
+                @if($errors->any())
+                <div class="mb-4 text-red-500">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-            </div>
-
-
-            <!-- Login & Contact Section -->
-            <div class="mb-8">
-                <h3 class="mb-2 text-sm font-semibold text-gray-800">Login & Contact Details</h3>
-                <div class="grid grid-cols-2 gap-6">
-                    <!-- Label and input for Email -->
-                    <div>
-                        <h3 class="mb-2 text-sm font-semibold text-gray-800">Email</h3>
-                        <input type="email" placeholder="Email *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
-                    </div>
-
-                    <!-- Label and input for Contact Number -->
-                    <div>
-                        <h3 class="mb-2 text-sm font-semibold text-gray-800">Contact Number</h3>
-                        <input type="tel" placeholder="Contact Number *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
-                    </div>
-
-                    <!-- Label and input for Password -->
-                    <div class="relative">
-                        <h3 class="mb-2 text-sm font-semibold text-gray-800">Password</h3>
-                        <input type="password" placeholder="Password *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
-                        <button type="button" class="absolute text-gray-500 -translate-y-1/2 right-3 top-1/2" onclick="togglePassword(this)">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <!-- Label and input for Confirm Password -->
-                    <div class="relative">
-                        <h3 class="mb-2 text-sm font-semibold text-gray-800">Confirm Password</h3>
-                        <input type="password" placeholder="Confirm Password *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none">
-                        <button type="button" class="absolute text-gray-500 -translate-y-1/2 right-3 top-1/2" onclick="togglePassword(this)">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                        </button>
-                    </div>
+            @endif
+            
+                <!-- First Name Section -->
+                <div>
+                    <h3 class="mb-2 text-sm font-semibold text-gray-800">First Name <span class="text-red-500">*</span></h3>
+                    <input type="text" placeholder="First Name *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none" name="first_name" required value="{{ old('first_name') }}">
+                    @error('first_name')
+                        <p class="pl-1 mt-1 text-xs text-red-500">{{ $message }}</p>
+                    @enderror
                 </div>
-            </div>
 
+                <!-- Last Name Section -->
+                <div>
+                    <h3 class="mb-2 text-sm font-semibold text-gray-800">Last Name <span class="text-red-500">*</span></h3>
+                    <input type="text" placeholder="Last Name *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none" name="last_name" required value="{{ old('last_name') }}">
+                    @error('last_name')
+                        <p class="pl-1 mt-1 text-xs text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <!-- Consent Section -->
-            <div class="mb-8 text-center">
-            <div class="mb-8">
-                <label class="flex items-start gap-2 mb-4">
-                    <input type="checkbox" class="w-5 h-5 mt-1 border border-gray-300 rounded-full appearance-none checked:bg-green-600 checked:border-transparent focus:outline-none">
-                    <span class="text-sm text-gray-600">I consent to the use and processing of my personal information. I am aware of my data privacy rights including the option to withdraw my consent at any time.</span>
-                </label>
-                <label class="flex items-start gap-2">
-                    <input type="checkbox" class="w-5 h-5 mt-1 border border-gray-300 rounded-full appearance-none checked:bg-green-600 checked:border-transparent focus:outline-none">
-                    <span class="text-sm text-gray-600">I have fully read, understood, and agree to the Data Privacy Policy, Terms & Conditions.</span>
-                </label>
-            </div>
-            </div>
+                <!-- Email Section -->
+                <div>
+                    <h3 class="mb-2 text-sm font-semibold text-gray-800">Email <span class="text-red-500">*</span></h3>
+                    <input type="email" placeholder="Email *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none" name="email" required value="{{ old('email') }}">
+                    @error('email')
+                        <p class="pl-1 mt-1 text-xs text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <!-- Create Account Button -->
-            <button class="w-full py-3 font-medium text-white bg-green-600 rounded-md hover:bg-green-700">
-                Create Account
-            </button>
+                <!-- Contact Number Section -->
+                <div>
+                    <h3 class="mb-2 text-sm font-semibold text-gray-800">Contact Number <span class="text-red-500">*</span></h3>
+                    <input type="tel" placeholder="Contact Number *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none" name="contact_number" required value="{{ old('contact_number') }}">
+                    @error('contact_number')
+                        <p class="pl-1 mt-1 text-xs text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Password Section -->
+                <div class="relative">
+                    <h3 class="mb-2 text-sm font-semibold text-gray-800">Password <span class="text-red-500">*</span></h3>
+                    <input type="password" placeholder="Password *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none" name="password" required>
+                </div>
+
+                <!-- Confirm Password Section -->
+                <div class="relative">
+                    <h3 class="mb-2 text-sm font-semibold text-gray-800">Confirm Password <span class="text-red-500">*</span></h3>
+                    <input type="password" placeholder="Confirm Password *" class="w-full px-4 py-3 text-gray-800 border rounded-md bg-gray-50 focus:outline-none" name="password_confirmation" required>
+                </div>
+
+                <!-- Create Account Button -->
+                <button class="w-full py-3 font-medium text-white bg-green-600 rounded-md hover:bg-green-700" type="submit">
+                    Create Account
+                </button>
+            </form>
 
             <!-- Login Prompt -->
             <p class="mt-6 text-sm text-center text-gray-600">
                 Already have an account? <a href="#" class="font-semibold text-green-600">Login</a>
             </p>
         </div>
-    </div>
 
     <script>
     function togglePassword(button) {
