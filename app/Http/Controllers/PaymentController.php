@@ -340,7 +340,7 @@ class PaymentController extends Controller
                     'message' => $response->body(),
                     'headers' => $response->headers(),
                     'request_payload' => $pushOrder, // Log the payload you sent
-                    'request_url' => env('KDS_URL'), // Log the target URL
+                    'request_url' => env('PUSH_ORDER_POS'), // Log the target URL
                 ]);
             } else {
                 Log::info('Successfully synced with OOS', [
