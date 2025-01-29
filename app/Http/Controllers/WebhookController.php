@@ -344,7 +344,7 @@ class WebhookController extends Controller
 
     public function getOrdersPaginate(Request $request)
     {
-        $orders = Order::with('orderProducts')->paginate();
+        $orders = Order::with('orderProducts')->paginate(15);
 
         Log::info('orders', [
             'orders' => $orders,

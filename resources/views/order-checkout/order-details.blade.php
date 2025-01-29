@@ -21,28 +21,35 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
         }
+
         html {
             height: 100%;
         }
+
         select:focus {
             outline: none;
             border-color: #E9B303;
             box-shadow: 0 0 0 2px #E9B303;
         }
+
         select::placeholder {
             color: #4A5568;
             /* Dark gray placeholder */
         }
+
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
+
         .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
         .active {
             border-bottom: 2px solid black;
         }
+
         .menu-button {
             transition: border-bottom 0.3s ease, color 0.3s ease;
         }
@@ -52,7 +59,8 @@
 
 <body class="bg-gray-100">
     <!-- Navbar -->
-    <header class="sticky top-0 z-20" style="height: 80px; box-shadow: 0 4px 6px rgba(139, 69, 19, 0.3); background-color: #066744;">
+    <header class="sticky top-0 z-20"
+        style="height: 80px; box-shadow: 0 4px 6px rgba(139, 69, 19, 0.3); background-color: #066744;">
         <div class="container flex items-center justify-between h-full px-4 mx-auto">
             <!-- Logo and Text -->
             <div class="flex items-center space-x-3">
@@ -69,7 +77,7 @@
                             class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Home</a>
                         <a href="{{ route('order-now') }}"
                             class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Menu</a>
-                        <a href="{{ route("showDetails") }}"
+                        <a href="{{ route('showDetails') }}"
                             class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Orders</a>
                     </nav>
                 </div>
@@ -89,8 +97,7 @@
                 <!-- Basket Icon -->
                 <button class="relative flex items-center basketBtn">
                     <img src="assets/order-bag.png" alt="Order Bag" class="w-12 h-12">
-                    <span
-                        id="basketCounter"
+                    <span id="basketCounter"
                         class="absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full basketCounter">
                         0</span>
                 </button>
@@ -119,22 +126,27 @@
                     <img src="assets/Caffeinated Logo.png" alt="Coffee Icon" class="h-40 mb-10 w-35">
                     <!-- Order Status -->
                     <ul class="space-y-4">
+                        // pending
                         <li class="flex items-center space-x-2">
                             <span class="w-4 h-4 bg-gray-300 rounded-full"></span>
                             <span class="text-gray-500">Order being validated</span>
                         </li>
+                        // preparing
                         <li class="flex items-center space-x-2">
                             <span class="w-4 h-4 bg-[#E9B303] rounded-full"></span>
                             <span class="font-semibold text-black">Order being prepared</span>
                         </li>
+                        // ready
                         <li class="flex items-center space-x-2">
                             <span class="w-4 h-4 bg-gray-300 rounded-full"></span>
                             <span class="text-gray-500">Rider on his way</span>
                         </li>
+                        // completed
                         <li class="flex items-center space-x-2">
                             <span class="w-4 h-4 bg-gray-300 rounded-full"></span>
                             <span class="text-gray-500">Delivery on its way</span>
                         </li>
+                        // ????
                         <li class="flex items-center space-x-2">
                             <span class="w-4 h-4 bg-gray-300 rounded-full"></span>
                             <span class="text-gray-500">Order delivered</span>
@@ -171,10 +183,11 @@
                     {{-- Display content when $orderProducts is passed and not null --}}
                     @foreach ($orderProducts as $item)
                         <div class="flex justify-between py-2">
-                            <span class="text-black product_name">{{ $item->product->name }}</span>
-                            <span class="text-center product_price">Php {{ number_format($item->price, 2) }}</span>
-                            <span class="text-center quantity">{{ $item->quantity }}</span>
-                            <span class="text-right total_price">Php {{ number_format($item->price * $item->quantity, 2) }}</span>
+                            <span class="product_name text-black">{{ $item->product->name }}</span>
+                            <span class="product_price text-center">Php {{ number_format($item->price, 2) }}</span>
+                            <span class="quantity text-center">{{ $item->quantity }}</span>
+                            <span class="total_price text-right">Php
+                                {{ number_format($item->price * $item->quantity, 2) }}</span>
                         </div>
                     @endforeach
                 @else
@@ -234,7 +247,7 @@
 
         <!-- Payment Section -->
         <div class="w-[720px] mx-auto mb-20 mt-10 bg-white rounded-lg shadow-lg p-6">
-           <!--@isset($orders , $payments)-->
+            @isset($orders, $payments)
                 <h2 class="mb-2 text-lg font-bold text-gray-700">Payment</h2>
                 <p class="text-gray-700 payment_type">{{ ucfirst($payments->payment_type) }}</p>
 
@@ -294,7 +307,10 @@
                 </button>
             </div>
         </div>
+        <script>
+            sessionStorage.clear();
+        </script>
 
     </body>
 
-    </html>
+</html>

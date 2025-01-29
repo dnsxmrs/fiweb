@@ -85,8 +85,6 @@ class OrderController extends Controller
                 $orderNumber = 'CAFOL' . strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
             } while (Order::where('order_number', $orderNumber)->exists());
 
-
-
             // create order
             $order = Order::create([
                 'order_number' => $orderNumber,
@@ -113,7 +111,9 @@ class OrderController extends Controller
                 'note' => $orders['orderDetails']['note'],
             ]);
 
-            Log::info('Validated Request:');
+            Log::error('Order validation order', [
+                'req' => $orders,
+            ]);
 
             // add the order products to the order
             foreach ($orders['orderDetails']['items'] as $orderItem) {
@@ -134,6 +134,10 @@ class OrderController extends Controller
             // Log::info('$');
 
             DB::commit();
+
+            Log::info('Order Created', [
+                'order' => $order,
+            ]);
 
             return response()->json([
                 'success' => true,
