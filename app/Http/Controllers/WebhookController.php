@@ -421,4 +421,69 @@ class WebhookController extends Controller
             ], 500);
         }
     }
+
+    public function getOrdersCount(Request $request)
+    {
+        Log::info('Received orders count request', [
+            'request_method' => $request->method(),
+            'request_data' => $request->all(),
+        ]);
+        // Get start and end dates from the request
+        $start = $request->input('start'); // Assume 'start' is passed in the request
+        $end = $request->input('end');     // Assume 'end' is passed in the request
+
+        if (!$start || !$end) {
+            return response()->json(['message' => 'Start and End dates are required'], 400);
+        }
+
+        try {
+            // Query orders within the specified date range and group by order type
+            $orderTypesCount = Order::whereBetween('created_at', [$start, $end])
+                                    ->selectRaw('order_type, COUNT(*) as count')
+                                    ->groupBy('order_type')
+                                    ->get();
+
+            Log::info('orders count by type', [
+                'orders' => $orderTypesCount,
+            ]);
+
+            return response()->json([
+                'online_orders_count' => $orderTypesCount,
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Error fetching orders count", ['error' => $e->getMessage()]);
+            return response()->json(['message' => 'Error fetching orders count'], 500);
+        }
+    }
+
+    public function getDashboardDetails(Request $request)
+    {
+        Log::info('Received dashboard details request', [
+            'request_method' => $request->method(),
+            'request_data' => $request->all(),
+        ]);
+
+        // 1. Total Revenue (Sum of paid order totals)
+        $totalRevenue = Order::where('status', 'completed')->sum('total');
+
+        // 2. Total Dishes Ordered (Assuming you have an order_items table)
+        $totalDishesOrdered = OrderProduct::sum('quantity'); // Sum all quantities across all orders
+
+        // 3. Total Customers (Count distinct users who placed an order)
+        $totalCustomers = Order::count();
+
+        Log::info('Dashboard details', [
+            'total_revenue' => $totalRevenue,
+            'total_dishes_ordered' => $totalDishesOrdered,
+            'total_customers' => $totalCustomers,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order status updated successfully!',
+            'totalRevenue' => $totalRevenue,
+            'totalDishesOrdered' => $totalDishesOrdered,
+            'totalCustomers' => $totalCustomers,
+        ], 200);
+    }
 }

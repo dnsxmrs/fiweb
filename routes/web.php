@@ -27,6 +27,9 @@ Route::get('/orders', [PaymentController::class, 'orders'])->name('orders');
 
 // independent details url
 Route::get('/order-details/{orderNumber?}', [PaymentController::class, 'showDetails'])->name('showDetails');
+// for canceling orders
+Route::post('/orders/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+
 
 //Signup Route
 
@@ -39,4 +42,12 @@ Route::get('/sign-up', function () {
 Route::get('/login', function () {
     return view('account.log-in');
 })->name('login');
-//=======
+
+
+Route::get('/cancel-order', function () {
+    return view('order-checkout.order-checkout-modals.cancel-order-modal');
+});
+
+Route::get('/cancel-success', function () {
+    return view('order-checkout.order-checkout-modals.order-cancelled-success');
+});

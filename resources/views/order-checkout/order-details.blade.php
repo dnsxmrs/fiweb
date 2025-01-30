@@ -96,7 +96,7 @@
 
                 <!-- Basket Icon -->
                 <button class="relative flex items-center basketBtn">
-                    <img src="assets/order-bag.png" alt="Order Bag" class="w-12 h-12">
+                    <img src="{{asset('assets/order-bag.png')}}" alt="Order Bag" class="w-12 h-12">
                     <span id="basketCounter"
                         class="absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full basketCounter">
                         0</span>
@@ -139,8 +139,10 @@
                         @foreach ($statuses as $key => $label)
                             <li class="flex items-center space-x-2">
                                 <!-- Highlight the active status -->
-                                <span class="w-4 h-4 {{ $key === $orders->status ? 'bg-[#E9B303]' : 'bg-gray-300' }} rounded-full"></span>
-                                <span class="{{ $key === $orders->status ? 'font-semibold text-black' : 'text-gray-500' }}">
+                                <span
+                                    class="w-4 h-4 {{ $key === $orders->status ? 'bg-[#E9B303]' : 'bg-gray-300' }} rounded-full"></span>
+                                <span
+                                    class="{{ $key === $orders->status ? 'font-semibold text-black' : 'text-gray-500' }}">
                                     {{ $label }}
                                 </span>
                             </li>
@@ -322,16 +324,134 @@
             <div class="my-4 border-t"></div>
 
             <!-- Cancel Order Button -->
-            <div class="mt-6 text-center">
+            {{-- <div class="mt-6 text-center">
                 <button class="w-[175px] h-[50px] text-lg font-bold text-white bg-red-600 rounded-lg hover:bg-red-700">
                     Cancel Order
                 </button>
+            </div> --}}
+            @if ($orders->status === 'pending')
+                <div class="mt-6 text-center">
+                    <button id="cancel-order" data-id="{{ $orders->id }}"
+                        class="w-[175px] h-[50px] text-lg font-bold text-white bg-red-600 rounded-lg hover:bg-red-700">
+                        Cancel Order
+                    </button>
+                </div>
+            @endif
+        </div>
+
+        <!-- Modal Background -->
+        <div id="confirm-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <!-- Modal Content -->
+            <div class="bg-white w-[600px] h-[400px] rounded-lg shadow-lg flex flex-col items-center justify-center">
+                <!-- Modal Text -->
+                <p class="mb-8 text-xl font-medium text-gray-800">Are you sure you want to cancel this order?</p>
+
+                <!-- Confirm Cancel Button -->
+                <button id="confirm-cancel" class="w-[195px] h-[45px] mb-4 font-bold text-white bg-green-500 rounded-md hover:bg-green-600">
+                    Confirm
+                </button>
+
+                <!-- Cancel Button -->
+                <button id="close-modal" class="w-[195px] h-[45px] font-bold text-red-500 border border-red-500 rounded-md hover:bg-red-500 hover:text-white">
+                    Cancel
+                </button>
             </div>
         </div>
+
+        <!-- Success Modal -->
+        <div id="success-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white w-[400px] h-[300px] rounded-lg shadow-lg flex flex-col items-center justify-center">
+                <img src="{{asset('assets/success 1.png')}}" class="w-[70px] h-[70px]">
+                <p class="mt-5 text-lg font-medium text-gray-800">Order cancelled successfully!</p>
+            </div>
+        </div>
+
+        {{-- <div class="confirm hidden flex items-center justify-center h-screen bg-gray-100">
+            <!-- Modal Background -->
+            <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <!-- Modal Content -->
+                <div class="bg-white w-[600px] h-[400px] rounded-lg shadow-lg flex flex-col items-center justify-center">
+                    <!-- Modal Text -->
+                    <p class="mb-8 text-xl font-medium text-gray-800">Are you sure you want to cancel this order?</p>
+
+                    <!-- Confirm Cancel Button -->
+                    <button
+                        class="w-[195px] h-[45px] mb-4 font-bold text-white transition bg-green-500 rounded-md hover:bg-green-600">
+                        Confirm
+                    </button>
+
+                    <!-- Cancel Button -->
+                    <button onclick="cancelOrder()"
+                        class="w-[195px] h-[45px] font-bold text-red-500 transition border border-red-500 rounded-md hover:bg-red-500 hover:text-white">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div> --}}
+
+        {{-- <div class="success hidden flex items-center justify-center h-screen bg-gray-100">
+            <!-- Modal Background -->
+            <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <!-- Modal Content -->
+                <div class="bg-white w-[400px] h-[300px] rounded-lg shadow-lg flex flex-col items-center justify-center">
+                    <!-- Success Icon -->
+                    <div class="flex items-center justify-center">
+                        <img src="assets/success 1.png" class="w-[70px] h-[70px]">
+                    </div>
+
+                    <!-- Success Message -->
+                    <p class="mt-5 text-lg font-medium text-gray-800">Order cancelled successfully!</p>
+                </div>
+            </div>
+        </div> --}}
+
         <script>
             sessionStorage.clear();
+            document.addEventListener("DOMContentLoaded", function() {
+                const cancelButton = document.getElementById("cancel-order");
+                const confirmModal = document.getElementById("confirm-modal");
+                const successModal = document.getElementById("success-modal");
+                const confirmCancelBtn = document.getElementById("confirm-cancel");
+                const closeModalBtn = document.getElementById("close-modal");
+                let orderId = null;
+
+                // Show confirmation modal when "Cancel Order" is clicked
+                cancelButton.addEventListener("click", function() {
+                    orderId = this.dataset.id; // Store the order ID
+                    confirmModal.classList.remove("hidden");
+                });
+
+                // Hide modal if "Cancel" is clicked
+                closeModalBtn.addEventListener("click", function() {
+                    confirmModal.classList.add("hidden");
+                });
+
+                // Handle order cancellation
+                // Handle order cancellation
+                confirmCancelBtn.addEventListener("click", function() {
+                    fetch("{{ route('orders.cancel') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                        },
+                        body: JSON.stringify({ order_id: orderId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        confirmModal.classList.add("hidden"); // Hide confirm modal
+                        successModal.classList.remove("hidden"); // Show success modal
+
+                        setTimeout(() => {
+                            window.location.href = "{{ route('showDetails', ['orderNumber' => $orders->order_number]) }}";
+                        }, 2000); // Redirect after 2 seconds
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("An error occurred while cancelling the order.");
+                    });
+                });
+            });
         </script>
-
     </body>
-
 </html>
