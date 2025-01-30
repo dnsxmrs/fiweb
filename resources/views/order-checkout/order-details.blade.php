@@ -64,7 +64,7 @@
         <div class="container flex items-center justify-between h-full px-4 mx-auto">
             <!-- Logo and Text -->
             <div class="flex items-center space-x-3">
-                <img src="assets/Caffeinated Logo.png" alt="Caffeinated Logo" class="w-12 h-12">
+                <img src="{{ asset('assets/Caffeinated Logo.png') }}" alt="Caffeinated Logo" class="w-12 h-12">
                 <div class="flex items-center">
                     <div>
                         <span class="text-2xl font-bold leading-none text-white">CAFFEINATED</span>
@@ -123,9 +123,30 @@
             <h2 class="mb-4 text-lg font-bold text-gray-700">Order Status</h2>
             <div>
                 <div class="flex flex-col items-center">
-                    <img src="assets/Caffeinated Logo.png" alt="Coffee Icon" class="h-40 mb-10 w-35">
+                    <img src="{{ asset('assets/Caffeinated Logo.png') }}" alt="Coffee Icon" class="h-40 mb-10 w-35">
                     <!-- Order Status -->
+                    @php
+                        $statuses = [
+                            'pending' => 'Order being validated',
+                            'preparing' => 'Order being prepared',
+                            'ready' => 'Ready for Pickup',
+                            'completed' => 'Order Picked Up',
+                            'cancelled' => 'Order Cancelled',
+                        ];
+                    @endphp
+
                     <ul class="space-y-4">
+                        @foreach ($statuses as $key => $label)
+                            <li class="flex items-center space-x-2">
+                                <!-- Highlight the active status -->
+                                <span class="w-4 h-4 {{ $key === $orders->status ? 'bg-[#E9B303]' : 'bg-gray-300' }} rounded-full"></span>
+                                <span class="{{ $key === $orders->status ? 'font-semibold text-black' : 'text-gray-500' }}">
+                                    {{ $label }}
+                                </span>
+                            </li>
+                        @endforeach
+                    </ul>
+                    {{-- <ul class="space-y-4">
                         // pending
                         <li class="flex items-center space-x-2">
                             <span class="w-4 h-4 bg-gray-300 rounded-full"></span>
@@ -151,7 +172,7 @@
                             <span class="w-4 h-4 bg-gray-300 rounded-full"></span>
                             <span class="text-gray-500">Order delivered</span>
                         </li>
-                    </ul>
+                    </ul> --}}
                 </div>
             </div>
         </div>
@@ -247,7 +268,7 @@
 
         <!-- Payment Section -->
         <div class="w-[720px] mx-auto mb-20 mt-10 bg-white rounded-lg shadow-lg p-6">
-           
+            @isset($payments)
                 <h2 class="mb-2 text-lg font-bold text-gray-700">Payment</h2>
                 <p class="text-gray-700 payment_type">{{ ucfirst($payments->payment_type) }}</p>
 

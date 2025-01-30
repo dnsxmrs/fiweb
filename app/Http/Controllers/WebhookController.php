@@ -368,4 +368,57 @@ class WebhookController extends Controller
             'data' => $orders
         ], 200);
     }
+
+    public function orderStatusUpdate(Request $request)
+    {
+        Log::info('Received status update request', [
+            'request_method' => $request->method,
+            'request_data' => $request->all(),
+        ]);
+
+        try
+        {
+            // Validate the incoming request
+            $validatedData = $request->validate([
+                'order_id' => 'required|integer|exists:orders,id',
+                'order_number' => 'required|string',
+                'status' => 'required|string|in:pending,preparing,ready,completed,cancelled',
+            ]);
+
+            Log::info('Validated status update request', [
+                'validated_data' => $validatedData,
+            ]);
+
+            $order = Order::where('id', $validatedData['order_id'])->first();
+
+            if (!$order) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Order not found.',
+                ], 404);
+            }
+
+            $order->status = $validatedData['status'];
+            $order->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Order status updated successfully!',
+                'order' => $order,
+            ], 200);
+        }
+        catch (\Exception $e)
+        {
+            Log::error('Failed to update order status', [
+                'error' => $e->getMessage(),
+                'data' => $validatedData,
+            ]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update order status.',
+                'error_details' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

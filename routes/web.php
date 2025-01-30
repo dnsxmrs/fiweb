@@ -26,7 +26,7 @@ Route::post('/payment', [PaymentController::class, 'pay'])->name('pay');
 Route::get('/orders', [PaymentController::class, 'orders'])->name('orders');
 
 // independent details url
-Route::get('/order-details', [PaymentController::class, 'showDetails'])->name('showDetails');
+Route::get('/order-details/{orderNumber?}', [PaymentController::class, 'showDetails'])->name('showDetails');
 
 //Signup Route
 

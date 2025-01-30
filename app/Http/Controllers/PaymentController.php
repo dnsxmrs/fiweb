@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Http;
 class PaymentController extends Controller
 {
     //
+
+
+
     public function validateRequest(Request $request)
     {
         try {
@@ -69,105 +72,95 @@ class PaymentController extends Controller
             // Validate and process request data
             $orders = $this->validateRequest($request);
 
+            Log::info('Type of $orders:', [gettype($orders)]); // Should output "array"
+            Log::info('Structure of $orders:', $orders); // Prints the entire array
 
             $paymentType = $orders['paymentDetails']['paymentType'];
             $deliveryFee = $orders['paymentDetails']['deliveryFee'];
-            // // paymentType
-            // $paymentType = $orders['paymentDetails']['paymentType'];
 
-            $storeOrder = new OrderController();
-            $orderCreated = $storeOrder->storeOrder(new Request($orders));
+            $items = [];
 
-            if ($orderCreated) {
-                // Extract order data from the response
-                $extractedOrder = $orderCreated->getData()->data;
+            // Convert associative array to indexed array
+            $orderItems = array_values($orders['orderDetails']['items']);
 
-                // Log::info('d',);
+            $orderNumber = '';
+            do {
+                $orderNumber = 'CAFOL' . strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
+            } while (Order::where('order_number', $orderNumber)->exists());
 
-                Log::info('what is dis', [
-                    'req' => (array)$extractedOrder,
-                ]);
-
-                $orderProducts = OrderProduct::where('order_id', $extractedOrder->id)
-                ->with('product')
-                ->get();
-
-                $items = [];
-
-                Log::info($orderProducts);
-
-                foreach ($orderProducts as $orderProduct) {
-                    if ($orderProduct->product && $orderProduct->product->name) {
-
-                        $items[] = [
-                            'name' => $orderProduct->product->name,
-                            'quantity' => $orderProduct->quantity,
-                            'amount' => $orderProduct->price * 100, // Convert to PHP cents
-                            'currency' => 'PHP',
-                            'description' => $extractedOrder->order_number,
-                        ];
-                    }
+            foreach ($orderItems as $orderItem) {
+                if (isset($orderItem['name'])) {  // Check if 'name' exists
+                    $items[] = [
+                        'name' => $orderItem['name'], // Access name directly
+                        'quantity' => $orderItem['quantity'],
+                        'amount' => $orderItem['price'] * 100, // Convert to PHP cents
+                        'currency' => 'PHP',
+                        'description' => $orderNumber,
+                    ];
                 }
-
-                $items[] = [
-                    'name' => 'Delivery Fee',
-                    'quantity' => 1,
-                    'amount' => intval($deliveryFee * 100), // Convert to PHP cents
-                    'currency' => 'PHP',
-                    'description' => 'Delivery Fee Amount',
-                ];
-
-                if (empty($items)) {
-                    Log::error('No valid items to process for payment');
-                    return response()->json([
-                        'error' => 'No valid items to process for payment'
-                    ], 400);
-                }
-
-                $data = [
-                    'data' => [
-                        'attributes' => [
-                            'send_email_receipt' => false,
-                            'show_description' => true,
-                            'show_line_items' => true,
-                            'line_items' => $items,
-                            'payment_method_types' => [
-                                $paymentType
-                            ],
-                            'success_url' => route('orders'),
-                            'cancel_url' => route('checkout'),
-                            'description' => $extractedOrder->order_number,
-                            'metadata' => [
-                                'order_id' => base64_encode($extractedOrder->id),
-                            ]
-                        ],
-                    ]
-                ];
-
-                // Send POST request to PayMongo's checkout endpoint
-                $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
-                    ->withHeader('Content-Type: application/json')
-                    ->withHeader('Accept: application/json')
-                    ->withHeader('Authorization: Basic ' . base64_encode(env('AUTH_PAY')))
-                    ->withData($data)
-                    ->asJson()
-                    ->post();
-
-                // Store session ID in the session
-                Session::put('session_id', $response->data->id);
-
-                $checkOutUrl = $response->data->attributes->checkout_url;
-
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Successful payment processing',
-                    'redirect' => $checkOutUrl,
-                ]);
-
             }
 
-            Log::error('Order could not be created');
-            return response()->json(['error' => 'Order creation failed'], 400);
+            // Add Delivery Fee
+            $items[] = [
+                'name' => 'Delivery Fee',
+                'quantity' => 1,
+                'amount' => intval($deliveryFee * 100), // Convert to PHP cents
+                'currency' => 'PHP',
+                'description' => 'Delivery Fee Amount',
+            ];
+
+            if (empty($items)) {
+                Log::error('No valid items to process for payment');
+                return response()->json([
+                    'error' => 'No valid items to process for payment'
+                ], 400);
+            }
+
+            $data = [
+                'data' => [
+                    'attributes' => [
+                        'send_email_receipt' => false,
+                        'show_description' => true,
+                        'show_line_items' => true,
+                        'line_items' => $items,
+                        'payment_method_types' => [
+                            $paymentType
+                        ],
+                        'success_url' => route('orders'),
+                        'cancel_url' => route('checkout'),
+                        'description' => $orderNumber,
+                        'metadata' => [
+                            'order_number' => base64_encode($orderNumber),
+                        ]
+                    ],
+                ]
+            ];
+
+            // Send POST request to PayMongo's checkout endpoint
+            $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
+                ->withHeader('Content-Type: application/json')
+                ->withHeader('Accept: application/json')
+                ->withHeader('Authorization: Basic ' . base64_encode(env('AUTH_PAY')))
+                ->withData($data)
+                ->asJson()
+                ->post();
+
+            // Store session ID in the session
+            Session::put('session_id', $response->data->id);
+
+            Session::put('pending_order', $orders);
+
+            $checkOutUrl = $response->data->attributes->checkout_url;
+
+            Log::info('Print items', [
+                'items' => $items,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Successful payment processing',
+                'redirect' => $checkOutUrl,
+            ]);
         } catch (\Exception $e) {
             Log::error($e);
 
@@ -178,7 +171,14 @@ class PaymentController extends Controller
     public function orders()
     {
         $sessionId = Session::get('session_id');
-        Log::info('Session ID: ' . $sessionId);
+        $orders = Session::get('pending_order');
+
+        // Log::info('Session ID: ' . $sessionId);
+        // Log::info('Pending Order: '. $orders);
+
+        // dd to see session id and pending order
+        // Dump and die to inspect the values
+        // dd($sessionId, $orders);
 
         $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions/' . $sessionId)
         ->withHeader('Content-Type: application/json')
@@ -187,50 +187,66 @@ class PaymentController extends Controller
         ->asJson()
         ->get();
 
-        if ($response->data->attributes->payments[0]->attributes->status === "paid") {
-            // Log::info((array) $response);
+        Log::info('Response: ', ['response' => $response]);
+
+        if (collect($response->data->attributes->payments)->contains('attributes.status', 'paid')) {
             Log::info('Logging object:', ['object' => json_encode($response)]);
 
-            $orderId = (int) base64_decode($response->data->attributes->metadata->order_id);
+            // $order_number = (int) base64_decode($response->data->attributes->metadata->order_number);
             $amount = $response->data->attributes->payments[0]->attributes->amount;
             $description = $response->data->attributes->payments[0]->attributes->description;
             $modeOfPayment = $response->data->attributes->payment_method_used;
             $status = $response->data->attributes->payments[0]->attributes->status;
 
-            Log::info("message", [
-                'order_id' => $orderId,
-                'total' => $amount,
-                'description' => $description,
-                'payment_type' => $modeOfPayment,
-                'status' => $status,
-            ]);
+            $storeOrder = new OrderController();
+            $orderCreated = $storeOrder->storeOrder(new Request($orders));
 
-            // load the details
-            $paymentToStore = [
-                'order_id' => $orderId,
-                'total' => $amount,
-                'description' => 'Payment for ' . $description,
-                'payment_type' => $modeOfPayment,
-                'status' => $status,
-            ];
+            if ($orderCreated) {
+                // Extract order data from the response
+                $extractedOrder = $orderCreated->getData()->data;
+                $orderId = $extractedOrder->id;
 
-            Log::info('Payment to store: ', $paymentToStore);
+                Log::info("message", [
+                    'order_id' => $orderId,
+                    'total' => $amount,
+                    'description' => $description,
+                    'payment_type' => $modeOfPayment,
+                    'status' => $status,
+                ]);
 
-            $payment = $this->storePayment(new Request($paymentToStore));
+                // load the details
+                $paymentToStore = [
+                    'order_id' => $orderId,
+                    'total' => $amount,
+                    'description' => 'Payment for ' . $description,
+                    'payment_type' => $modeOfPayment,
+                    'status' => $status,
+                ];
+                Log::info('Payment to store: ', $paymentToStore);
 
-            Log::info('Payment stored: ', json_decode($payment->getContent(), true));
-            Log::info('Payment Log object:', ['object' => json_encode($payment)]);
+                $payment = $this->storePayment(new Request($paymentToStore));
 
-            if (!$payment) {
+                if (!$payment) {
+                    return response()->json([
+                        'message' => 'Unsuccessful to save payment'
+                    ], 400);
+                }
+                Log::info('Payment stored: ', json_decode($payment->getContent(), true));
 
-                return response()->json([
-                    'message' => 'Unsuccessful to save payment'
-                ], 400);
+                $this->pushOrder($orderId);
+
+                // get ordernumber of the order
+                $orderget = Order::where('id', $orderId)->first();
+
+                $order_number = $orderget['order_number'];
+
+                Session::forget('pending_order');
+                Session::forget('session_id');
+
+                // return $this->showDetails($orderId);
+                return redirect()->route('showDetails', ['orderNumber' => $order_number]);
+
             }
-
-            $this->pushOrder($orderId);
-
-            return $this->showDetails($orderId);
         }
     }
 
@@ -264,22 +280,22 @@ class PaymentController extends Controller
         ], 200);
     }
 
-    public function showDetails($orderId = null)
+    public function showDetails($orderNumber = null)
     {
-        if (!$orderId) {
+        if (!$orderNumber) {
             return view('order-checkout.order-details');
         }
 
         // retrieve order based on orderid
-        $orders = Order::find($orderId);
+        $orders = Order::where('order_number', $orderNumber)->first(); // Use order_number to find the order
 
         // get the order and the orderProduct and pass to view
-        $orderProducts = OrderProduct::where('order_id', $orderId)
+        $orderProducts = OrderProduct::where('order_id', $orders->id)
         ->with('product')
         ->get();
 
         // get the corresponding payment
-        $payments = Payment::where('order_id', $orderId)->first();
+        $payments = Payment::where('order_id', $orders->id)->first();
 
         Log::info($orders);
         Log::info($orderProducts);
