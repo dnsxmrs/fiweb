@@ -357,7 +357,14 @@ class WebhookController extends Controller
 
     public function getOrders(Request $request)
     {
-        $orders = Order::with('orderProducts')->get();
+        $orders = Order::select('id', 'order_number', 'order_type', 'total', 'status', 'first_name', 'last_name', 'contact_number', 'email', 'delivery_time')
+            ->with(['orderProducts' => function($query) {
+                $query->select('id', 'order_id', 'product_id', 'quantity', 'price')
+                    ->with(['product' => function($query) {
+                        $query->select('id', 'name');
+                    }]);
+            }])
+            ->get();
 
         Log::info('orders', [
             'orders' => $orders,
