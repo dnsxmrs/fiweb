@@ -396,13 +396,51 @@
                             <!-- Checkbox -->
                             <input type="checkbox" class="w-5 h-5 text-black border-gray-300 rounded focus:ring-0"
                                 id="terms-checkbox" />
+
                             <!-- Text -->
                             <label for="terms-checkbox" class="ml-2 text-sm text-gray-500">
-                                I agree to the
-                                <a href="#" class="text-blue-500 underline">Terms and Conditions</a>
-                                &
-                                <a href="#" class="text-blue-500 underline">Privacy Policy</a>.
-                            </label>
+                                    I agree to the
+                                    <a href="#" class="text-blue-500 underline" onclick="openModal(event)">Terms and Conditions</a>
+                                </label>
+
+                                <!-- Modal -->
+                                <div id="termsModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+                                    <div class="bg-white p-6 rounded-lg shadow-lg w-200">
+                                        <h2 class="text-lg font-bold mb-4">Terms and Conditions</h2>
+                                        <p class="text-sm text-gray-600">Here are the terms and conditions of our service. Please read them carefully before proceeding.</p>
+                                        <li>Orders once placed cannot be canceled or modified after confirmation.</li>
+                                        <li>All prices are subject to change without prior notice.</li>
+                                        <li>Delivery times are estimated and may vary due to external factors.</li>
+                                        <li>We are not responsible for food allergies or dietary restrictions; please review menu details before ordering.</li>
+                                        <li>By proceeding, you acknowledge that you have read and understood these terms.</li>
+                                        <div class="flex items-center mt-4">
+                                            <input type="checkbox" id="agree-checkbox" class="mr-2">
+                                            <label for="agree-checkbox" class="text-sm text-gray-500">I agree to the terms and conditions</label>
+                                        </div>
+
+                                        <div class="mt-4 flex justify-end">
+                                            <button id="submit-btn" onclick="submitAgreement()" class="px-4 py-2 bg-green-500 text-white rounded-lg" disabled>Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script>
+                                function openModal(event) {
+                                    event.preventDefault(); // Prevent default anchor behavior
+                                    document.getElementById('termsModal').classList.remove('hidden');
+                                }
+
+                                function submitAgreement() {
+
+                                    alert("Thank you for agreeing to the terms and conditions.");
+                                    document.getElementById('termsModal').classList.add('hidden');
+                                }
+
+                                document.getElementById('agree-checkbox').addEventListener('change', function() {
+                                    document.getElementById('submit-btn').disabled = !this.checked;
+                                });
+                                </script>
+
                         </div>
                     </div>
                 </div>

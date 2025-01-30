@@ -10,7 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&display=swap');
 
         body {
-            font-family: 'Barlow', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
     </style>
 </head>
@@ -80,7 +80,7 @@
         <aside class="fixed top-20 right-0 h-[calc(100vh-80px)] bg-white shadow-md w-96 z-10 flex flex-col">
             <!-- Order Summary Header -->
             <div class="p-6">
-                <h2 class="mb-4 text-xl font-semibold text-gray-800">Order Summary</h2>
+                <h2 class="mb-4 text-l font-semibold text-gray-800">Order Summary</h2>
                 <!-- Column Headings -->
                 <div class="flex justify-between pb-2 mb-2 border-b">
                     <span class="font-medium text-gray-600">Item</span>
