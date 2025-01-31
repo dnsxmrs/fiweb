@@ -58,10 +58,7 @@
                     <nav class="hidden ml-8 space-x-8 md:flex">
                         <a href=" {{ route('landing') }} "
                             class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Home</a>
-                        <a href="{{ route('order-now') }}"
-                            class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Menu</a>
-                        <a href="#                       "
-                            class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Orders</a>
+                        
                     </nav>
                 </div>
             </div>
@@ -75,7 +72,7 @@
                 </button>
 
                 <!-- Guest Button -->
-              
+
 
                 <!-- My Account Button -->
                 <button class="px-4 py-2 text-sm text-white rounded-md bg-brown-500 hover:bg-brown-600">
