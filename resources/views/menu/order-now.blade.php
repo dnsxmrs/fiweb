@@ -82,10 +82,7 @@
                 </button>
 
                 <!-- Guest Button -->
-                <button
-                    class="flex items-center justify-center w-40 h-10 px-6 py-3 text-sm text-black bg-white rounded-full hover:bg-brown-600">
-                    <img src="{{ asset('assets/Male User.png') }}" alt="User" class="w-5 h-5 mr-2">Guest
-                </button>
+              
 
                 {{-- <!-- My Account Button -->
                 <button class="px-4 py-2 text-sm text-gray-700 rounded-md bg-brown-500 hover:bg-brown-600">
