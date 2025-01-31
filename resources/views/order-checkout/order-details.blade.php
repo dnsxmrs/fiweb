@@ -127,11 +127,12 @@
                     <!-- Order Status -->
                     @php
                         $statuses = [
-                            'pending' => 'Order being validated',
-                            'preparing' => 'Order being prepared',
-                            'ready' => 'Ready for Pickup',
-                            'completed' => 'Order Picked Up',
-                            'cancelled' => 'Order Cancelled',
+                            'pending' => 'Order is being validated',
+                            'preparing' => 'Order is being prepared',
+                            'ready' => 'Order is ready for dispatch',
+                            'delivery' => 'Order is out for delivery',
+                            'completed' => 'Order has been delivered',
+                            'cancelled' => 'Order has been cancelled',
                         ];
                     @endphp
 
@@ -323,12 +324,6 @@
             <!-- Divider -->
             <div class="my-4 border-t"></div>
 
-            <!-- Cancel Order Button -->
-            {{-- <div class="mt-6 text-center">
-                <button class="w-[175px] h-[50px] text-lg font-bold text-white bg-red-600 rounded-lg hover:bg-red-700">
-                    Cancel Order
-                </button>
-            </div> --}}
             @if ($orders->status === 'pending')
                 <div class="mt-6 text-center">
                     <button id="cancel-order" data-id="{{ $orders->id }}"

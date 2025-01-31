@@ -29,6 +29,9 @@ Route::middleware([CheckPosSource::class])->group(function () {
         Route::get('/get-dashboard-details', [WebhookController::class, 'getDashboardDetails']);
 
         Route::match(['post', 'put'], '/kds-to-web', [WebhookController::class, 'orderStatusUpdate']);
+
+        Route::match(['post', 'put'], '/order-complete', [WebhookController::class, 'orderComplete']);
+
     });
 });
 

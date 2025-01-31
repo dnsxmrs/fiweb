@@ -389,7 +389,7 @@ class WebhookController extends Controller
             $validatedData = $request->validate([
                 'order_id' => 'required|integer|exists:orders,id',
                 'order_number' => 'required|string',
-                'status' => 'required|string|in:pending,preparing,ready,completed,cancelled',
+                'status' => 'required|string|in:pending,preparing,ready,delivery,completed,cancelled',
             ]);
 
             Log::info('Validated status update request', [
@@ -492,5 +492,42 @@ class WebhookController extends Controller
             'totalDishesOrdered' => $totalDishesOrdered,
             'totalCustomers' => $totalCustomers,
         ], 200);
+    }
+
+    public function orderComplete(Request $request)
+    {
+        Log::info('Received orders by category request', [
+            'request_method' => $request->method(),
+            'request_data' => $request->all(),
+        ]);
+
+        try {
+            // validate the payload above
+            $validatedData = $request->validate([
+                'orderId' => 'required|integer',
+                'status' => 'required|string|in:completed',
+            ]);
+
+            // find the order by id
+            $order = Order::find($validatedData['orderId']);
+            if (!$order) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Order not found.',
+                ], 404);
+            }
+            // update the order status
+            $order->status = $validatedData['status'];
+            $order->save();
+
+            return response()->json([
+                'status' =>'success',
+                'message' => 'Order status updated successfully!',
+            ], 200);
+
+        } catch (\Exception $e) {
+            Log::error("Error fetching orders by category", ['error' => $e->getMessage()]);
+            return response()->json(['message' => 'Error fetching orders by category'], 500);
+        }
     }
 }
