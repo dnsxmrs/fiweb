@@ -75,10 +75,7 @@
                 </button>
 
                 <!-- Guest Button -->
-                <button
-                    class="flex items-center justify-center w-40 h-10 px-6 py-3 text-lg text-white bg-black rounded-full hover:bg-brown-600">
-                    <img src="{{ asset('assets/Male User.png') }}" alt="User" class="w-5 h-5 mr-2">Guest
-                </button>
+              
 
                 <!-- My Account Button -->
                 <button class="px-4 py-2 text-sm text-white rounded-md bg-brown-500 hover:bg-brown-600">
@@ -122,7 +119,7 @@
                                     </label>
                                     <input type="text" id="contactNumber" placeholder="09123456789"
                                         class="validate mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
-                                        <p id="cnValidation" class="hidden text-xs font-medium text-red-500 pt-1">
+                                        <p id="cnValidation" class="hidden pt-1 text-xs font-medium text-red-500">
                                             Input Philippine phone number</p>
                                 </div>
 
@@ -132,7 +129,7 @@
                                     </label>
                                     <input type="email" id="email" placeholder="email@gmail.com"
                                         class="validate mt-1 block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
-                                        <p id="eaValidation" class="hidden text-xs font-medium text-red-500 pt-1">
+                                        <p id="eaValidation" class="hidden pt-1 text-xs font-medium text-red-500">
                                             Input valid gmail address</p>
                                 </div>
                             </div>
@@ -404,9 +401,9 @@
                                 </label>
 
                                 <!-- Modal -->
-                                <div id="termsModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
-                                    <div class="bg-white p-6 rounded-lg shadow-lg w-200">
-                                        <h2 class="text-lg font-bold mb-4">Terms and Conditions</h2>
+                                <div id="termsModal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50">
+                                    <div class="p-6 bg-white rounded-lg shadow-lg w-200">
+                                        <h2 class="mb-4 text-lg font-bold">Terms and Conditions</h2>
                                         <p class="text-sm text-gray-600">Here are the terms and conditions of our service. Please read them carefully before proceeding.</p>
                                         <li>Orders once placed cannot be canceled or modified after confirmation.</li>
                                         <li>All prices are subject to change without prior notice.</li>
@@ -418,8 +415,8 @@
                                             <label for="agree-checkbox" class="text-sm text-gray-500">I agree to the terms and conditions</label>
                                         </div>
 
-                                        <div class="mt-4 flex justify-end">
-                                            <button id="submit-btn" onclick="submitAgreement()" class="px-4 py-2 bg-green-500 text-white rounded-lg" disabled>Submit</button>
+                                        <div class="flex justify-end mt-4">
+                                            <button id="submit-btn" onclick="submitAgreement()" class="px-4 py-2 text-white bg-green-500 rounded-lg" disabled>Submit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -655,8 +652,8 @@
                         <span class="font-medium text-gray-400">₱ ${itemDetails.price}</span>
                     </div>
                 </td>
-                <td class="pl-3 pr-1 py-4 text-center">${itemDetails.quantity}</td>
-                <td class="pl-1 pr-5 py-4 font-bold text-black">₱ ${parseFloat(itemDetails.totalPrice).toFixed(2)}</td>
+                <td class="py-4 pl-3 pr-1 text-center">${itemDetails.quantity}</td>
+                <td class="py-4 pl-1 pr-5 font-bold text-black">₱ ${parseFloat(itemDetails.totalPrice).toFixed(2)}</td>
             `;
             document.querySelector("#orderItems").appendChild(row);
         }
