@@ -11,6 +11,8 @@ use App\Models\OrderProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Http;
+
 
 class OrderController extends Controller
 {
@@ -157,4 +159,67 @@ class OrderController extends Controller
         return view('components.contact'); // Ensure this matches the Blade file name
     }
 
+    public function cancel(Request $request)
+    {
+        $order = Order::findOrFail($request->order_id);
+
+        if ($order->status !== 'pending') {
+            return response()->json([
+                'message' => 'Order cannot be canceled.',
+                'success' => false
+            ], 400);
+        }
+
+        $order->status = 'cancelled';
+        $order->save();
+
+        $this->cancelOrder($order);
+
+        return response()->json([
+            'message' => 'Order has been cancelled.',
+            'success' => true,
+            'redirect_url' => route('showDetails', ['orderNumber' => $order->order_number])
+        ]);
+    }
+
+    public function cancelOrder ($order)
+    {
+        $id = $order->id;
+        $orderNumber = $order->order_number;
+        $status = $order->status;
+
+        $payload = [
+            'id' => $id,
+            'orderNumber' => $orderNumber,
+            'status' => $status,
+        ];
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . env('WEB_API_KEY'), // Include the Authorization Bearer token
+                // 'X-CSRF-TOKEN' => $csrfToken, // Include the CSRF token if necessary
+            ])->send('post', env('CANCEL_ORDER'), [
+                'json' => $payload, // Send data as JSON
+            ]);
+
+            if ($response->failed()) {
+                Log::error('Failed to sync with OOS', [
+                    'status' => $response->status(),
+                    'message' => $response->body(),
+                    'headers' => $response->headers(),
+                    'request_payload' => $payload, // Log the payload you sent
+                    'request_url' => env('PUSH_ORDER_POS'), // Log the target URL
+                ]);
+            } else {
+                Log::info('Successfully synced with OOS', [
+                    'status' => $response->status(),
+                    'message' => $response->body(),
+                    'headers' => $response->headers(),
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error syncing with OOS', [
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
 }

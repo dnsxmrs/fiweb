@@ -24,8 +24,14 @@ Route::middleware([CheckPosSource::class])->group(function () {
         // fetching orders from POS, for display
         Route::get('/get-orders-paginate', [WebhookController::class, 'getOrdersPaginate']);
         Route::get('/get-orders', [WebhookController::class, 'getOrders']);
+        Route::post('/get-orders-count', [WebhookController::class, 'getOrdersCount']);
+
+        Route::get('/get-dashboard-details', [WebhookController::class, 'getDashboardDetails']);
 
         Route::match(['post', 'put'], '/kds-to-web', [WebhookController::class, 'orderStatusUpdate']);
+
+        Route::match(['post', 'put'], '/order-complete', [WebhookController::class, 'orderComplete']);
+
     });
 });
 
