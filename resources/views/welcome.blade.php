@@ -113,11 +113,7 @@
 
                 <!-- Guest Button -->
                 <div>
-                    <button
-                        class="absolute z-20 flex items-center justify-center w-40 px-6 py-3 text-lg text-white bg-black rounded-full top-20 right-10"
-                        <img src="{{ asset('assets/Male User.png') }}" alt="User" class="w-5 h-5 mr-2">
-                        Guest
-                    </button>
+                    
                 </div>
 
             </div>
