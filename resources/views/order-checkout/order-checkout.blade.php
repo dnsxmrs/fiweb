@@ -579,16 +579,16 @@
             const currentTime = new Date();
             const currentHour = currentTime.getHours();
             const currentMinute = currentTime.getMinutes();
-            const minTime = "15:30"; // 3:30 PM
-            const maxTime = "22:30"; // 10:30 PM
+            const minTime = "15:30"; // 3:30 PM in 24-hour format
+            const maxTime = "22:30"; // 10:30 PM in 24-hour format
 
             // Default time
-            let defaultTime = "15:30"; // Initial default time
+            let defaultTime = "15:30"; // Initial default time in 24-hour format
 
             // Calculate dynamic minTime based on current time
-            let dynamicMinTime = "15:30"; // Default min time
+            let dynamicMinTime = "15:30"; // Default min time in 24-hour format
 
-            // If current time is out of the min-max range, set the default to 3:30
+            // If current time is out of the min-max range, set the default to 3:30 PM
             if (currentHour < 15 || (currentHour === 15 && currentMinute < 30)) {
                 defaultTime = "15:30";
                 dynamicMinTime = "15:30"; // Set to 3:30 PM if current time is earlier
@@ -598,14 +598,21 @@
             } else {
                 // If current time is between min and max time - 30 minutes, set default to 30 minutes ahead
                 const thirtyMinutesAhead = new Date(currentTime.getTime() + 30 * 60000); // Add 30 minutes
-                const formattedDefaultTime = formatTime(thirtyMinutesAhead);
-                const formattedMinTime = formatTime(thirtyMinutesAhead);
-                defaultTime = formattedDefaultTime;
-                dynamicMinTime = formattedMinTime;
+                defaultTime = formatTime24Hour(thirtyMinutesAhead);
+                dynamicMinTime = formatTime24Hour(thirtyMinutesAhead);
             }
 
-            // Function to format time to h:i format
-            function formatTime(date) {
+            // Function to format time to 24-hour format (e.g., "15:30")
+            function formatTime24Hour(date) {
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+                const formattedHours = hours < 10 ? '0' + hours : hours;
+                const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+                return `${formattedHours}:${formattedMinutes}`;
+            }
+
+            // Function to format time to 12-hour format with AM/PM (e.g., "3:30 PM")
+            function formatTime12Hour(date) {
                 const hours = date.getHours();
                 const minutes = date.getMinutes();
                 const ampm = hours >= 12 ? 'PM' : 'AM';
@@ -614,14 +621,15 @@
                 return `${formattedHours}:${formattedMinutes} ${ampm}`;
             }
 
+            // Initialize Flatpickr
             flatpickr("#datepickerCheckout", {
                 enableTime: true,
                 noCalendar: true,
                 dateFormat: "h:i K", // 12-hour format with AM/PM
-                minTime: dynamicMinTime, // Minimum time in 24-hour format (3:30 PM)
-                maxTime: "22:30", // Maximum time in 24-hour format (10:30 PM)
+                minTime: dynamicMinTime, // Minimum time in 24-hour format
+                maxTime: maxTime, // Maximum time in 24-hour format
                 minuteIncrement: 1,
-                defaultDate: defaultTime, // Dynamic default time
+                defaultDate: defaultTime, // Default time in 24-hour format
             });
 
             // <span id="dateDelivery" class=""></span>
