@@ -77,7 +77,7 @@
 
     <!-- Menu Section -->
     <main class="container px-4 pb-8 pt-1 mx-auto">
-        
+
 
         <div class="container px-6 pb-6 pt-1 mx-auto">
 
@@ -92,9 +92,9 @@
                         Back to menu page
                     </a>
                 </div>
-                
+
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-                    
+
 
                     <!-- Left Section: Contact and Address Details -->
                     <div class="col-span-2 space-y-4">
@@ -270,9 +270,9 @@
                                 <label for="deliveryTime" class="block text-sm font-medium text-gray-700">
                                     Choose delivery time
                                     <span class="text-red-500"> *</span>
-                                    <span class="italic text-gray-500">(for this day: 
+                                    <span class="italic text-gray-500">(for this day:
                                     <span id="dateDelivery"></span>)</span>
-                                </label>                  
+                                </label>
                                 <div class="relative mt-2">
                                     <input type="text" id="datepickerCheckout" placeholder="Select Date"
                                         class="mt-1 block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
@@ -548,7 +548,7 @@
         let totalAmount = 0.0; // loaded
 
         window.addEventListener("load", () => {
-            
+
             console.log("checkout.js loaded");
             window.openModal = function (event) {
                 event.preventDefault(); // Prevent default anchor behavior
@@ -618,7 +618,7 @@
                 enableTime: true,
                 noCalendar: true,
                 dateFormat: "h:i K", // 12-hour format with AM/PM
-                minTime: "15:30", // Minimum time in 24-hour format (3:30 PM)
+                minTime: dynamicMinTime, // Minimum time in 24-hour format (3:30 PM)
                 maxTime: "22:30", // Maximum time in 24-hour format (10:30 PM)
                 minuteIncrement: 1,
                 defaultDate: defaultTime, // Dynamic default time
