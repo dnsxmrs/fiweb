@@ -43,52 +43,58 @@
 
 <body class="bg-gray-100">
     <!-- Navbar -->
-    <header class="sticky top-0 z-20 bg-white" style="height: 80px; box-shadow: 0 4px 6px rgba(139, 69, 19, 0.3);">
+    <header class="sticky top-0 z-20" style="height: 80px; box-shadow: 0 4px 6px rgba(139, 69, 19, 0.3); background-color: #066744;">
         <div class="container flex items-center justify-between h-full px-4 mx-auto">
             <!-- Logo and Text -->
             <div class="flex items-center space-x-3">
                 <img src="assets/Caffeinated Logo.png" alt="Caffeinated Logo" class="w-12 h-12">
                 <div class="flex items-center">
                     <div>
-                        <span class="text-2xl font-bold leading-none text-black">CAFFEINATED</span>
-                        <p class="text-sm font-medium text-gray-500">Food Delivery</p>
+                        <span class="text-2xl font-bold leading-none text-white">CAFFEINATED</span>
+                        <p class="text-sm font-medium text-white">Food Delivery</p>
                     </div>
 
                     <!-- Navigation Links -->
-                    <nav class="hidden ml-8 space-x-8 md:flex">
+                    <nav class="hidden ml-12 space-x-8 md:flex">
                         <a href=" {{ route('landing') }} "
-                            class="text-lg font-bold text-gray-700 hover:text-[#E9B303]">Home</a>
-                        
+                            class="text-base font-normal text-white hover:text-[#E9B303]">Home</a>
                     </nav>
                 </div>
             </div>
             <!-- Search Bar, Basket Icon, and Buttons -->
             <div class="flex items-center space-x-2">
                 <!-- Basket Icon -->
-                <button class="relative flex items-center">
+                <button class="relative flex items-center basketBtn">
                     <img src="assets/order-bag.png" alt="Order Bag" class="w-12 h-12">
-                    <span id="basketCounter"
-                        class="absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full basketCounter"></span>
-                </button>
-
-                <!-- Guest Button -->
-
-
-                <!-- My Account Button -->
-                <button class="px-4 py-2 text-sm text-white rounded-md bg-brown-500 hover:bg-brown-600">
-                    My account
+                    <span
+                        id="basketCounter"
+                        class="absolute top-0 right-0 flex items-center justify-center w-4 h-5 text-xs text-white bg-red-500 rounded-full basketCounter">
+                        0</span>
                 </button>
             </div>
         </div>
     </header>
 
     <!-- Menu Section -->
-    <main class="container px-4 py-8 mx-auto">
+    <main class="container px-4 pb-8 pt-1 mx-auto">
+        
 
-        <div class="container p-6 mx-auto">
+        <div class="container px-6 pb-6 pt-1 mx-auto">
+
             <!-- Main Layout -->
-            <main class="container px-4 py-8 mx-auto">
+            <main class="container px-4 pb-8 pt-1 mx-auto">
+                <div class="py-8">
+                    <a href="{{ url()->previous() }}" class="btn btn-default inline-flex items-center text-black-700 hover:text-[#E9B303] focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 5l-7 7 7 7"></path>
+                        </svg>
+                        Back to menu page
+                    </a>
+                </div>
+                
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                    
 
                     <!-- Left Section: Contact and Address Details -->
                     <div class="col-span-2 space-y-4">
@@ -261,9 +267,12 @@
                         <div class="p-6 mt-6 bg-white rounded-lg shadow-md">
                             <h2 class="mb-4 text-lg font-bold">Delivery time</h2>
                             <div>
-                                <label for="deliveryTime" class="block text-sm font-medium text-gray-700">Choose
-                                    delivery time<span class="text-red-500"> *</span>
-                                </label>
+                                <label for="deliveryTime" class="block text-sm font-medium text-gray-700">
+                                    Choose delivery time
+                                    <span class="text-red-500"> *</span>
+                                    <span class="italic text-gray-500">(for this day: 
+                                    <span id="dateDelivery"></span>)</span>
+                                </label>                  
                                 <div class="relative mt-2">
                                     <input type="text" id="datepickerCheckout" placeholder="Select Date"
                                         class="mt-1 block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-md text-black focus:ring-[#E9B303] focus:border-[#E9B303]">
@@ -407,32 +416,19 @@
                                         <li>Delivery times are estimated and may vary due to external factors.</li>
                                         <li>We are not responsible for food allergies or dietary restrictions; please review menu details before ordering.</li>
                                         <li>By proceeding, you acknowledge that you have read and understood these terms.</li>
-                                        <div class="flex items-center mt-4">
+                                        {{-- <div class="flex items-center mt-4">
                                             <input type="checkbox" id="agree-checkbox" class="mr-2">
                                             <label for="agree-checkbox" class="text-sm text-gray-500">I agree to the terms and conditions</label>
-                                        </div>
+                                        </div> --}}
 
                                         <div class="flex justify-end mt-4">
-                                            <button id="submit-btn" onclick="submitAgreement()" class="px-4 py-2 text-white bg-green-500 rounded-lg" disabled>Submit</button>
+                                            <button id="submit-btn" onclick="submitAgreement()" class="px-4 py-2 text-white bg-[#066744] rounded-lg">Close</button>
                                         </div>
                                     </div>
                                 </div>
 
                                 <script>
-                                function openModal(event) {
-                                    event.preventDefault(); // Prevent default anchor behavior
-                                    document.getElementById('termsModal').classList.remove('hidden');
-                                }
 
-                                function submitAgreement() {
-
-                                    alert("Thank you for agreeing to the terms and conditions.");
-                                    document.getElementById('termsModal').classList.add('hidden');
-                                }
-
-                                document.getElementById('agree-checkbox').addEventListener('change', function() {
-                                    document.getElementById('submit-btn').disabled = !this.checked;
-                                });
                                 </script>
 
                         </div>
@@ -552,13 +548,71 @@
         let totalAmount = 0.0; // loaded
 
         window.addEventListener("load", () => {
+            
             console.log("checkout.js loaded");
+            window.openModal = function (event) {
+                event.preventDefault(); // Prevent default anchor behavior
+                document.getElementById('termsModal').classList.remove('hidden');
+            }
+
+            window.submitAgreement = function () {
+                // tick the terms-checkbox
+                document.getElementById('terms-checkbox').checked = true;
+                // update place order button and cll the function
+                updatePlaceOrder();
+
+                // alert("Thank you for agreeing to the terms and conditions.");
+                document.getElementById('termsModal').classList.add('hidden');
+            }
+
+            // document.getElementById('agree-checkbox').addEventListener('change', function() {
+            //     document.getElementById('submit-btn').disabled = !this.checked;
+            // });
 
             loadOrderItems();
 
             loadDropdown();
 
             updatePlaceOrder();
+
+            // Get current time
+            const currentTime = new Date();
+            const currentHour = currentTime.getHours();
+            const currentMinute = currentTime.getMinutes();
+            const minTime = "15:30"; // 3:30 PM
+            const maxTime = "22:30"; // 10:30 PM
+
+            // Default time
+            let defaultTime = "15:30"; // Initial default time
+
+            // Calculate dynamic minTime based on current time
+            let dynamicMinTime = "15:30"; // Default min time
+
+            // If current time is out of the min-max range, set the default to 3:30
+            if (currentHour < 15 || (currentHour === 15 && currentMinute < 30)) {
+                defaultTime = "15:30";
+                dynamicMinTime = "15:30"; // Set to 3:30 PM if current time is earlier
+            } else if (currentHour >= 22 || (currentHour === 22 && currentMinute > 30)) {
+                defaultTime = "15:30"; // Set to 3:30 PM if current time is past max
+                dynamicMinTime = "15:30"; // Set to 3:30 PM if current time is past max
+            } else {
+                // If current time is between min and max time - 30 minutes, set default to 30 minutes ahead
+                const thirtyMinutesAhead = new Date(currentTime.getTime() + 30 * 60000); // Add 30 minutes
+                const formattedDefaultTime = formatTime(thirtyMinutesAhead);
+                const formattedMinTime = formatTime(thirtyMinutesAhead);
+                defaultTime = formattedDefaultTime;
+                dynamicMinTime = formattedMinTime;
+            }
+
+            // Function to format time to h:i format
+            function formatTime(date) {
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                const formattedHours = hours % 12 || 12; // Convert 24-hour format to 12-hour
+                const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+                return `${formattedHours}:${formattedMinutes} ${ampm}`;
+            }
 
             flatpickr("#datepickerCheckout", {
                 enableTime: true,
@@ -567,8 +621,14 @@
                 minTime: "15:30", // Minimum time in 24-hour format (3:30 PM)
                 maxTime: "22:30", // Maximum time in 24-hour format (10:30 PM)
                 minuteIncrement: 1,
-                defaultDate: "15:30",
+                defaultDate: defaultTime, // Dynamic default time
             });
+
+            // <span id="dateDelivery" class=""></span>
+
+            // Calculate delivery date based on current time
+            const deliveryDate = calculateDeliveryDate(currentTime, minTime, maxTime);
+            document.getElementById("dateDelivery").textContent = deliveryDate;
 
             let cnValidation = document.getElementById("cnValidation");
             let eaValidation = document.getElementById("eaValidation");
@@ -609,6 +669,35 @@
             // Attach the event listener to the button
             placeOrderBtn.addEventListener("click", placeOrderBtnClick);
         });
+
+        // Function to calculate delivery date
+        function calculateDeliveryDate(currentTime, minTime, maxTime) {
+            const currentHour = currentTime.getHours();
+            const currentMinute = currentTime.getMinutes();
+            const minHour = parseInt(minTime.split(":")[0]);
+            const minMinute = parseInt(minTime.split(":")[1].split(" ")[0]);
+            const maxHour = parseInt(maxTime.split(":")[0]);
+            const maxMinute = parseInt(maxTime.split(":")[1].split(" ")[0]);
+
+            // Check if current time is inside the range of min and max time
+            if (currentHour < minHour || (currentHour === minHour && currentMinute < minMinute)) {
+                return formatDate(currentTime); // If before min time, use today's date
+            } else if (currentHour > maxHour || (currentHour === maxHour && currentMinute > maxMinute)) {
+                // If after max time, set delivery date to tomorrow
+                const tomorrow = new Date();
+                tomorrow.setDate(currentTime.getDate() + 1);
+                return formatDate(tomorrow);
+            } else {
+                // If within the range, set delivery date to today
+                return formatDate(currentTime);
+            }
+        }
+
+        // Function to format the date as "Feb 14 2025"
+        function formatDate(date) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
 
         function loadOrderItems() {
             let totalPrice = 0;
@@ -791,12 +880,20 @@
             termsCheckBox.addEventListener('change', function() {
                 if (termsCheckBox.checked) {
                     placeOrderBtn.disabled = false;
-                    placeOrderBtn.style.backgroundColor = "#0FAF00";
+                    placeOrderBtn.style.backgroundColor = "#066744";
                 } else {
                     placeOrderBtn.disabled = true;
                     placeOrderBtn.style.backgroundColor = "rgb(156, 163, 175)"; // Gray equivalent to bg-gray-400
                 }
             });
+
+            if (termsCheckBox.checked) {
+                    placeOrderBtn.disabled = false;
+                placeOrderBtn.style.backgroundColor = "#066744";
+            } else {
+                placeOrderBtn.disabled = true;
+                placeOrderBtn.style.backgroundColor = "rgb(156, 163, 175)"; // Gray equivalent to bg-gray-400
+            }
         }
 
         function placeOrderBtnClick() {

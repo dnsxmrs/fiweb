@@ -59,9 +59,9 @@ function addItemToOrderPanel(id, itemDetails) {
             </div>
 
             <div class="flex items-center">
-                <button onclick="changeQuantity('${id}', -1)" id="cart-decrease" class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
-                <span class="cart-product-quantity px-2 text-gray-800">${itemDetails.quantity}</span>
-                <button onclick="changeQuantity('${id}', 1)" id="cart-increase" class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
+                <button onclick="changeQuantity('${id}', -1, this)" id="cart-decrease-${id}" class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
+                <input type="input" id="cart-quantity-${id}" value="${itemDetails.quantity}" class="cart-product-quantity px-2 text-gray-800 w-8 text-center" min="1" max="30" onchange="updateQuantityFromInput('${id}', this)">
+                <button onclick="changeQuantity('${id}', 1, this)" id="cart-increase-${id}" class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
             </div>
 
             <div class="flex items-center">
@@ -296,14 +296,21 @@ window.addToMyBag = function () {
     console.table({constProductId, name, totalPrice, quantity});
 
     if (orderItems[constProductId]) {
+
+        if (orderItems[constProductId].quantity >= 30 || orderItems[constProductId].quantity + quantity > 30) {
+            modal.classList.add("hidden");
+            return;
+        }
+
         // If item already exists, update the quantity and price
         orderItems[constProductId].quantity += quantity;
         orderItems[constProductId].totalPrice += parseFloat(totalPrice);
 
         // Update the quantity and price in the DOM
         const itemRow = document.getElementById("item-" + constProductId);
-        itemRow.querySelector(".cart-product-quantity").textContent = orderItems[constProductId].quantity;
-        itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[constProductId].totalPrice.toFixed(2)}`;;
+        itemRow.querySelector(".cart-product-quantity").value = orderItems[constProductId].quantity;
+        itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[constProductId].totalPrice.toFixed(2)}`;
+
     } else {
 
         // If item does not exist, add it to the order
@@ -331,9 +338,9 @@ window.addToMyBag = function () {
                     </div>
 
                     <div class="flex items-center">
-                        <button onclick="changeQuantity('${constProductId}', -1)" id="cart-decrease" class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
-                        <span class="cart-product-quantity px-2 text-gray-800">${orderItems[constProductId].quantity}</span>
-                        <button onclick="changeQuantity('${constProductId}', 1)" id="cart-increase" class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
+                        <button onclick="changeQuantity('${constProductId}', -1, this)" id="cart-decrease-${constProductId}" class="cart-decrease px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">-</button>
+                        <input type="input" id="cart-quantity-${constProductId}" value="${orderItems[constProductId].quantity}" class="cart-product-quantity px-2 text-gray-800 w-8 text-center" min="1" max="30" onchange="updateQuantityFromInput('${constProductId}', this)">
+                        <button onclick="changeQuantity('${constProductId}', 1, this)" id="cart-increase-${constProductId}" class="cart-increase px-2 py-1 text-gray-600 bg-gray-200 rounded hover:bg-gray-300">+</button>
                     </div>
 
                     <div class="flex items-center">
@@ -354,11 +361,9 @@ window.addToMyBag = function () {
     saveOrders();
 
     console.log("AFTER", orderItems)
-
     modal.classList.add("hidden");
+
 };
-
-
 
 
 window.deleteNote = function () {
@@ -373,14 +378,18 @@ window.deleteNote = function () {
 };
 
 
-window.changeQuantity = function (id, change) {
+window.changeQuantity = function (id, change, button) {
+    
+    console.log("outisde function");
+    console.log("quantity: ", orderItems[id].quantity);
+
     if (orderItems[id]) {
         const productPrice = orderItems[id].totalPrice / orderItems[id].quantity; // Price per item
+        const orderId = orderItems[id].id;
 
         if (change < 0 && orderItems[id].quantity === 1) {
             // If the quantity is already 1, do not allow to decrease below 0, remove item instead
             removeItem(id);
-
             updateTotal(-productPrice);
         } else {
             orderItems[id].quantity += change;
@@ -390,7 +399,7 @@ window.changeQuantity = function (id, change) {
 
             // Update the quantity and price in the DOM
             const itemRow = document.getElementById("item-" + id);
-            itemRow.querySelector(".cart-product-quantity").textContent = orderItems[id].quantity;
+            itemRow.querySelector(".cart-product-quantity").value = orderItems[id].quantity;
             itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[id].totalPrice.toFixed(2)}`;
 
             // Update the total after the change
@@ -398,10 +407,11 @@ window.changeQuantity = function (id, change) {
         }
     }
 
+    updateQuantityButton(id, change);
     cartCounter();
     updateCheckoutButton();
     saveOrders();
-}
+};
 
 function removeItem(id) {
     if (orderItems[id]) {
@@ -410,6 +420,78 @@ function removeItem(id) {
         document.getElementById("item-" + id).remove();
     }
 }
+
+// New function to handle quantity changes from the input field
+window.updateQuantityFromInput = function (id, input) {
+    let newQuantity = parseInt(input.value);
+    let productPrice = orderItems[id].totalPrice / orderItems[id].quantity; // Price per item
+    let changeQuantity = newQuantity - orderItems[id].quantity;
+    var change;
+
+    if (newQuantity >= 1 && newQuantity <= 30) {
+        orderItems[id].quantity = newQuantity;
+        orderItems[id].totalPrice = parseFloat(productPrice * newQuantity);
+
+        change = newQuantity;
+
+        // set the input value to 30
+        input.value = newQuantity;
+
+        // Update the total price in the DOM
+        let itemRow = document.getElementById("item-" + id);
+        itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[id].totalPrice.toFixed(2)}`;
+
+        // Update the quantity for the cart
+        updateTotal(changeQuantity * productPrice);
+    } else {
+        const maxQuantity = 30;
+
+        let changeQuantity = maxQuantity - orderItems[id].quantity;
+
+        orderItems[id].quantity = maxQuantity;
+        orderItems[id].totalPrice = parseFloat(productPrice * maxQuantity);
+
+        change = maxQuantity;
+
+        // set the input value to 30
+        input.value = maxQuantity;
+
+        // Update the total price in the DOM
+        let itemRow = document.getElementById("item-" + id);
+        itemRow.querySelector(".cart-quantity-price").textContent = `₱ ${orderItems[id].totalPrice.toFixed(2)}`;
+
+        // Update the quantity for the cart
+        updateTotal(changeQuantity * productPrice);
+    }
+
+    updateQuantityButton(id, change);
+    cartCounter();
+    updateCheckoutButton();
+    saveOrders();
+};
+
+// update the increase and decrease buttons
+function updateQuantityButton(id, change) {
+    // Prevent increasing quantity beyond 30
+    if (orderItems[id].quantity >= 30 && change > 0) {
+        console.log("quantity is 30");
+        // Disable the increase button and set opacity to 50%
+        const increaseBtn = document.getElementById(`cart-increase-${id}`);
+        increaseBtn.disabled = true;
+        increaseBtn.classList.remove("opacity-100"); // Remove opacity-50 when opacity-100 is added
+        increaseBtn.classList.add("opacity-50");
+    }
+
+    // Enable the increase button and set opacity to 100% if quantity is less than 30
+    if (orderItems[id].quantity < 30) {
+        console.log(" qunatity less than 30");
+        const increaseBtn = document.getElementById(`cart-increase-${id}`);
+        increaseBtn.disabled = false;
+        increaseBtn.classList.remove("opacity-50"); // Remove opacity-50 when opacity-100 is added
+        increaseBtn.classList.add("opacity-100");
+    }
+}
+
 
 window.checkout = function () {
     // Store the order items in localStorage
